@@ -4,6 +4,8 @@ import '@tarojs/async-await'
 import Index from './pages/index';
 
 import indexModel from './store/index';
+import gameModel from './store/game';
+import rewardForSealModel from './store/rewardForSeal'
 
 import './app.less';
 
@@ -14,14 +16,17 @@ import './app.less';
 // }
 
 const store = {
-  indexModel
+  indexModel,
+  gameModel,
+  rewardForSealModel
 };
 
 class App extends Component {
   config = {
     pages: [
       'pages/index/index',
-      'pages/my/index'
+      'pages/my/index',
+      'pages/rewardForSeal/index'
     ],
     window: {
       backgroundTextStyle: 'light',

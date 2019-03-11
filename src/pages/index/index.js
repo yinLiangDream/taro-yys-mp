@@ -209,8 +209,8 @@ class Index extends Component {
   }
 
   changeSwiper(e) {
-    const index = e.mp.detail.current;
-    this.clickTap(e, index);
+    const index = e.detail.current;
+    this.clickTap(index);
   }
 
   clickHeader(clickName) {
@@ -284,7 +284,7 @@ class Index extends Component {
         <View className={styles.ssr}>
           <View className={styles.header}>{tagList}</View>
           <View className={styles.body}>
-            <Swiper className={styles.swiper} current={this.state.showIndex}>{roleTagList}</Swiper>
+            <Swiper className={styles.swiper} onChange={this.changeSwiper} current={this.state.showIndex}>{roleTagList}</Swiper>
           </View>
         </View>
       </View>
