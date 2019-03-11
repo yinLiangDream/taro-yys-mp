@@ -1,0 +1,122 @@
+.indexPage {
+  position: relative;
+  color: #666;
+
+  .tabs {
+    width: 100vw;
+    z-index: 2;
+  }
+
+  .scroll {
+    width: 100vw;
+    background-color: rgba(255, 255, 255, 1);
+    padding: 20rpx 0;
+
+    .long {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+
+      .content {
+        height: 160rpx;
+        width: 160rpx;
+        flex: 0 0 auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+
+        .img {
+          width: 120rpx;
+        }
+
+        .text {
+          font-size: 22rpx;
+        }
+      }
+    }
+  }
+
+  .ssr {
+    .header {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      align-items: center;
+      font-size: 28rpx;
+      padding: 5rpx 0;
+      background-color: rgba(255, 255, 255, 1);
+      width: 100vw;
+      z-index: 2;
+
+      .active {
+        color: #c2a060;
+        font-weight: 700;
+        border-bottom: 4rpx #c2a060 solid;
+      }
+
+      .noActive {
+        font-weight: normal;
+      }
+    }
+
+    .body {
+      padding: 0rpx 20rpx;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+
+      .swiper {
+        width: 100vw;
+        height: calc(100vh - 260rpx);
+
+        .swiperItem {
+          height: calc(100vh - 260rpx);
+
+          .scroll {
+            height: calc(100vh - 260rpx);
+            width: 100%;
+            background: transparent;
+
+            .div {
+              display: flex;
+              justify-content: space-around;
+              align-items: center;
+              flex-wrap: wrap;
+            }
+          }
+        }
+      }
+
+      .head {
+        display: flex;
+        margin: 20rpx 5rpx;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        max-width: 100%;
+        border: 3rpx #ecdbbd solid;
+        background-color: white;
+        position: relative;
+
+        .new {
+          position: absolute;
+          width: 40rpx;
+          height: 40rpx;
+          right: -5rpx;
+          top: -5rpx;
+          z-index: 1;
+        }
+
+        .img {
+          width: 110rpx;
+          height: 110rpx;
+        }
+
+        .text {
+          font-size: 18rpx;
+        }
+      }
+    }
+  }
+}
