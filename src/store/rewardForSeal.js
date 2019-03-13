@@ -16,6 +16,38 @@ class RewardForSeal {
   @action('保存所有逢魔信息') saveAllFengmo = params => {
     this.allFengmo = params;
   };
+
+  @computed get filterDetail() {
+    const filterSealArr = (data, key) => {
+      return data.filter(item => {
+        const arr = item.monster;
+        return arr.find(item => {
+          const keys = Object.keys(item.detail);
+          return keys.includes(key);
+        });
+      });
+    }
+    return (key, funcName) => {
+      const data = this.allRewardsDetails[funcName];
+      return filterSealArr(data, key)
+        .map(item => {
+          const monster = item.monster.filter(item => {
+            return Object.keys(item.detail).includes(key);
+          });
+          item.monster = monster;
+          return item;
+        })
+        .map(item => {
+          const monster = item.monster.map(item => {
+            const num = item.detail[key];
+            item.value = `${key}*${num}`;
+            return item;
+          });
+          item.monster = monster;
+          return item;
+        });
+    }
+  }
 }
 
 const rewardForSeal = new RewardForSeal();

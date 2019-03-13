@@ -26,7 +26,8 @@ class App extends Component {
     pages: [
       'pages/index/index',
       'pages/my/index',
-      'pages/rewardForSeal/index'
+      'pages/rewardForSeal/index',
+      'pages/rewardForSeal/rewardForSealDetail/index'
     ],
     window: {
       backgroundTextStyle: 'light',

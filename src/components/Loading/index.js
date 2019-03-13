@@ -1,5 +1,6 @@
 import Taro, { Component } from '@tarojs/taro';
 import { View } from '@tarojs/components';
+import PropTypes from 'prop-types'
 
 class Loading extends Component {
 
@@ -24,7 +25,7 @@ class Loading extends Component {
     if (this.state.statusControl.loadProgress < 100) {
       setTimeout(() => {
         this.loadProgress();
-      }, 80);
+      }, 60);
     } else {
       this.setState({
         statusControl: {
@@ -56,6 +57,10 @@ class Loading extends Component {
       </View>
     )
   }
+}
+
+Loading.propTypes = {
+  show: PropTypes.bool
 }
 
 export default Loading;

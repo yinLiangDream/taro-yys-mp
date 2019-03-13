@@ -13,7 +13,7 @@ import styles from './index.module.less';
 import updateData from '../../utils/mpUpdateModel';
 import { roleApi } from '../../api/index';
 
-import Loading from '../../components/Loading';
+import Loading from '../../components/Loading/index';
 
 @inject('indexModel')
 @observer
@@ -135,7 +135,7 @@ class Index extends Component {
       allTag: this.state.allTag
     });
     try {
-      const value = wx.getStorageSync('version');
+      const value = Taro.getStorageSync('version');
       if (value !== this.state.currentVersion.version) {
         this.setState({
           statusControl: {
@@ -160,41 +160,41 @@ class Index extends Component {
         showVersion: false
       }
     });
-    wx.setStorage({
+    Taro.setStorage({
       key: 'version',
       data: this.state.currentVersion.version
     });
   }
 
   mpUpdate() {
-    wx.navigateTo({
-      url: '/pages/mpUpdateRecord/main'
+    Taro.navigateTo({
+      url: '/pages/mpUpdateRecord/index'
     });
   }
 
   rewardForSeal() {
-    wx.navigateTo({
-      url: '/pages/rewardForSeal/main'
+    Taro.navigateTo({
+      url: '/pages/rewardForSeal/index'
     });
   }
 
   clikshishen(item) {
-    wx.navigateTo({
-      url: `/pages/roleDetail/main?id=${item.id}&level=${item.level}&name=${
+    Taro.navigateTo({
+      url: `/pages/roleDetail/index?id=${item.id}&level=${item.level}&name=${
         item.name
       }`
     });
   }
 
   fengmo() {
-    wx.navigateTo({
-      url: '/pages/fengmo/main'
+    Taro.navigateTo({
+      url: '/pages/fengmo/index'
     });
   }
 
   updateGame() {
-    wx.navigateTo({
-      url: '/pages/updateGame/main'
+    Taro.navigateTo({
+      url: '/pages/updateGame/index'
     });
   }
 

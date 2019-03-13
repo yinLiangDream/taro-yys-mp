@@ -30,8 +30,21 @@ class RewardForSeal extends Component {
   }
   async componentDidMount() {
     const { rewardForSealModel } = this.props;
-    const res = await rewardForSealApi('list', {});
-    rewardForSealModel.saveAllReward(res.result.data);
+    try {
+      const res = await rewardForSealApi('list', {});
+      rewardForSealModel.saveAllReward(res.result.data);
+    }catch(err) {
+      console.error(err)
+    }
+    if (!Object.keys(rewardForSealModel.allRewardsDetails).length) {
+      try {
+        const res = await rewardForSealApi('detail', {});
+        rewardForSealModel.saveAllRewardsDetails(res.result.data);
+        this.state.data = res.result.data;
+      } catch(err) {
+        console.error(err)
+      }
+    }
   }
   search(e) {
     this.state.searchKey = e.detail.value;
@@ -54,16 +67,14 @@ class RewardForSeal extends Component {
       showList: this.state.showList
     });
   }
-  deatil(item) {
-    console.log(item);
+  async deatil(item) {
     wx.navigateTo({
-      url: `/pages/rewardForSeal/rewardForSealDetail/main?id=${
+      url: `/pages/rewardForSeal/rewardForSealDetail/index?id=${
         item.id
       }&advice=${JSON.stringify(item.advice)}&name=${item.name}`
     });
   }
   render() {
-    console.log(styles);
     const findList = this.state.showList.map((item, index) => (
       <View
         className={styles.list}
