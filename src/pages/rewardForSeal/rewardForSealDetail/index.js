@@ -57,7 +57,7 @@ class RewardForSeal extends Component {
   }
 
   render() {
-    console.log(this.state.advice);
+    console.log('render rewardForSealDetail');
     const adviceList = this.state.advice.map((item, index) => (
       <View key={index}>
         <Text className={styles.adviceName}>{item[0][0]}</Text>

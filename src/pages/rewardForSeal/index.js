@@ -65,6 +65,7 @@ class RewardForSeal extends Component {
     });
   }
   render() {
+    console.log('render rewardForSeal');
     const findList = this.state.showList.map((item, index) => (
       <View
         className={styles.list}

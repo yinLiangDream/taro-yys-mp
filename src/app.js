@@ -27,7 +27,8 @@ class App extends Component {
       'pages/index/index',
       'pages/my/index',
       'pages/rewardForSeal/index',
-      'pages/rewardForSeal/rewardForSealDetail/index'
+      'pages/rewardForSeal/rewardForSealDetail/index',
+      'pages/fengmo/index'
     ],
     window: {
       backgroundTextStyle: 'light',

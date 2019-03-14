@@ -21,7 +21,7 @@ class Index extends Component {
   static options = {
     addGlobalClass: true
   };
-  static config = {
+  config = {
     navigationBarTitleText: '首页'
   };
 
@@ -218,6 +218,7 @@ class Index extends Component {
   }
 
   render() {
+    console.log('render index');
     const tabHeadersList = this.state.imgUrl.map(item => (
       <View
         className={styles.content}
