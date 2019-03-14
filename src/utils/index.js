@@ -1,14 +1,13 @@
-import pinyin from 'pinyin';
+import tinypinyin from 'tiny-pinyin';
 import Taro from '@tarojs/taro';
 
 /**
- * 将中文转换成英文首字符
+ * 将中文转换成拼音
  * @param {*} value
  */
 export const firstName = value => {
-  return pinyin(value, {
-    style: pinyin.STYLE_FIRST_LETTER
-  }).join('');
+  const pinyin = tinypinyin.convertToPinyin(value, '-', true);
+  return pinyin.split('-').map(key => key.slice(0, 1)).join('')
 };
 
 /**

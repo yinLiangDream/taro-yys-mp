@@ -1,13 +1,5 @@
 import Taro, { Component } from '@tarojs/taro';
-import {
-  View,
-  Text,
-  ScrollView,
-  Image,
-  Swiper,
-  SwiperItem,
-  Input
-} from '@tarojs/components';
+import { View, Text, Image, Input } from '@tarojs/components';
 import { observer, inject } from '@tarojs/mobx';
 
 import styles from './index.module.less';
@@ -23,7 +15,6 @@ class RewardForSeal extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      searchKey: '',
       showList: [],
       searchFlag: false
     };
@@ -33,38 +24,37 @@ class RewardForSeal extends Component {
     try {
       const res = await rewardForSealApi('list', {});
       rewardForSealModel.saveAllReward(res.result.data);
-    }catch(err) {
-      console.error(err)
+    } catch (err) {
+      console.error(err);
     }
     if (!Object.keys(rewardForSealModel.allRewardsDetails).length) {
       try {
         const res = await rewardForSealApi('detail', {});
         rewardForSealModel.saveAllRewardsDetails(res.result.data);
         this.state.data = res.result.data;
-      } catch(err) {
-        console.error(err)
+      } catch (err) {
+        console.error(err);
       }
     }
   }
   search(e) {
-    this.state.searchKey = e.detail.value;
     const { rewardForSealModel } = this.props;
+    console.log(e.detail)
     this.setState({
       searchFlag: true,
       showList: []
     });
-    if (!this.state.searchKey) return;
+    if (!e.detail.value) return;
     const data = rewardForSealModel.allRewards;
-    this.state.showList =
-      data.filter(
-        item =>
-          firstName(item.name).includes(this.state.searchKey) ||
-          item.name.includes(this.state.searchKey) ||
-          (item.othername && item.othername.includes(this.state.searchKey)) ||
-          (item.clue && item.clue.includes(this.state.searchKey))
-      ) || [];
     this.setState({
-      showList: this.state.showList
+      showList:
+        data.filter(
+          item =>
+            firstName(item.name).includes(e.detail.value) ||
+            item.name.includes(e.detail.value) ||
+            (item.othername && item.othername.includes(e.detail.value)) ||
+            (item.clue && item.clue.includes(e.detail.value))
+        ) || []
     });
   }
   async deatil(item) {
@@ -92,16 +82,16 @@ class RewardForSeal extends Component {
       <View className={styles.RewardForSeal}>
         <View className={styles.header}>
           <Image
-            src="https://mp-yys-1255362963.cos.ap-chengdu.myqcloud.com/search_title.png"
+            src='https://mp-yys-1255362963.cos.ap-chengdu.myqcloud.com/search_title.png'
             className={styles.img}
-            mode="aspectFit"
+            mode='aspectFit'
           />
         </View>
         <View className={styles.body}>
           <Input
-            type="text"
+            type='text'
             className={styles['input-box']}
-            placeholder="输入妖怪（简写亦可）、线索、关键词"
+            placeholder='输入妖怪（简写亦可）、线索、关键词'
             onInput={this.search}
           />
         </View>

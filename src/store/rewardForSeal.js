@@ -21,8 +21,8 @@ class RewardForSeal {
     const filterSealArr = (data, key) => {
       return data.filter(item => {
         const arr = item.monster;
-        return arr.find(item => {
-          const keys = Object.keys(item.detail);
+        return arr.find(itemList => {
+          const keys = Object.keys(itemList.detail);
           return keys.includes(key);
         });
       });
@@ -31,17 +31,17 @@ class RewardForSeal {
       const data = this.allRewardsDetails[funcName];
       return filterSealArr(data, key)
         .map(item => {
-          const monster = item.monster.filter(item => {
-            return Object.keys(item.detail).includes(key);
+          const monster = item.monster.filter(itemMonster => {
+            return Object.keys(itemMonster.detail).includes(key);
           });
           item.monster = monster;
           return item;
         })
         .map(item => {
-          const monster = item.monster.map(item => {
-            const num = item.detail[key];
-            item.value = `${key}*${num}`;
-            return item;
+          const monster = item.monster.map(itemMonster => {
+            const num = itemMonster.detail[key];
+            itemMonster.value = `${key}*${num}`;
+            return itemMonster;
           });
           item.monster = monster;
           return item;
