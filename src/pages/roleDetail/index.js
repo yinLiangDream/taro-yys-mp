@@ -13,6 +13,7 @@ import SkillItem from '../../components/SkillItem/index';
 import AwakeMaterial from '../../components/AwakeMaterial/index';
 
 let routerParams = {};
+let disabledJuexing = false;
 
 @inject('indexModel')
 @observer
@@ -75,6 +76,7 @@ class RoleDetail extends Component {
   async componentDidMount() {
     setNavTitle(routerParams.name);
     const { indexModel } = this.props;
+    disabledJuexing = this.state.notJuexing.includes(routerParams.level)
     this.setState({
       statusControl: {
         ...this.state.statusControl,
@@ -88,7 +90,7 @@ class RoleDetail extends Component {
       staticUrl: {
         ...this.state.staticUrl,
         noAwakeHead: `${indexModel.baseUrl}head/${this.state.id}.jpg`,
-        awakeHead: this.state.disabledJuexing
+        awakeHead: disabledJuexing
           ? this.state.staticUrl.noAwakeHead
           : `${indexModel.baseUrl}awake_head/${id}.jpg`
       }
@@ -117,7 +119,7 @@ class RoleDetail extends Component {
 
     // 按钮及式神图片
     this.setState({
-      disabledJuexing: this.state.notJuexing.includes(routerParams.level),
+      disabledJuexing: disabledJuexing,
       staticUrl: {
         ...this.state.staticUrl,
         awakeUrl: `${indexModel.baseUrl}v2/${id}.png`,
@@ -125,7 +127,7 @@ class RoleDetail extends Component {
           this.state.staticUrl.chushi_active
         }`,
         juexingButton: `${indexModel.baseUrl}${
-          !this.state.disabledJuexing
+          !disabledJuexing
             ? this.state.staticUrl.juexing_normal
             : this.state.staticUrl.juexing_disabled
         }`,
@@ -295,7 +297,7 @@ class RoleDetail extends Component {
         }));
         const attrs = names.map(key => {
           let beforeData = attrData.noAwake[key];
-          let afterData = this.state.disabledJuexing
+          let afterData = disabledJuexing
             ? beforeData
             : attrData.awake[key];
           const rate = [
@@ -315,7 +317,7 @@ class RoleDetail extends Component {
           const beforeAwake = beforeData.toFixed();
           const afterAwake = afterData.toFixed();
           const diff = Number(afterAwake) - Number(beforeAwake);
-          const ssAttr = this.state.disabledJuexing
+          const ssAttr = disabledJuexing
             ? attrData.noAwake.score[key]
             : attrData.awake.score[key];
           return {
@@ -368,7 +370,7 @@ class RoleDetail extends Component {
    */
   juexingClick() {
     const { indexModel } = this.props;
-    if (this.state.disabledJuexing) return;
+    if (disabledJuexing) return;
     this.setState(
       {
         statusControl: {
@@ -418,7 +420,7 @@ class RoleDetail extends Component {
   headerButtonReset(type) {
     const { indexModel } = this.props;
     const resetJuexing = `${indexModel.baseUrl}${
-      !this.state.disabledJuexing
+      !disabledJuexing
         ? this.state.staticUrl.juexing_normal
         : this.state.staticUrl.juexing_disabled
     }`;
@@ -602,7 +604,7 @@ class RoleDetail extends Component {
                     className={styles.noAwakeHead}
                   />
                 </View>
-                {!this.state.disabledJuexing ? (
+                {!disabledJuexing ? (
                   <View className={styles.awake}>
                     <Image
                       src={this.state.staticUrl.awakeHead}
@@ -686,12 +688,12 @@ class RoleDetail extends Component {
           <View className={styles.skill}>
             <View className={styles.title}>03/ 技能</View>
             <SkillItem skills={this.state.skills} />
-            {!this.state.disabledJuexing ? (
+            {!disabledJuexing ? (
               <SkillItem skills={this.state.awakeSkills} awake />
             ) : (
               ''
             )}
-            {!this.state.disabledJuexing ? (
+            {!disabledJuexing ? (
               <View className={`${styles.metarial} shadow-blur bg-gray`}>
                 {this.state.awakeMaterial.map((item, index) => (
                   <View key={index}>
