@@ -110,8 +110,6 @@ class Index extends Component {
     };
   }
 
-  componentWillMount() {}
-
   componentWillReact() {
     console.log('componentWillReact');
   }
@@ -130,22 +128,25 @@ class Index extends Component {
     this.clickTap(0);
     this.setState({
       statusControl: {
+        ...this.state.statusControl,
         showLoading: false
       },
       allTag: this.state.allTag
-    });
-    try {
-      const value = Taro.getStorageSync('version');
-      if (value !== this.state.currentVersion.version) {
-        this.setState({
-          statusControl: {
-            showVersion: true
-          }
-        });
+    }, () => {
+      try {
+        const value = Taro.getStorageSync('version');
+        if (value !== this.state.currentVersion.version) {
+          this.setState({
+            statusControl: {
+              ...this.state.statusControl,
+              showVersion: true
+            }
+          });
+        }
+      } catch (e) {
+        console.error(e);
       }
-    } catch (e) {
-      console.error(e);
-    }
+    });
   }
 
   componentWillUnmount() {}
@@ -157,6 +158,7 @@ class Index extends Component {
   hideVersion() {
     this.setState({
       statusControl: {
+        ...this.state.statusControl,
         showVersion: false
       }
     });

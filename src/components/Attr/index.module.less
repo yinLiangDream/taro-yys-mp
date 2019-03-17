@@ -1,0 +1,62 @@
+.attr {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1prx dashed darkgray;
+  padding: 15rpx;
+  box-sizing: border-box;
+  z-index: 2;
+  position: relative;
+  .border {
+    height: 1rpx;
+    position: absolute;
+    bottom: 0;
+    width: 96%;
+    box-sizing: border-box;
+    border-bottom: 1rpx dashed darkgray;
+  }
+  .title {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex: 1;
+    .img {
+      width: 24rpx;
+      padding-right: 10rpx;
+    }
+    .text {
+      font-size: 24rpx;
+    }
+  }
+  .noAwakeAttr {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 178rpx;
+    flex: 0 0 auto;
+    .img {
+      width: 24rpx;
+      padding-right: 10rpx;
+    }
+    .text {
+      font-size: 24rpx;
+      color: #bb391c;
+    }
+  }
+  .awakeAttr {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 168rpx;
+    flex: 0 0 auto;
+    .img {
+      width: 24rpx;
+      padding-right: 10rpx;
+    }
+    .text {
+      font-size: 24rpx;
+      color: #bb391c;
+    }
+  }
+}

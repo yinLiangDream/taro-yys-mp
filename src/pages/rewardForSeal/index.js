@@ -58,7 +58,7 @@ class RewardForSeal extends Component {
     });
   }
   async deatil(item) {
-    wx.navigateTo({
+    Taro.navigateTo({
       url: `/pages/rewardForSeal/rewardForSealDetail/index?id=${
         item.id
       }&advice=${JSON.stringify(item.advice)}&name=${item.name}`

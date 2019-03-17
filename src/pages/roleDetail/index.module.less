@@ -1,0 +1,269 @@
+.roleDetail {
+  position: relative;
+  .header {
+    position: relative;
+    width: 100vw;
+    .skinGroup {
+      position: absolute;
+      bottom: 200rpx;
+      left: 150rpx;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      flex-direction: column;
+      .buttons {
+        margin: 5rpx;
+      }
+    }
+    .header_bg {
+      width: 100%;
+      height: 800rpx;
+    }
+    .left {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      top: 50rpx;
+      left: 50rpx;
+      z-index: 1;
+      .ssl {
+        width: 100rpx;
+        z-index: 1;
+      }
+      .name {
+        position: relative;
+        color: white;
+        .img {
+          width: 80rpx;
+        }
+        .text {
+          position: absolute;
+          top: 15rpx;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          width: 100%;
+          font-size: 40rpx;
+          .level {
+            font-weight: 900;
+            margin-bottom: 20rpx;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+          .names {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+        }
+      }
+    }
+
+    .yys {
+      position: absolute;
+      right: 50rpx;
+      top: 50rpx;
+      width: 100rpx;
+      z-index: 1;
+    }
+    .role {
+      position: absolute;
+      top: 0;
+      width: 90%;
+      right: 0;
+      z-index: 0;
+    }
+    .awake {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      right: 100rpx;
+      bottom: 100rpx;
+      z-index: 2;
+      .chushi {
+        margin-right: 30rpx;
+        .img {
+          width: 100rpx;
+        }
+      }
+      .juexing {
+        margin-right: 30rpx;
+        .img {
+          width: 100rpx;
+        }
+      }
+      .skin {
+        .img {
+          width: 100rpx;
+        }
+      }
+    }
+  }
+  .detail {
+    padding: 30rpx;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    flex-direction: column;
+    .title {
+      color: sienna;
+      border-bottom: 2rpx sienna solid;
+      margin-bottom: 20rpx;
+    }
+    .biography {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      flex-direction: column;
+      width: 100%;
+      .border {
+        width: 100%;
+        border: solid 6rpx #000;
+        padding: 7rpx;
+        box-sizing: border-box;
+        .content {
+          width: 100%;
+          border: solid 2rpx #000;
+          padding: 20rpx;
+          box-sizing: border-box;
+          .contentName {
+            display: flex;
+            width: 100%;
+            align-items: center;
+            justify-content: flex-start;
+            height: 40rpx;
+            border-bottom: 4rpx #bb391c solid;
+            .img {
+              width: 30rpx;
+            }
+            .text {
+              padding-left: 20rpx;
+              font-size: 24rpx;
+              font-weight: 800;
+              color: #bb391c;
+            }
+          }
+          .contentDetail {
+            padding: 30rpx 0;
+            .contentDetailItem {
+              padding: 20rpx;
+              .zhuanjiTitle {
+                display: flex;
+                align-items: center;
+                justify-content: flex-start;
+                font-size: 26rpx;
+                font-weight: 700;
+                color: #bb391c;
+                padding: 10prx 0;
+              }
+              .zhuanjiContext {
+                font-size: 24rpx;
+                border-bottom: 1rpx dashed darkgray;
+              }
+            }
+          }
+        }
+      }
+    }
+    .intelligence {
+      padding: 30rpx 0;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      flex-direction: column;
+      width: 100%;
+      position: relative;
+      .detailHead {
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        flex-direction: column;
+        padding-bottom: 30rpx;
+        width: 100%;
+        border: 1rpx solid #000;
+        position: relative;
+        .level {
+          display: flex;
+          justify-content: flex-start;
+          align-items: center;
+          position: absolute;
+          left: 20rpx;
+          top: 20rpx;
+          .ssStar {
+            margin-left: 30rpx;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            .ssStarImg {
+              width: 20rpx;
+            }
+          }
+          .levelModal {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items: center;
+            flex-wrap: wrap;
+            .levelModalBtn {
+              flex: 1 0 auto;
+              margin: 5rpx;
+            }
+          }
+        }
+        .head {
+          display: flex;
+          align-items: center;
+          justify-content: flex-end;
+          width: 100%;
+          padding: 20rpx;
+          margin-top: -80rpx;
+          .noAwake {
+            padding: 10rpx;
+            margin-right: 50rpx;
+            border: 5rpx solid #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: lightgray;
+            .noAwakeHead {
+              width: 100rpx;
+            }
+          }
+          .awake {
+            padding: 10rpx;
+            margin-right: 50rpx;
+            border: 5rpx solid #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: lightgray;
+            .awakeHead {
+              width: 100rpx;
+            }
+          }
+        }
+        .attr {
+          width: 100%;
+        }
+      }
+    }
+    .skill {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      flex-direction: column;
+      width: 100%;
+      .metarial {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        width: 100%;
+      }
+    }
+  }
+}
