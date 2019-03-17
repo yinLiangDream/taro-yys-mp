@@ -37,14 +37,15 @@ class Fengmo extends Component {
       statusControl: {
         searchFlag: true
       }
-    });
-    if (!e.detail.value) return;
-    this.setState({
-      showList: this.state.allDatas.filter(
-        item =>
-          item.question.includes(e.detail.value) ||
-          firstName(item.question).includes(e.detail.value)
-      )
+    },() => {
+      if (!e.detail.value) return;
+      this.setState({
+        showList: this.state.allDatas.filter(
+          item =>
+            item.question.includes(e.detail.value) ||
+            firstName(item.question).includes(e.detail.value)
+        )
+      });
     });
   }
 
