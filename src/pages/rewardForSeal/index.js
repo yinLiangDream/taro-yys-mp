@@ -43,18 +43,19 @@ class RewardForSeal extends Component {
     this.setState({
       searchFlag: true,
       showList: []
-    });
-    if (!e.detail.value) return;
-    const data = rewardForSealModel.allRewards;
-    this.setState({
-      showList:
-        data.filter(
-          item =>
-            firstName(item.name).includes(e.detail.value) ||
-            item.name.includes(e.detail.value) ||
-            (item.othername && item.othername.includes(e.detail.value)) ||
-            (item.clue && item.clue.includes(e.detail.value))
-        ) || []
+    }, () => {
+      if (!e.detail.value) return;
+      const data = rewardForSealModel.allRewards;
+      this.setState({
+        showList:
+          data.filter(
+            item =>
+              firstName(item.name).includes(e.detail.value) ||
+              item.name.includes(e.detail.value) ||
+              (item.othername && item.othername.includes(e.detail.value)) ||
+              (item.clue && item.clue.includes(e.detail.value))
+          ) || []
+      });
     });
   }
   async deatil(item) {
