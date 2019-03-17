@@ -126,27 +126,30 @@ class Index extends Component {
       return item;
     });
     this.clickTap(0);
-    this.setState({
-      statusControl: {
-        ...this.state.statusControl,
-        showLoading: false
+    this.setState(
+      {
+        statusControl: {
+          ...this.state.statusControl,
+          showLoading: false
+        },
+        allTag: this.state.allTag
       },
-      allTag: this.state.allTag
-    }, () => {
-      try {
-        const value = Taro.getStorageSync('version');
-        if (value !== this.state.currentVersion.version) {
-          this.setState({
-            statusControl: {
-              ...this.state.statusControl,
-              showVersion: true
-            }
-          });
+      () => {
+        try {
+          const value = Taro.getStorageSync('version');
+          if (value !== this.state.currentVersion.version) {
+            this.setState({
+              statusControl: {
+                ...this.state.statusControl,
+                showVersion: true
+              }
+            });
+          }
+        } catch (e) {
+          console.error(e);
         }
-      } catch (e) {
-        console.error(e);
       }
-    });
+    );
   }
 
   componentWillUnmount() {}
@@ -287,7 +290,50 @@ class Index extends Component {
         <View className={styles.ssr}>
           <View className={styles.header}>{tagList}</View>
           <View className={styles.body}>
-            <Swiper className={styles.swiper} onChange={this.changeSwiper} current={this.state.showIndex}>{roleTagList}</Swiper>
+            <Swiper
+              className={styles.swiper}
+              onChange={this.changeSwiper}
+              current={this.state.showIndex}
+            >
+              {roleTagList}
+            </Swiper>
+          </View>
+        </View>
+        <View className={styles.other}>
+          <View
+            className={`${
+              this.state.statusControl.showVersion ? 'show' : ''
+            } cu-modal`}
+          >
+            <View className='cu-dialog'>
+              <View className='bg-gradual-blue light'>
+                <View className='cu-bar justify-end text-Abc'>
+                  <View className='content'>
+                    版本更新：{this.state.currentVersion.version}
+                  </View>
+                  <View className='action' onClick={this.hideVersion}>
+                    <Text className='icon-close' />
+                  </View>
+                </View>
+                <View className='padding'>
+                  <View>
+                    {this.state.currentVersion.desc.map((item, index) => (
+                      <View key={index} className='text-sm'>
+                        {item}
+                      </View>
+                    ))}
+                  </View>
+                </View>
+              </View>
+              <View className='cu-bar bg-white'>
+                <View
+                  className='action margin-0 flex-sub solid-left'
+                  onClick={this.hideVersion}
+                >
+                  我知道了
+                </View>
+              </View>
+            </View>
           </View>
         </View>
       </View>

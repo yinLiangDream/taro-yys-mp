@@ -2,8 +2,7 @@ import Taro, { Component } from '@tarojs/taro'
 import { View, Button, Text } from '@tarojs/components'
 import { observer, inject } from '@tarojs/mobx'
 
-import './index.module.less'
-
+import styles from './index.module.less'
 
 @inject('indexModel')
 @observer
@@ -29,8 +28,8 @@ class My extends Component {
 
   render () {
     return (
-      <View className='index'>
-
+      <View className={styles.my}>
+        页面正在开发中~
       </View>
     )
   }
