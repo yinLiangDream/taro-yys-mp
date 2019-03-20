@@ -4,8 +4,17 @@ module.exports = {
   },
   defineConstants: {
   },
+  copy: {
+    patterns: [
+      {
+        from: 'src/cloud/',
+        to: 'dist/cloud/'
+      }
+    ],
+    options: {
+    }
+  },
   weapp: {
-
   },
   h5: {
   }

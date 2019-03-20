@@ -4,7 +4,9 @@ import game from './game'
 
 const httpRequest = async params => {
   try {
-    wx.cloud.init()
+    wx.cloud.init({
+      env: process.env.NODE_ENV === 'development' ? 'test-ee83d3' : 'formal-265d2c'
+    })
     const promise = await new Promise((resolve, reject) => {
       const data = params.data || {}
       wx.cloud.callFunction({
