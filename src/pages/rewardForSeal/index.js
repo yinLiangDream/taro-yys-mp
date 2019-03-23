@@ -42,7 +42,7 @@ class RewardForSeal extends Component {
     console.log(e.detail)
     this.setState({
       searchFlag: true,
-      showList: []
+      showList: !e.detail.value ? [] : this.state.showList
     }, () => {
       if (!e.detail.value) return;
       const data = rewardForSealModel.allRewards;

@@ -33,7 +33,7 @@ class Fengmo extends Component {
 
   search(e) {
     this.setState({
-      showList: [],
+      showList: !e.detail.value ? [] : this.state.showList,
       statusControl: {
         searchFlag: true
       }
