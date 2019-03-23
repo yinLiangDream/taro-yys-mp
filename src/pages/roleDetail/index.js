@@ -1,5 +1,5 @@
 import Taro, { Component } from '@tarojs/taro';
-import { View, Text, Image, Button, Label } from '@tarojs/components';
+import { View, Text, Image, Button, Label, ScrollView } from '@tarojs/components';
 import { observer, inject } from '@tarojs/mobx';
 
 import styles from './index.module.less';
@@ -588,7 +588,11 @@ class RoleDetail extends Component {
                   />
                   <Text className={styles.text}>{routerParams.name}</Text>
                 </View>
-                <View className={styles.contentDetail}>{storyList}</View>
+                <View className={styles.contentDetail}>
+                <ScrollView scroll-y style='height: 300rpx;'>
+                  {storyList}
+                </ScrollView>
+                </View>
               </View>
             </View>
           </View>
