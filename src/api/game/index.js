@@ -16,5 +16,15 @@ export default {
       ...data,
       $url: 'update'
     })
+  },
+  /**
+   * 获取御魂详情
+   * @param {*} data
+   */
+  yuhun (data = {}) {
+    return returnObj({
+      ...data,
+      $url: 'yuhun'
+    })
   }
 }
