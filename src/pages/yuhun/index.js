@@ -58,6 +58,7 @@ class Yuhun extends Component {
         let data = []
         if (gameModel.yuhunInfo.length === 0) {
           const res = await gameApi('yuhun', {});
+          gameModel.saveAllYuhun(res.result.data)
           data = res.result.data
         } else data = gameModel.yuhunInfo
         data.forEach((item, index) => {

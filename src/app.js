@@ -1,6 +1,8 @@
 import Taro, { Component } from '@tarojs/taro';
 import { Provider } from '@tarojs/mobx';
 import '@tarojs/async-await'
+import 'taro-ui/dist/style/index.scss'
+
 import Index from './pages/index';
 
 import indexModel from './store/index';
@@ -31,7 +33,8 @@ class App extends Component {
       'pages/fengmo/index',
       'pages/mpUpdateRecord/index',
       'pages/updateGame/index',
-      'pages/roleDetail/index'
+      'pages/roleDetail/index',
+      'pages/yuhun/index'
     ],
     window: {
       backgroundTextStyle: 'light',
