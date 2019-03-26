@@ -234,6 +234,14 @@ class Index extends Component {
       })
     })
   }
+  closeFloat() {
+    this.setState({
+      statusControl: {
+        ...this.state.statusControl,
+        showFloat: false
+      }
+    });
+  }
 
   render() {
     console.log('render index');
@@ -297,6 +305,7 @@ class Index extends Component {
         <AtFloatLayout
           title='最新活动'
           isOpened={this.state.statusControl.showFloat}
+          onClose={this.closeFloat}
         >
           {this.state.activities.map((item, index) => (
             <AtAccordion key={index} title={item.title} open={item.open} onClick={this.changeActiveOpen.bind(this, index)}>
