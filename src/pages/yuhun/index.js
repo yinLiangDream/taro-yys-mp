@@ -132,7 +132,7 @@ class Yuhun extends Component {
                       </View>
 
                       <View>
-                        <View className='at-row at-row__align--start at-row--wrap'>
+                        <View className='at-row at-row__align--start'>
                           <View className='at-col-1 at-col--auto'>
                             <AtTag
                               active
