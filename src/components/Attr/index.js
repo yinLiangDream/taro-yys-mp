@@ -1,13 +1,10 @@
 import Taro, { Component } from '@tarojs/taro';
 import { View, Image } from '@tarojs/components';
 import PropTypes from 'prop-types';
-import { observer, inject } from '@tarojs/mobx';
 
 import styles from './index.module.less';
 
-@inject('indexModel')
-@observer
-class Attr extends Component {
+class AttrSS extends Component {
   static options = {
     addGlobalClass: true
   };
@@ -24,15 +21,13 @@ class Attr extends Component {
         critPower: '暴击伤害',
         debuffResist: '效果抵抗',
         debuffEnhance: '效果命中'
-      },
-      attrUrl: ''
+      }
     };
   }
 
-  componentWillMount() {
-    const { indexModel, name } = this.props;
+  componentDidMount() {
+    const { name } = this.props;
     this.setState({
-      attrUrl: indexModel.baseUrl + 'attribute/' + name + '.png',
       percent: [
         'critRate',
         'critPower',
@@ -48,7 +43,7 @@ class Attr extends Component {
       <View className={styles.attr}>
         <View className={styles.title}>
           <Image
-            src={this.state.attrUrl}
+            src={indexModel.baseUrl + 'attribute/' + name + '.png'}
             className={styles.img}
             mode='widthFix'
           />
@@ -85,12 +80,13 @@ class Attr extends Component {
   }
 }
 
-Attr.propTypes = {
+AttrSS.propTypes = {
   name: PropTypes.string,
   noAwakeAttr: PropTypes.string,
   awakeAttr: PropTypes.string,
   attr: PropTypes.object,
-  disabled: PropTypes.bool
+  disabled: PropTypes.bool,
+  indexModel: PropTypes.object
 };
 
-export default Attr;
+export default AttrSS;

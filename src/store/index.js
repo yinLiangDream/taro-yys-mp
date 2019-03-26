@@ -31,6 +31,7 @@ class Global {
     '风转符·高级': baseUrl + 'awakeMaterial/fzf_high.png'
   }
   @observable baseUrl = baseUrl
+  @observable allRoleDetail = []
 
   @action('获取所有式神') saveAllRoles = (params) => {
     this.allRoles = params
@@ -38,6 +39,10 @@ class Global {
 
   @action('获取所有更新') saveMpUpdate = (params) => {
     this.mpUpdate = params
+  }
+
+  @action('获取所有式神详情') saveAllRoleDetail = (params) => {
+    this.allRoleDetail = params
   }
 
   @computed get all() {

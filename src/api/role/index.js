@@ -66,5 +66,15 @@ export default {
       ...data,
       $url: 'skinIds'
     })
+  },
+  /**
+   * 获取御魂推荐
+   * @param {*} data
+   */
+  yuhuntuijian (data = {}) {
+    return returnObj({
+      ...data,
+      $url: 'yuhuntuijian'
+    })
   }
 }

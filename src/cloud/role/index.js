@@ -1,6 +1,7 @@
 const TcbRouter = require('tcb-router')
 const request = require('request')
 const jsdom = require('jsdom')
+
 const { JSDOM } = jsdom
 
 exports.main = (event, context) => {
@@ -39,13 +40,13 @@ exports.main = (event, context) => {
           request(
             `https://g37simulator.webapp.163.com/get_hero_attr?heroid=${id}&awake=1&level=${level ||
               1}&star=${star || 2}`,
-            (err, res, content) => {
-              const awake = JSON.parse(content).data
+            (error, res, response) => {
+              const awake = JSON.parse(response).data
               resolve({
                 noAwake,
                 awake
               })
-              reject(err)
+              reject(error)
             }
           )
           console.log(err)
@@ -67,13 +68,13 @@ exports.main = (event, context) => {
           const noAwake = JSON.parse(content).data
           request(
             `https://g37simulator.webapp.163.com/get_hero_skill?heroid=${id}&awake=1&level=1&star=2`,
-            (err, res, content) => {
-              const awake = JSON.parse(content).data
+            (error, res, response) => {
+              const awake = JSON.parse(response).data
               resolve({
                 noAwake,
                 awake
               })
-              reject(err)
+              reject(error)
             }
           )
           console.log(err)
@@ -106,8 +107,8 @@ exports.main = (event, context) => {
     ctx.data = await new Promise((resolve, reject) => {
       request(
         `https://mp-yys-1255362963.cos.ap-chengdu.myqcloud.com/json/sszjjs.json`,
-        (err, res, context) => {
-          resolve(JSON.parse(context))
+        (err, res, response) => {
+          resolve(JSON.parse(response))
           reject(err)
         }
       )
@@ -123,8 +124,8 @@ exports.main = (event, context) => {
     ctx.data = await new Promise((resolve, reject) => {
       request(
         `https://yys.163.com/m/shishen/${id}.html`,
-        (err, res, context) => {
-          const dom = new JSDOM(context)
+        (err, res, response) => {
+          const dom = new JSDOM(response)
           const skins = JSON.parse(
             dom.window.document.querySelector('#skin').textContent
           )
@@ -133,6 +134,23 @@ exports.main = (event, context) => {
           reject(err)
         }
       )
+    })
+    ctx.body = {
+      data: ctx.data
+    }
+  })
+
+  // 获取式神御魂推荐（式神定位、攻击方式等，技能消耗）
+  app.router('yuhuntuijian', async (ctx, next) => {
+    ctx.data = await new Promise((resolve, reject) => {
+      request('https://yys.16163.com/zt/yys/ds/gj/data/ss.js',
+      (err, res, response) => {
+        const firstIndex = response.indexOf('[')
+          const lastIndex = response.lastIndexOf(']')
+          const data = response.slice(firstIndex, lastIndex + 1)
+          resolve(JSON.parse(data))
+          reject(err)
+      })
     })
     ctx.body = {
       data: ctx.data

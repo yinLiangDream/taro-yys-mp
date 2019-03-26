@@ -25,7 +25,8 @@ class Index extends Component {
     navigationBarTitleText: '首页'
   };
 
-  constructor() {
+  constructor(props) {
+    super(props)
     const { indexModel } = this.props;
     this.state = {
       imgUrl: [
@@ -40,6 +41,11 @@ class Index extends Component {
           click: 'fengmo'
         },
         {
+          text: '御魂',
+          key: `${indexModel.baseUrl}yuhun.png`,
+          click: 'yuhun'
+        },
+        {
           text: '游戏更新记',
           key: `${indexModel.baseUrl}eventRecord.png`,
           click: 'updateGame'
@@ -47,7 +53,7 @@ class Index extends Component {
         {
           text: '小程序更新记',
           key: `${indexModel.baseUrl}gameCalendar.png`,
-          click: 'mpUpdate'
+          click: 'mpUpdateRecord'
         }
         // {
         //   text: '主角录',
@@ -171,35 +177,11 @@ class Index extends Component {
     });
   }
 
-  mpUpdate() {
-    Taro.navigateTo({
-      url: '/pages/mpUpdateRecord/index'
-    });
-  }
-
-  rewardForSeal() {
-    Taro.navigateTo({
-      url: '/pages/rewardForSeal/index'
-    });
-  }
-
   clikshishen(item) {
     Taro.navigateTo({
       url: `/pages/roleDetail/index?id=${item.id}&level=${item.level}&name=${
         item.name
       }`
-    });
-  }
-
-  fengmo() {
-    Taro.navigateTo({
-      url: '/pages/fengmo/index'
-    });
-  }
-
-  updateGame() {
-    Taro.navigateTo({
-      url: '/pages/updateGame/index'
     });
   }
 
@@ -219,7 +201,9 @@ class Index extends Component {
   }
 
   clickHeader(clickName) {
-    this[clickName]();
+    Taro.navigateTo({
+      url: `/pages/${clickName}/index`
+    });
   }
 
   render() {

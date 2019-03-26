@@ -1,6 +1,14 @@
 import Taro, { Component } from '@tarojs/taro';
-import { View, Text, Image, Button, Label, ScrollView } from '@tarojs/components';
+import {
+  View,
+  Text,
+  Image,
+  Button,
+  Label,
+  ScrollView
+} from '@tarojs/components';
 import { observer, inject } from '@tarojs/mobx';
+import { AtCard, AtAvatar } from 'taro-ui';
 
 import styles from './index.module.less';
 import { roleApi } from '../../api/index';
@@ -8,7 +16,7 @@ import { setNavTitle } from '../../utils/index';
 
 import Loading from '../../components/Loading/index';
 import Modal from '../../components/Modal/index';
-import Attr from '../../components/Attr/index';
+import AttrSS from '../../components/Attr/index';
 import SkillItem from '../../components/SkillItem/index';
 import AwakeMaterial from '../../components/AwakeMaterial/index';
 
@@ -37,6 +45,7 @@ class RoleDetail extends Component {
       awakeMaterial: [],
       awakeSkills: [],
       storyUnlock: [],
+      recommendYuhun: [],
       disabledJuexing: false,
       staticUrl: {
         awakeUrl: '',
@@ -76,7 +85,7 @@ class RoleDetail extends Component {
   async componentDidMount() {
     setNavTitle(routerParams.name);
     const { indexModel } = this.props;
-    disabledJuexing = this.state.notJuexing.includes(routerParams.level)
+    disabledJuexing = this.state.notJuexing.includes(routerParams.level);
     this.setState({
       statusControl: {
         ...this.state.statusControl,
@@ -157,14 +166,6 @@ class RoleDetail extends Component {
     }
     console.log('===传记加载完毕===');
 
-    // 式神属性
-    this.setState({
-      ssLevel: 1,
-      ssStar: [true, true, false, false, false, false]
-    });
-    this.setAttr(1, 2, this.state.ssStar);
-    console.log('===式神属性加载完毕===');
-
     // 技能图标及说明
     const skills = await roleApi('skills', { id });
     this.state.skills = [];
@@ -187,10 +188,69 @@ class RoleDetail extends Component {
       this.state.awakeSkills.push({ text: skills.result.data.awake });
     }
     this.calLevel(this.state.ssStar);
-    this.setState({
-      skills: this.state.skills,
-      awakeSkills: this.state.awakeSkills
-    });
+
+    // 御魂推荐
+    let yuhunData = [];
+    if (indexModel.allRoleDetail.length === 0) {
+      const yuhuntuijian = await roleApi('yuhuntuijian', {});
+      indexModel.saveAllRoleDetail(yuhuntuijian.result.data);
+      yuhunData = yuhuntuijian.result.data;
+    } else yuhunData = indexModel.allRoleDetail;
+    const skillOtherDesc = yuhunData.find(
+      item => item['式神名称'] === routerParams.name
+    );
+    console.log(skillOtherDesc);
+    let recommendYuhun = [];
+    if (skillOtherDesc) {
+      this.state.skills.forEach((item, index) => {
+        item.type = skillOtherDesc[`${index + 1}技能类型`];
+        item.need = skillOtherDesc[`${index + 1}技能消耗`];
+      });
+      console.log('===技能类型===');
+
+      recommendYuhun = [
+        {
+          icon1: `${indexModel.baseUrl}yuhun_icon/${
+            skillOtherDesc['1御魂图标1']
+          }`,
+          icon2: `${indexModel.baseUrl}yuhun.png`,
+          main1: skillOtherDesc['1御魂数量1'],
+          main2: skillOtherDesc['1御魂数量2'],
+          title: '方案一',
+          mainAttr: `${indexModel.baseUrl}yuhun_icon/yuhun_icon.png`,
+          mainAttr2: skillOtherDesc['1主属性1'],
+          mainAttr4: skillOtherDesc['1主属性2'],
+          mainAttr6: skillOtherDesc['1主属性3'],
+          reason: skillOtherDesc['1理由']
+        },
+        {
+          icon1: `${indexModel.baseUrl}yuhun_icon/${
+            skillOtherDesc['2御魂图标1']
+          }`,
+          icon2: `${indexModel.baseUrl}yuhun.png`,
+          main1: skillOtherDesc['2御魂数量1'],
+          main2: skillOtherDesc['2御魂数量2'],
+          title: '方案二',
+          mainAttr: `${indexModel.baseUrl}yuhun_icon/yuhun_icon.png`,
+          mainAttr2: skillOtherDesc['2主属性1'],
+          mainAttr4: skillOtherDesc['2主属性2'],
+          mainAttr6: skillOtherDesc['2主属性3'],
+          reason: skillOtherDesc['2理由']
+        }
+      ];
+    }
+    console.log('===技能加载完毕===');
+    this.setState(
+      {
+        skills: this.state.skills,
+        awakeSkills: this.state.awakeSkills,
+        recommendYuhun
+      },
+      () => {
+        // 式神属性
+        this.setAttr(1, 2, this.state.ssStar);
+      }
+    );
   }
 
   /**
@@ -228,21 +288,24 @@ class RoleDetail extends Component {
   closeLevel(level, star, ssStar = this.state.ssStar) {
     if (level) {
       const starLen = ssStar.filter(item => item).length;
-      this.setState({
-        statusControl: {
-          ...this.state.statusControl,
-          showLevelModal: false
+      this.setState(
+        {
+          statusControl: {
+            ...this.state.statusControl,
+            showLevelModal: false
+          }
+        },
+        () => {
+          this.setAttr(level, starLen, ssStar);
         }
-      }, () => {
-        this.setAttr(level, starLen, ssStar);
-      })
+      );
     } else {
       this.setState({
         statusControl: {
           ...this.state.statusControl,
           showLevelModal: false
         }
-      })
+      });
     }
   }
 
@@ -273,7 +336,6 @@ class RoleDetail extends Component {
         }
       },
       async () => {
-        console.log('showLoading', this.state.statusControl.showLoading);
         const attr = await roleApi('attr', {
           id: this.state.id,
           level,
@@ -297,9 +359,7 @@ class RoleDetail extends Component {
         }));
         const attrs = names.map(key => {
           let beforeData = attrData.noAwake[key];
-          let afterData = disabledJuexing
-            ? beforeData
-            : attrData.awake[key];
+          let afterData = disabledJuexing ? beforeData : attrData.awake[key];
           const rate = [
             'critRate',
             'critPower',
@@ -339,6 +399,7 @@ class RoleDetail extends Component {
             showLoading: false
           }
         });
+        console.log('===式神属性加载完毕===');
       }
     );
   }
@@ -474,7 +535,7 @@ class RoleDetail extends Component {
 
   render() {
     console.log('render roleDetail');
-
+    const { indexModel } = this.props;
     const storyList = this.state.story.map((item, index) => (
       <View key={index} className={styles.contentDetailItem}>
         <View className={styles.zhuanjiTitle}>
@@ -484,6 +545,60 @@ class RoleDetail extends Component {
         <Label className={styles.zhuanjiContext}>{item.desc}</Label>
       </View>
     ));
+    const skillList = <SkillItem skills={this.state.skills} />;
+    const awakeSkillList = <SkillItem skills={this.state.awakeSkills} awake />;
+    const materialList = this.state.awakeMaterial.map((item, index) => (
+      <View key={index}>{item ? <AwakeMaterial data={item} /> : ''}</View>
+    ));
+    const yuhuntuijian = this.state.recommendYuhun.map((item, index) => (
+      <View
+        className={index === 1 ? 'margin-top margin-bottom' : ''}
+        key={index}
+      >
+        <AtCard title={item.title}>
+          <View className='at-row at-row__align--center'>
+            <View className='at-col'>
+              <AtAvatar size='small' circle image={item.icon1} />
+            </View>
+            <View className='at-col padding'>
+              <Text>{item.main1}</Text>
+            </View>
+            <View className='at-col'>
+              <AtAvatar size='small' circle image={item.icon2} />
+            </View>
+            <View className='at-col padding'>
+              <Text>{item.main2}</Text>
+            </View>
+          </View>
+          <View className='at-row at-row__align--center margin-top-sm margin-bottom-sm text-sm'>
+            主属性：
+            <View className={`${styles.yuhunAttrIcon} ${styles.mainAttr2}`} />
+            <Text className='padding-lr-xs'>{item.mainAttr2}</Text>
+            <View className={`${styles.yuhunAttrIcon} ${styles.mainAttr4}`} />
+            <Text className='padding-lr-xs'>{item.mainAttr4}</Text>
+            <View className={`${styles.yuhunAttrIcon} ${styles.mainAttr6}`} />
+            <Text className='padding-lr-xs'>{item.mainAttr6}</Text>
+          </View>
+          <View className='at-row at-row__align--start text-sm'>
+            <View className='at-rol'>推荐理由：</View>
+            <Text className='at-col at-col--wrap'>{item.reason}</Text>
+          </View>
+        </AtCard>
+      </View>
+    ));
+    const attrsList = this.state.attrs.map((item, index) => (
+      <View key={index}>
+        <AttrSS
+          name={item.name}
+          noAwakeAttr={item.noAwakeAttr}
+          awakeAttr={item.awakeAttr}
+          attr={item.attr}
+          disabled={this.state.disabledJuexing}
+          indexModel={indexModel}
+        />
+      </View>
+    ));
+    // console.log(attrsList)
     return (
       <View className={styles.roleDetail}>
         <Loading show={this.state.statusControl.showLoading} />
@@ -589,9 +704,9 @@ class RoleDetail extends Component {
                   <Text className={styles.text}>{routerParams.name}</Text>
                 </View>
                 <View className={styles.contentDetail}>
-                <ScrollView scroll-y style='height: 300rpx;'>
-                  {storyList}
-                </ScrollView>
+                  <ScrollView scroll-y style='height: 300rpx;'>
+                    {storyList}
+                  </ScrollView>
                 </View>
               </View>
             </View>
@@ -673,41 +788,26 @@ class RoleDetail extends Component {
                 </View>
               </View>
 
-              <View className={styles.attr}>
-                {this.state.attrs.map((item, index) => (
-                  <View key={index}>
-                    <Attr
-                      name={item.name}
-                      noAwakeAttr={item.noAwakeAttr}
-                      awakeAttr={item.awakeAttr}
-                      attr={item.attr}
-                      disabled={this.state.disabledJuexing}
-                    />
-                  </View>
-                ))}
-              </View>
+              <View className={styles.attr}>{attrsList}</View>
             </View>
           </View>
 
           <View className={styles.skill}>
             <View className={styles.title}>03/ 技能</View>
-            <SkillItem skills={this.state.skills} />
-            {!disabledJuexing ? (
-              <SkillItem skills={this.state.awakeSkills} awake />
-            ) : (
-              ''
-            )}
+            {skillList}
+            {!disabledJuexing ? awakeSkillList : ''}
             {!disabledJuexing ? (
               <View className={`${styles.metarial} shadow-blur bg-gray`}>
-                {this.state.awakeMaterial.map((item, index) => (
-                  <View key={index}>
-                    {item ? <AwakeMaterial data={item} /> : ''}
-                  </View>
-                ))}
+                {materialList}
               </View>
             ) : (
               ''
             )}
+          </View>
+
+          <View className={styles.recommend}>
+            <View className={styles.title}>04/ 御魂推荐</View>
+            {yuhuntuijian}
           </View>
         </View>
       </View>

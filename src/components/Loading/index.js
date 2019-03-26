@@ -68,10 +68,10 @@ class Loading extends Component {
     return (
       <View className={`load-progress ${showOrHide}`}>
         <View
-          class='load-progress-bar bg-cyan'
+          class='load-progress-bar bg-blue'
           style={`transform: translate3d(-${100 - this.state.statusControl.loadProgress}%, 0px, 0px)`}
         />
-        <View class='load-progress-spinner text-cyan' />
+        <View class='load-progress-spinner text-blue' />
       </View>
     )
   }

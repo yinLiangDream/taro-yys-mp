@@ -1,5 +1,5 @@
 import Taro, { Component } from '@tarojs/taro';
-import { View, Image } from '@tarojs/components';
+import { View, Image, Text } from '@tarojs/components';
 import PropTypes from 'prop-types';
 
 import styles from './index.module.less';
@@ -29,14 +29,31 @@ class SkillItem extends Component {
                     className={styles.img}
                   />
                   <View className={styles.title}>{item.text.name}</View>
+                  {!awake ? (
+                    <View className={styles.xiaohao}>
+                      <Image
+                        src='https://mp-yys-1255362963.cos.ap-chengdu.myqcloud.com/yuhun_icon/fire.png'
+                        mode='widthFix'
+                        className={styles.xiaohaoimg}
+                      />
+                      <Text>x {item.need}</Text>
+                    </View>
+                  ) : (
+                    ''
+                  )}
+                  {!awake ? (
+                    <View className={styles.attackType}>{item.type}</View>
+                  ) : (
+                    ''
+                  )}
                 </View>
               ) : (
                 ''
               )}
               <View className={styles.skillDes}>{item.text.normaldesc}</View>
               <View className={styles.skillLevel}>
-                {item.text.desc.map((item, index) => (
-                  <View key={index}>{item}</View>
+                {item.text.desc.map((itemDesc, indexDesc) => (
+                  <View key={indexDesc}>{itemDesc}</View>
                 ))}
               </View>
               {awake ? (
