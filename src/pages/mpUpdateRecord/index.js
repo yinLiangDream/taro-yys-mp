@@ -43,7 +43,7 @@ class Record extends Component {
           </View>
           <View className='margin-top'>
             {item.desc.map((itemDesc, indexDesc) => (
-              <Text key={indexDesc}>{itemDesc}</Text>
+              <View key={indexDesc}>{itemDesc}</View>
             ))}
           </View>
         </View>
