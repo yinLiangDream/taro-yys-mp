@@ -103,8 +103,8 @@ class Yuhun extends Component {
                   className='margin'
                   title={yuhun['御魂名称']}
                 >
-                  <View className='at-row at-row__align--center'>
-                    <View className='at-col-3'>
+                  <View className='at-row at-row__align--center at-row--wrap'>
+                    <View className='at-col-2 at-col at-col--auto' style='padding-right: 10rpx'>
                       <AtAvatar
                         circle
                         image={`${indexModel.baseUrl}yuhun_icon/${
@@ -112,7 +112,7 @@ class Yuhun extends Component {
                         }`}
                       />
                     </View>
-                    <View className='at-col at-col--auto'>
+                    <View className='at-col'>
                       <View className='padding-bottom-sm'>
                         <View className='at-row at-row__align--start at-row--wrap'>
                           <View className='at-col-1 at-col--auto'>
@@ -133,7 +133,7 @@ class Yuhun extends Component {
 
                       <View>
                         <View className='at-row at-row__align--start'>
-                          <View className='at-col-1 at-col--auto'>
+                          <View className='at-col at-col-1 at-col--auto'>
                             <AtTag
                               active
                               size='small'
