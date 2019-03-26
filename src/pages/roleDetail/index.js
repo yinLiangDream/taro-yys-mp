@@ -552,10 +552,11 @@ class RoleDetail extends Component {
     ));
     const yuhuntuijian = this.state.recommendYuhun.map((item, index) => (
       <View
-        className={index === 1 ? 'margin-top margin-bottom' : ''}
+        className={index === 1 ? 'margin-top margin-bottom radius' : 'radius'}
         key={index}
+        style='overflow: hidden'
       >
-        <AtCard title={item.title}>
+        <AtCard title={item.title} isFull>
           <View className='at-row at-row__align--center'>
             <View className='at-col'>
               <AtAvatar size='small' circle image={item.icon1} />
@@ -598,7 +599,6 @@ class RoleDetail extends Component {
         />
       </View>
     ));
-    // console.log(attrsList)
     return (
       <View className={styles.roleDetail}>
         <Loading show={this.state.statusControl.showLoading} />
@@ -764,6 +764,9 @@ class RoleDetail extends Component {
                       {this.state.ssLevel}级
                     </Button>
                   </View>
+                  <Text className={styles.levelTip}>
+                    Tips: 可以选择星级和等级~
+                  </Text>
                 </View>
 
                 <View className={styles.ssStar}>
