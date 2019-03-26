@@ -64,5 +64,24 @@ exports.main = (event, context) => {
     };
   });
 
+  // 获取活动信息
+  app.router('active', async (ctx, next) => {
+    ctx.data = await new Promise((resolve, reject) => {
+      request(
+        {
+          url: 'https://mp-yys-1255362963.cos.ap-chengdu.myqcloud.com/active/data.json',
+          method: 'GET'
+        },
+        (err, res, response) => {
+          resolve(JSON.parse(response))
+          reject(err)
+        }
+      );
+    });
+    ctx.body = {
+      data: ctx.data
+    };
+  });
+
   return app.serve();
 };

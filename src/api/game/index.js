@@ -1,30 +1,40 @@
-const name = 'game'
+const name = 'game';
 
 const returnObj = data => {
   return {
     name,
     data
-  }
-}
+  };
+};
 export default {
   /**
    * 游戏公告
    * @param {*} data
    */
-  update (data = {}) {
+  update(data = {}) {
     return returnObj({
       ...data,
       $url: 'update'
-    })
+    });
   },
   /**
    * 获取御魂详情
    * @param {*} data
    */
-  yuhun (data = {}) {
+  yuhun(data = {}) {
     return returnObj({
       ...data,
       $url: 'yuhun'
-    })
+    });
+  },
+  /**
+   * 获取活动信息
+   * @param {*} data
+   */
+  active(data = {}) {
+    return returnObj({
+      ...data,
+      $url: 'active'
+    });
   }
-}
+};

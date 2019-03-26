@@ -8,12 +8,14 @@ import {
   SwiperItem
 } from '@tarojs/components';
 import { observer, inject } from '@tarojs/mobx';
+import { AtFloatLayout, AtAccordion } from 'taro-ui';
 
 import styles from './index.module.less';
 import updateData from '../../utils/mpUpdateModel';
-import { roleApi } from '../../api/index';
+import { roleApi, gameApi } from '../../api/index';
 
 import Loading from '../../components/Loading/index';
+import FloatButton from '../../components/FloatButton/index';
 
 @inject('indexModel')
 @observer
@@ -26,7 +28,7 @@ class Index extends Component {
   };
 
   constructor(props) {
-    super(props)
+    super(props);
     const { indexModel } = this.props;
     this.state = {
       imgUrl: [
@@ -105,13 +107,15 @@ class Index extends Component {
       ],
       showIndex: 0,
       currentVersion: updateData[0],
+      activities: [],
       staticUrl: {
         baseUrl: indexModel.baseUrl,
         new: indexModel.baseUrl + 'new.png'
       },
       statusControl: {
         showLoading: true,
-        showVersion: false
+        showVersion: false,
+        showFloat: false
       }
     };
   }
@@ -121,6 +125,13 @@ class Index extends Component {
   }
 
   async componentDidMount() {
+    const resActive = await gameApi('active', {});
+    this.setState({
+      activities: resActive.result.data.map((item) => {
+        item.open = false;
+        return item;
+      })
+    });
     const { indexModel } = this.props;
     const res = await roleApi('list', {});
     const data = res.result.data;
@@ -206,6 +217,24 @@ class Index extends Component {
     });
   }
 
+  clickFloatButton() {
+    this.setState({
+      statusControl: {
+        ...this.state.statusControl,
+        showFloat: true
+      }
+    });
+  }
+
+  changeActiveOpen(index) {
+    this.setState({
+      activities: this.state.activities.map((item, i) => {
+        item.open = index === i ? !item.open: false;
+        return item;
+      })
+    })
+  }
+
   render() {
     console.log('render index');
     const tabHeadersList = this.state.imgUrl.map(item => (
@@ -265,6 +294,27 @@ class Index extends Component {
     ));
     return (
       <View className={styles.indexPage}>
+        <AtFloatLayout
+          title='最新活动'
+          isOpened={this.state.statusControl.showFloat}
+        >
+          {this.state.activities.map((item, index) => (
+            <AtAccordion key={index} title={item.title} open={item.open} onClick={this.changeActiveOpen.bind(this, index)}>
+              {item.desc.map((desc, descIndex) => (
+                <View className='text-sm text-gray text-content' key={descIndex}>{desc}</View>
+              ))}
+            </AtAccordion>
+          ))}
+        </AtFloatLayout>
+        {this.state.activities.length > 0 ? (
+          <FloatButton
+            type='text'
+            detail='最新活动'
+            onClickButton={this.clickFloatButton}
+          />
+        ) : (
+          ''
+        )}
         <Loading show={this.state.statusControl.showLoading} />
         <View className={styles.tabs}>
           <ScrollView scroll-x className={styles.scroll}>
