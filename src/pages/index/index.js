@@ -8,7 +8,8 @@ import {
   SwiperItem
 } from '@tarojs/components';
 import { observer, inject } from '@tarojs/mobx';
-import { AtFloatLayout, AtAccordion } from 'taro-ui';
+import { AtFloatLayout, AtAccordion, AtTag } from 'taro-ui';
+import dayjs from 'dayjs';
 
 import styles from './index.module.less';
 import updateData from '../../utils/mpUpdateModel';
@@ -127,7 +128,7 @@ class Index extends Component {
   async componentDidMount() {
     const resActive = await gameApi('active', {});
     this.setState({
-      activities: resActive.result.data.map((item) => {
+      activities: resActive.result.data.map(item => {
         item.open = false;
         return item;
       })
@@ -229,10 +230,10 @@ class Index extends Component {
   changeActiveOpen(index) {
     this.setState({
       activities: this.state.activities.map((item, i) => {
-        item.open = index === i ? !item.open: false;
+        item.open = index === i ? !item.open : false;
         return item;
       })
-    })
+    });
   }
   closeFloat() {
     this.setState({
@@ -308,9 +309,30 @@ class Index extends Component {
           onClose={this.closeFloat}
         >
           {this.state.activities.map((item, index) => (
-            <AtAccordion key={index} title={item.title} open={item.open} onClick={this.changeActiveOpen.bind(this, index)}>
+            <AtAccordion
+              key={index}
+              title={`${item.title}${
+                dayjs().isBefore(dayjs(item.time[0]))
+                  ? '（※未开始※）'
+                  : dayjs().isAfter(dayjs(item.time[1]))
+                  ? '（※已结束※）'
+                  : '（※进行中※）'
+              }`}
+              open={item.open}
+              onClick={this.changeActiveOpen.bind(this, index)}
+            >
+              <View className='padding-sm'>
+                <AtTag size='small' active type='primary'>
+                  活动时间：{item.time[0]}~{item.time[1]}
+                </AtTag>
+              </View>
               {item.desc.map((desc, descIndex) => (
-                <View className='text-sm text-gray text-content' key={descIndex}>{desc}</View>
+                <View
+                  className='text-sm text-gray text-content'
+                  key={descIndex}
+                >
+                  {desc}
+                </View>
               ))}
             </AtAccordion>
           ))}
