@@ -8,7 +8,6 @@ import {
   ScrollView
 } from '@tarojs/components';
 import { observer, inject } from '@tarojs/mobx';
-import { AtCard, AtAvatar } from 'taro-ui';
 
 import styles from './index.module.less';
 import { roleApi } from '../../api/index';
@@ -552,21 +551,33 @@ class RoleDetail extends Component {
     ));
     const yuhuntuijian = this.state.recommendYuhun.map((item, index) => (
       <View
-        className={index === 1 ? 'margin-top margin-bottom radius' : 'radius'}
-        key={index}
-        style='overflow: hidden'
+        className={
+          index === 1
+            ? 'margin-top margin-bottom radius bg-gray padding'
+            : 'radius bg-gray padding'
+        }
+        key={item.title}
+        style={{
+          overflow: 'hidden',
+          width: '100%',
+          border: '1rpx lightgray solid'
+        }}
       >
-        <AtCard title={item.title} isFull>
-          <View className='at-row at-row__align--center'>
+        <View title={item.title} isFull>
+          <View className='at-row at-row__align--center padding'>
             <View className='at-col'>
-              <AtAvatar size='small' circle image={item.icon1} />
+              <View
+                className='cu-avatar lg round'
+                style={{ backgroundImage: `url(${item.icon1})` }}
+              />
             </View>
             <View className='at-col padding'>
               <Text>{item.main1}</Text>
             </View>
-            <View className='at-col'>
-              <AtAvatar size='small' circle image={item.icon2} />
-            </View>
+            <View
+              className='cu-avatar lg round'
+              style={{ backgroundImage: `url(${item.icon2})` }}
+            />
             <View className='at-col padding'>
               <Text>{item.main2}</Text>
             </View>
@@ -584,7 +595,7 @@ class RoleDetail extends Component {
             <View className='at-rol'>推荐理由：</View>
             <Text className='at-col at-col--wrap'>{item.reason}</Text>
           </View>
-        </AtCard>
+        </View>
       </View>
     ));
     const attrsList = this.state.attrs.map((item, index) => (

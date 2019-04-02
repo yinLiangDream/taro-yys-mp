@@ -1,11 +1,14 @@
 import Taro, { Component } from '@tarojs/taro';
-import { View, Image } from '@tarojs/components';
+import { View, ScrollView, Button, Text } from '@tarojs/components';
 import { observer, inject } from '@tarojs/mobx';
-import dayjs from 'dayjs';
+import { AtDrawer } from 'taro-ui';
 
 import { gameApi } from '../../api/index';
 
 import Loading from '../../components/Loading';
+import UpdateDetail from './components/updateDetail';
+
+import './index.less';
 
 @inject('gameModel', 'indexModel')
 @observer
@@ -20,8 +23,11 @@ class UpdateGame extends Component {
     super(props);
     this.state = {
       list: [],
+      scrollTop: Math.random(),
+      showDetail: {},
       statusControl: {
-        showLoading: true
+        showLoading: true,
+        showDrawer: false
       }
     };
   }
@@ -36,59 +42,115 @@ class UpdateGame extends Component {
   async componentDidMount() {
     this.setState({
       statusControl: {
+        ...this.state.statusControl,
         showLoading: true
       }
-    })
-    const { gameModel, indexModel } = this.props;
+    });
+    const { gameModel } = this.props;
     let list = [];
     if (gameModel.update.length === 0) {
       const res = await gameApi('update', {});
-      list = res.result.data
-        .filter(item => item.type === 2)
-        .map(item => {
-          const title = JSON.parse(item.content).body.text.split(' ')[1];
-          const url = `${indexModel.baseUrl}updateImg/${dayjs(
-            item.createTime
-          ).format('YYYY-M-D')}-0.jpg`;
-          return {
-            title,
-            url
-          };
-        });
+      console.log(res.result.data);
+      list = res.result.data;
       gameModel.saveAllUpdate(list);
     }
     list = gameModel.update;
     this.setState({
       list,
+      showDetail: list[0],
       statusControl: {
-        showLoading: false
+        ...this.state.statusControl,
+        showLoading: false,
       }
     });
   }
+
+  showHistory() {
+    this.setState({
+      ...this.state.statusControl,
+      statusControl: {
+        showDrawer: true
+      }
+    });
+  }
+  hideHistory() {
+    this.setState({
+      ...this.state.statusControl,
+      statusControl: {
+        showDrawer: false
+      }
+    });
+  }
+  showDetail(index) {
+    this.setState({
+      showDetail: this.state.list[index],
+      scrollTop: Math.random()
+    });
+    this.hideHistory()
+  }
   render() {
-    const updateList = this.state.list.map((item, index) => (
-      <View key={index}>
-        <View className='cu-card case'>
-          <View className='cu-item shadow'>
-            <View classNamea='cu-item shadow'>
-              <View className='text-Abc text-lg padding bg-gradual-blue'>
-                {item.title}
-              </View>
-              <View
-                className='image'
-                onClick={this.showImg.bind(this, item.url)}
-              >
-                <Image src={item.url} mode='aspectFill' lazy-load />
-              </View>
-            </View>
-          </View>
-        </View>
-      </View>
-    ));
     return (
       <View>
         <Loading show={this.state.statusControl.showLoading} />
-        {updateList}
+        {this.state.list.length > 0 ? (
+          <ScrollView
+            scrollY
+            scrollTop={this.state.scrollTop}
+            scrollWithAnimation
+            className={
+              this.state.statusControl.showDrawer
+                ? 'DrawerPage show'
+                : 'DrawerPage'
+            }
+          >
+            <View className='radius'>
+              <UpdateDetail detail={this.state.showDetail} />
+
+              <View className='flex justify-center padding-bottom bg-gray'>
+                <Button
+                  className='cu-btn sm shadow bg-cyan radius'
+                  onClick={this.showHistory}
+                >
+                  查看历史更新
+                </Button>
+              </View>
+            </View>
+          </ScrollView>
+        ) : (
+          ''
+        )}
+        <View
+          className={
+            this.state.statusControl.showDrawer
+              ? 'DrawerClose show'
+              : 'DrawerClose'
+          }
+          onClick={this.hideHistory}
+        >
+          <Text className='icon-pullright' />
+        </View>
+        <ScrollView
+          scrollY
+          className={
+            this.state.statusControl.showDrawer
+              ? 'DrawerWindow show'
+              : 'DrawerWindow'
+          }
+        >
+          <View className='cu-list menu card-menu margin-top-xl margin-bottom-xl shadow-lg'>
+            {this.state.list.map((item, index) => (
+              <View
+                className='cu-item arrow bg-gray'
+                key={item.title}
+                onClick={this.showDetail.bind(this, index)}
+              >
+                <View class='content'>
+                  <Text class='text-grey'>{item.title}</Text>
+                </View>
+              </View>
+            ))}
+          </View>
+        </ScrollView>
       </View>
     );
   }

@@ -310,7 +310,7 @@ class Index extends Component {
         >
           {this.state.activities.map((item, index) => (
             <AtAccordion
-              key={index}
+              key={item.title}
               title={`${item.title}${
                 dayjs().isBefore(dayjs(item.time[0]))
                   ? '（※未开始※）'
