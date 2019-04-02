@@ -145,7 +145,7 @@ class UpdateGame extends Component {
                 onClick={this.showDetail.bind(this, index)}
               >
                 <View class='content'>
-                  <Text class='text-grey'>{item.title}</Text>
+                  <Text class='text-grey'>{item.title}（{item.time}）</Text>
                 </View>
               </View>
             ))}

@@ -23,7 +23,7 @@ class FloatButton extends Component {
   render() {
     const { type, detail } = this.props;
     return (
-      <View className={`${styles.floatButton} round bg-blue shadow`} onClick={this.click}>
+      <View className={`${styles.floatButton} round bg-blue shadow light`} onClick={this.click}>
         <View className={styles.main}>
           {type !== 'image' ? detail : <Image src={detail} mode='aspectFill' />}
         </View>

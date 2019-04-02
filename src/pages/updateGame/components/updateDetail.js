@@ -14,7 +14,7 @@ export default class UpdateDetail extends Component {
 
   render() {
     return (
-      <View className='flex flex-direction justify-center margin bg-gray' style={{ border: '1rpx solid #999', borderRadius: '10rpx' }} >
+      <View className='flex flex-direction justify-center margin bg-gray' style={{ border: '1rpx solid lightgray', borderRadius: '10rpx' }} >
         <View className='flex text-lg text-bold justify-center padding'>
           {this.props.detail.title}
         </View>
