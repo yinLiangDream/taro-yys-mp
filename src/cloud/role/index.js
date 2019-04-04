@@ -15,7 +15,7 @@ exports.main = (event, context) => {
   app.router('list', async (ctx, next) => {
     ctx.data = await new Promise((resolve, reject) => {
       request(
-        'https://yys.res.netease.com/m/gw/20180918135651/js/app/shishen.json',
+        'https://mp-yys-1255362963.cos.ap-chengdu.myqcloud.com/ss_json/ssList.json',
         (err, res, content) => {
           resolve(JSON.parse(content))
           reject(err)

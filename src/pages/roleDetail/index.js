@@ -84,8 +84,15 @@ class RoleDetail extends Component {
   async componentDidMount() {
     setNavTitle(routerParams.name);
     const { indexModel } = this.props;
+
+    const routerSkins = JSON.parse(routerParams.skins).map((item, index) => ({
+      url: `${indexModel.baseUrl}skin/${item.key}.png`,
+      name: item.name,
+      show: index === 0
+    }));
     disabledJuexing = this.state.notJuexing.includes(routerParams.level);
     this.setState({
+      skins: routerSkins,
       statusControl: {
         ...this.state.statusControl,
         showSkin: false
@@ -93,6 +100,20 @@ class RoleDetail extends Component {
     });
     const id = routerParams.id;
     this.state.id = id;
+
+    // 皮肤数据
+    // const skins = await roleApi('skinIds', { id });
+    // const currentSkins = skins.result.data
+    //   ? skins.result.data.map((item, index) => {
+    //     item.show = index === 0;
+    //     return item;
+    //   })
+    //   : [];
+    // this.setState({
+    //   skins: currentSkins
+    // });
+    // console.log('===皮肤数据加载完毕===');
+
     // 头像
     this.setState({
       staticUrl: {
@@ -112,19 +133,6 @@ class RoleDetail extends Component {
     });
     console.log('===传记解锁===');
 
-    // 皮肤数据
-    const skins = await roleApi('skinIds', { id });
-    const currentSkins = skins.result.data
-      ? skins.result.data.map((item, index) => {
-          item.show = index === 0;
-          return item;
-        })
-      : [];
-    this.setState({
-      skins: currentSkins
-    });
-    console.log('===皮肤数据加载完毕===');
-
     // 按钮及式神图片
     this.setState({
       disabledJuexing: disabledJuexing,
@@ -140,7 +148,7 @@ class RoleDetail extends Component {
             : this.state.staticUrl.juexing_disabled
         }`,
         skinButton: `${indexModel.baseUrl}${
-          currentSkins.length
+          routerSkins.length
             ? this.state.staticUrl.skin_normal
             : this.state.staticUrl.skin_disabled
         }`
@@ -416,11 +424,9 @@ class RoleDetail extends Component {
         },
         staticUrl: {
           ...this.state.staticUrl,
+          ...this.headerButtonReset(0),
           awakeUrl: `${indexModel.baseUrl}v2/${this.state.id}.png`
         }
-      },
-      () => {
-        this.headerButtonReset(0);
       }
     );
   }
@@ -439,11 +445,9 @@ class RoleDetail extends Component {
         },
         staticUrl: {
           ...this.state.staticUrl,
+          ...this.headerButtonReset(1),
           awakeUrl: `${indexModel.baseUrl}v3/${this.state.id}.png`
         }
-      },
-      () => {
-        this.headerButtonReset(1);
       }
     );
   }
@@ -452,23 +456,18 @@ class RoleDetail extends Component {
    * 点击皮肤
    */
   skinClick() {
-    const { indexModel } = this.props;
     if (!this.state.skins.length) return;
     this.setState(
       {
         staticUrl: {
           ...this.state.staticUrl,
-          awakeUrl: `${indexModel.baseUrl}skin/${
-            this.state.id
-          }-${this.state.skins.findIndex(item => item.show) + 1}.png`
+          ...this.headerButtonReset(2),
+          awakeUrl: this.state.skins[0].url
         },
         statusControl: {
           ...this.state.statusControl,
           showSkin: true
         }
-      },
-      () => {
-        this.headerButtonReset(2);
       }
     );
   }
@@ -503,14 +502,11 @@ class RoleDetail extends Component {
       type === 2
         ? `${indexModel.baseUrl}${this.state.staticUrl.skin_active}`
         : resetSkin;
-    this.setState({
-      staticUrl: {
-        ...this.state.staticUrl,
-        chushiButton,
-        juexingButton,
-        skinButton
-      }
-    });
+    return {
+      chushiButton,
+      juexingButton,
+      skinButton
+    }
   }
 
   /**
@@ -518,17 +514,16 @@ class RoleDetail extends Component {
    * @param {*} index
    */
   showSkin(index) {
-    const { indexModel } = this.props;
     this.state.skins.forEach((item, listIndex) => {
       item.show = index === listIndex;
-      if (item.show)
+      if (item.show) {
         this.setState({
           staticUrl: {
             ...this.state.staticUrl,
-            awakeUrl: `${indexModel.baseUrl}skin/${this.state.id}-${index +
-              1}.png`
+            awakeUrl: this.state.skins[index].url
           }
         });
+      }
     });
   }
 
@@ -684,7 +679,7 @@ class RoleDetail extends Component {
           {this.state.statusControl.showSkin ? (
             <View className={styles.skinGroup}>
               {this.state.skins.map((item, index) => (
-                <View key={index}>
+                <View key={item.name}>
                   <Button
                     className={`${
                       item.show ? 'bg-cyan' : 'bg-grey'
