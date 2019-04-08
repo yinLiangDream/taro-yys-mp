@@ -22,7 +22,7 @@ import AwakeMaterial from '../../components/AwakeMaterial/index';
 let routerParams = {};
 let disabledJuexing = false;
 
-@inject('indexModel')
+@inject('indexModel', 'roleModel')
 @observer
 class RoleDetail extends Component {
   static options = {
@@ -45,6 +45,7 @@ class RoleDetail extends Component {
       awakeSkills: [],
       storyUnlock: [],
       recommendYuhun: [],
+      zrRecommend: [],
       disabledJuexing: false,
       staticUrl: {
         awakeUrl: '',
@@ -81,128 +82,70 @@ class RoleDetail extends Component {
   componentWillMount() {
     routerParams = this.$router.params;
   }
-  async componentDidMount() {
-    setNavTitle(routerParams.name);
-    const { indexModel } = this.props;
-
-    const routerSkins = JSON.parse(routerParams.skins).map((item, index) => ({
-      url: `${indexModel.baseUrl}skin/${item.key}.png`,
-      name: item.name,
-      show: index === 0
-    }));
-    disabledJuexing = this.state.notJuexing.includes(routerParams.level);
-    this.setState({
-      skins: routerSkins,
-      statusControl: {
-        ...this.state.statusControl,
-        showSkin: false
-      }
-    });
-    const id = routerParams.id;
-    this.state.id = id;
-
-    // 皮肤数据
-    // const skins = await roleApi('skinIds', { id });
-    // const currentSkins = skins.result.data
-    //   ? skins.result.data.map((item, index) => {
-    //     item.show = index === 0;
-    //     return item;
-    //   })
-    //   : [];
-    // this.setState({
-    //   skins: currentSkins
-    // });
-    // console.log('===皮肤数据加载完毕===');
-
-    // 头像
-    this.setState({
-      staticUrl: {
-        ...this.state.staticUrl,
-        noAwakeHead: `${indexModel.baseUrl}head/${this.state.id}.jpg`,
-        awakeHead: disabledJuexing
-          ? this.state.staticUrl.noAwakeHead
-          : `${indexModel.baseUrl}awake_head/${id}.jpg`
-      }
-    });
-    console.log('===头像加载完毕===');
-
-    // 式神传记解锁
-    const res = await roleApi('storyUnlock');
-    this.setState({
-      storyUnlock: res.result.data
-    });
-    console.log('===传记解锁===');
-
-    // 按钮及式神图片
-    this.setState({
-      disabledJuexing: disabledJuexing,
-      staticUrl: {
-        ...this.state.staticUrl,
-        awakeUrl: `${indexModel.baseUrl}v2/${id}.png`,
-        chushiButton: `${indexModel.baseUrl}${
-          this.state.staticUrl.chushi_active
-        }`,
-        juexingButton: `${indexModel.baseUrl}${
-          !disabledJuexing
-            ? this.state.staticUrl.juexing_normal
-            : this.state.staticUrl.juexing_disabled
-        }`,
-        skinButton: `${indexModel.baseUrl}${
-          routerSkins.length
-            ? this.state.staticUrl.skin_normal
-            : this.state.staticUrl.skin_disabled
-        }`
-      }
-    });
-    console.log('===按钮及式神图片加载完毕===');
-
+  async getStory() {
+    const { roleModel } = this.props;
     // 传记
-    const zhuanjires = await roleApi('story', { id });
-    const showUnlock = this.state.storyUnlock.find(
-      item => item.id === Number(id)
-    );
+    if (!roleModel.allStory.length) {
+      const zhuanjires = await roleApi('story', {});
+      roleModel.saveAllStory(zhuanjires.result.data);
+    }
+    const story = roleModel.getStoryById(this.state.id);
+    // const showUnlock = this.state.storyUnlock.find(
+    //   item => item.id === Number(id)
+    // );
     const zhuanji = ['一', '二', '三', '四', '五', '六', '七', '八', '九'];
-    if (Object.keys(zhuanjires.result.data.data).length) {
+    if (Object.keys(story).length) {
       this.setState({
-        story: zhuanjires.result.data.data.story.map((item, index) => ({
+        story: story.map((item, index) => ({
           title: '传记' + zhuanji[index],
-          desc: item,
-          unlock: showUnlock ? showUnlock.jx[index] : null
+          desc: item
+          // unlock: showUnlock ? showUnlock.jx[index] : null
         }))
       });
     }
     console.log('===传记加载完毕===');
+  }
 
+  async getSkill() {
+    const { indexModel, roleModel } = this.props;
     // 技能图标及说明
-    const skills = await roleApi('skills', { id });
+    if (!roleModel.allSkill.length) {
+      const skills = await roleApi('skills', {});
+      roleModel.saveAllSKill(skills.result.data);
+    }
+    const skillDesc = roleModel.getSkillById(this.state.id);
     this.state.skills = [];
     this.state.awakeSkills = [];
-    Object.keys(skills.result.data.noAwake).forEach(noAwakeId => {
+    Object.keys(skillDesc.beforeAwakeSkillDesc).forEach(noAwakeId => {
       if (['add', 'add_type'].includes(noAwakeId)) return;
       this.state.skills.push({
         url: indexModel.baseUrl + 'skill_icons/' + noAwakeId + '.png',
-        text: skills.result.data.noAwake[noAwakeId]
+        text: skillDesc.beforeAwakeSkillDesc[noAwakeId]
       });
     });
-    Object.keys(skills.result.data.awake).forEach(awakeId => {
+    Object.keys(skillDesc.afterAwakeSkillDesc).forEach(awakeId => {
       if (['add', 'add_type'].includes(awakeId)) return;
       this.state.awakeSkills.push({
         url: indexModel.baseUrl + 'skill_icons/' + awakeId + '.png',
-        text: skills.result.data.awake[awakeId]
+        text: skillDesc.afterAwakeSkillDesc[awakeId]
       });
     });
     if (this.state.awakeSkills.length === 0) {
-      this.state.awakeSkills.push({ text: skills.result.data.awake });
+      this.state.awakeSkills.push({ text: skillDesc.afterAwakeSkillDesc });
     }
     this.calLevel(this.state.ssStar);
+  }
 
+  async getRecommend() {
+    await this.getSkill();
+    const { indexModel, roleModel } = this.props;
     // 御魂推荐
     let yuhunData = [];
-    if (indexModel.allRoleDetail.length === 0) {
+    if (roleModel.allRecommend.length === 0) {
       const yuhuntuijian = await roleApi('yuhuntuijian', {});
-      indexModel.saveAllRoleDetail(yuhuntuijian.result.data);
+      roleModel.saveAllRecommend(yuhuntuijian.result.data);
       yuhunData = yuhuntuijian.result.data;
-    } else yuhunData = indexModel.allRoleDetail;
+    } else yuhunData = roleModel.allRecommend;
     const skillOtherDesc = yuhunData.find(
       item => item['式神名称'] === routerParams.name
     );
@@ -247,17 +190,78 @@ class RoleDetail extends Component {
       ];
     }
     console.log('===技能加载完毕===');
-    this.setState(
-      {
-        skills: this.state.skills,
-        awakeSkills: this.state.awakeSkills,
-        recommendYuhun
+
+    this.setState({
+      skills: this.state.skills,
+      awakeSkills: this.state.awakeSkills,
+      recommendYuhun
+    });
+  }
+  async componentDidMount() {
+    setNavTitle(routerParams.name);
+    const { indexModel, roleModel } = this.props;
+    const id = routerParams.id;
+    this.state.id = id;
+    const routerSkins = JSON.parse(routerParams.skins).map((item, index) => ({
+      url: `${indexModel.baseUrl}skin/${item.key}.png`,
+      name: item.name,
+      show: index === 0
+    }));
+    disabledJuexing = this.state.notJuexing.includes(routerParams.level);
+    // this.setState({
+    //   skins: routerSkins,
+    //   statusControl: {
+    //     ...this.state.statusControl,
+    //     showSkin: false
+    //   }
+    // });
+    console.log('===皮肤数据加载完毕===');
+
+    // 式神传记解锁
+    // const res = await roleApi('storyUnlock');
+    // this.setState({
+    //   storyUnlock: res.result.data
+    // });
+    console.log('===传记解锁===');
+
+    // 按钮及式神图片
+    this.setState({
+      disabledJuexing: disabledJuexing,
+      skins: routerSkins,
+      statusControl: {
+        ...this.state.statusControl,
+        showSkin: false
       },
-      () => {
-        // 式神属性
-        this.setAttr(1, 2, this.state.ssStar);
+      staticUrl: {
+        ...this.state.staticUrl,
+        noAwakeHead: `${indexModel.baseUrl}head/${this.state.id}.jpg`,
+        awakeHead: disabledJuexing
+          ? this.state.staticUrl.noAwakeHead
+          : `${indexModel.baseUrl}awake_head/${id}.jpg`,
+        awakeUrl: `${indexModel.baseUrl}v2/${id}.png`,
+        chushiButton: `${indexModel.baseUrl}${
+          this.state.staticUrl.chushi_active
+        }`,
+        juexingButton: `${indexModel.baseUrl}${
+          !disabledJuexing
+            ? this.state.staticUrl.juexing_normal
+            : this.state.staticUrl.juexing_disabled
+        }`,
+        skinButton: `${indexModel.baseUrl}${
+          routerSkins.length
+            ? this.state.staticUrl.skin_normal
+            : this.state.staticUrl.skin_disabled
+        }`
       }
-    );
+    });
+    console.log('===头像加载完毕===');
+    console.log('===按钮及式神图片加载完毕===');
+
+    this.getStory();
+
+    this.getRecommend();
+
+    this.setAttr(1, 2, this.state.ssStar);
   }
 
   /**
@@ -416,19 +420,17 @@ class RoleDetail extends Component {
    */
   chushiClick() {
     const { indexModel } = this.props;
-    this.setState(
-      {
-        statusControl: {
-          ...this.state.statusControl,
-          showSkin: false
-        },
-        staticUrl: {
-          ...this.state.staticUrl,
-          ...this.headerButtonReset(0),
-          awakeUrl: `${indexModel.baseUrl}v2/${this.state.id}.png`
-        }
+    this.setState({
+      statusControl: {
+        ...this.state.statusControl,
+        showSkin: false
+      },
+      staticUrl: {
+        ...this.state.staticUrl,
+        ...this.headerButtonReset(0),
+        awakeUrl: `${indexModel.baseUrl}v2/${this.state.id}.png`
       }
-    );
+    });
   }
 
   /**
@@ -437,19 +439,17 @@ class RoleDetail extends Component {
   juexingClick() {
     const { indexModel } = this.props;
     if (disabledJuexing) return;
-    this.setState(
-      {
-        statusControl: {
-          ...this.state.statusControl,
-          showSkin: false
-        },
-        staticUrl: {
-          ...this.state.staticUrl,
-          ...this.headerButtonReset(1),
-          awakeUrl: `${indexModel.baseUrl}v3/${this.state.id}.png`
-        }
+    this.setState({
+      statusControl: {
+        ...this.state.statusControl,
+        showSkin: false
+      },
+      staticUrl: {
+        ...this.state.staticUrl,
+        ...this.headerButtonReset(1),
+        awakeUrl: `${indexModel.baseUrl}v3/${this.state.id}.png`
       }
-    );
+    });
   }
 
   /**
@@ -457,19 +457,17 @@ class RoleDetail extends Component {
    */
   skinClick() {
     if (!this.state.skins.length) return;
-    this.setState(
-      {
-        staticUrl: {
-          ...this.state.staticUrl,
-          ...this.headerButtonReset(2),
-          awakeUrl: this.state.skins[0].url
-        },
-        statusControl: {
-          ...this.state.statusControl,
-          showSkin: true
-        }
+    this.setState({
+      staticUrl: {
+        ...this.state.staticUrl,
+        ...this.headerButtonReset(2),
+        awakeUrl: this.state.skins[0].url
+      },
+      statusControl: {
+        ...this.state.statusControl,
+        showSkin: true
       }
-    );
+    });
   }
 
   /**
@@ -506,7 +504,7 @@ class RoleDetail extends Component {
       chushiButton,
       juexingButton,
       skinButton
-    }
+    };
   }
 
   /**
@@ -539,8 +537,12 @@ class RoleDetail extends Component {
         <Label className={styles.zhuanjiContext}>{item.desc}</Label>
       </View>
     ));
-    const skillList = <SkillItem skills={this.state.skills} />;
-    const awakeSkillList = <SkillItem skills={this.state.awakeSkills} awake />;
+    const skillList = (
+      <SkillItem skills={this.state.skills} style='width: 100%' />
+    );
+    const awakeSkillList = (
+      <SkillItem skills={this.state.awakeSkills} awake style='width: 100%' />
+    );
     const materialList = this.state.awakeMaterial.map((item, index) => (
       <View key={index}>{item ? <AwakeMaterial data={item} /> : ''}</View>
     ));

@@ -60,24 +60,11 @@ exports.main = (event, context) => {
 
   // 式神技能
   app.router('skills', async (ctx, next) => {
-    const { id } = event
     ctx.data = await new Promise((resolve, reject) => {
       request(
-        `https://g37simulator.webapp.163.com/get_hero_skill?heroid=${id}&awake=0&level=1&star=2`,
+        `https://mp-yys-1255362963.cos.ap-chengdu.myqcloud.com/ss_json/skill.json`,
         (err, res, content) => {
-          const noAwake = JSON.parse(content).data
-          request(
-            `https://g37simulator.webapp.163.com/get_hero_skill?heroid=${id}&awake=1&level=1&star=2`,
-            (error, res, response) => {
-              const awake = JSON.parse(response).data
-              resolve({
-                noAwake,
-                awake
-              })
-              reject(error)
-            }
-          )
-          console.log(err)
+          err ? reject(err) : resolve(JSON.parse(content));
         }
       )
     })
@@ -90,10 +77,9 @@ exports.main = (event, context) => {
   app.router('story', async (ctx, next) => {
     ctx.data = await new Promise((resolve, reject) => {
       request(
-        `https://g37simulator.webapp.163.com/get_hero_story?heroid=${event.id}`,
+        `https://mp-yys-1255362963.cos.ap-chengdu.myqcloud.com/ss_json/story.json`,
         (err, res, content) => {
-          resolve(JSON.parse(content))
-          reject(err)
+          !err ? resolve(JSON.parse(content)) : reject(err)
         }
       )
     })
@@ -108,8 +94,7 @@ exports.main = (event, context) => {
       request(
         `https://mp-yys-1255362963.cos.ap-chengdu.myqcloud.com/json/sszjjs.json`,
         (err, res, response) => {
-          resolve(JSON.parse(response))
-          reject(err)
+          !err ? resolve(JSON.parse(response)) : reject(err)
         }
       )
     })
@@ -129,9 +114,7 @@ exports.main = (event, context) => {
           const skins = JSON.parse(
             dom.window.document.querySelector('#skin').textContent
           )
-          resolve(skins)
-          console.log(skins)
-          reject(err)
+          !err ? resolve(skins) : reject(err)
         }
       )
     })
@@ -143,13 +126,22 @@ exports.main = (event, context) => {
   // 获取式神御魂推荐（式神定位、攻击方式等，技能消耗）
   app.router('yuhuntuijian', async (ctx, next) => {
     ctx.data = await new Promise((resolve, reject) => {
-      request('https://yys.16163.com/zt/yys/ds/gj/data/ss.js',
+      request('https://mp-yys-1255362963.cos.ap-chengdu.myqcloud.com/ss_json/recommend.json',
       (err, res, response) => {
-        const firstIndex = response.indexOf('[')
-          const lastIndex = response.lastIndexOf(']')
-          const data = response.slice(firstIndex, lastIndex + 1)
-          resolve(JSON.parse(data))
-          reject(err)
+        !err ? resolve(JSON.parse(response)) : reject(err)
+      })
+    })
+    ctx.body = {
+      data: ctx.data
+    }
+  })
+
+  // 获取式神阵容推荐
+  app.router('zrtj', async (ctx, next) => {
+    ctx.data = await new Promise((resolve, reject) => {
+      request(`https://mp-yys-1255362963.cos.ap-chengdu.myqcloud.com/ss_json/zrRecommend.json`,
+        (err, res, response) => {
+          !err ? resolve(JSON.parse(response)) : reject(err)
       })
     })
     ctx.body = {

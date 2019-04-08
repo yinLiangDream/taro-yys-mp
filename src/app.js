@@ -7,7 +7,8 @@ import Index from './pages/index';
 
 import indexModel from './store/index';
 import gameModel from './store/game';
-import rewardForSealModel from './store/rewardForSeal'
+import rewardForSealModel from './store/rewardForSeal';
+import roleModel from './store/role';
 
 import './app.less';
 
@@ -20,7 +21,8 @@ import './app.less';
 const store = {
   indexModel,
   gameModel,
-  rewardForSealModel
+  rewardForSealModel,
+  roleModel
 };
 
 class App extends Component {
@@ -42,27 +44,27 @@ class App extends Component {
       navigationBarTitleText: '痒痒鼠式神录',
       navigationBarTextStyle: 'black'
     },
-    tabBar: {
-      color: '#999',
-      backgroundColor: '#fafafa',
-      selectedColor: '#333',
-      borderStyle: 'white',
-      list: [
-        {
-          text: '首页',
-          pagePath: 'pages/index/index',
-          iconPath: './assets/tabs/home.png',
-          selectedIconPath: './assets/tabs/home-active.png'
-        },
-        {
-          text: '我的',
-          pagePath: 'pages/my/index',
-          iconPath: './assets/tabs/my.png',
-          selectedIconPath: './assets/tabs/my-active.png'
-        }
-      ],
-      position: 'bottom'
-    },
+    // tabBar: {
+    //   color: '#999',
+    //   backgroundColor: '#fafafa',
+    //   selectedColor: '#333',
+    //   borderStyle: 'white',
+    //   list: [
+    //     {
+    //       text: '首页',
+    //       pagePath: 'pages/index/index',
+    //       iconPath: './assets/tabs/home.png',
+    //       selectedIconPath: './assets/tabs/home-active.png'
+    //     },
+    //     {
+    //       text: '我的',
+    //       pagePath: 'pages/my/index',
+    //       iconPath: './assets/tabs/my.png',
+    //       selectedIconPath: './assets/tabs/my-active.png'
+    //     }
+    //   ],
+    //   position: 'bottom'
+    // },
     cloud: true
   };
 

@@ -76,5 +76,11 @@ export default {
       ...data,
       $url: 'yuhuntuijian'
     })
+  },
+  zrtj (data = {}) {
+    return returnObj({
+      ...data,
+      $url: 'zrtj'
+    })
   }
 }

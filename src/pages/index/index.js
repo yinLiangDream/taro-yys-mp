@@ -17,6 +17,7 @@ import { roleApi, gameApi } from '../../api/index';
 
 import Loading from '../../components/Loading/index';
 import FloatButton from '../../components/FloatButton/index';
+import SearchBar from '../../components/SearchBar/index';
 
 @inject('indexModel')
 @observer
@@ -193,7 +194,7 @@ class Index extends Component {
     Taro.navigateTo({
       url: `/pages/roleDetail/index?id=${item.id}&level=${item.level}&name=${
         item.name
-      }`
+      }&skins=${JSON.stringify(item.skins)}`
     });
   }
 
@@ -243,7 +244,22 @@ class Index extends Component {
       }
     });
   }
+  search(key) {
+    const {indexModel} = this.props;
+    this.clickTap(0);
+    this.setState({
+      allTag: this.state.allTag.map((item, index) => {
+        if (index === 0) {
+          item.showList = indexModel.allRoles.filter(itemTag =>
+            itemTag.name.includes(key)
+          );
+        }
+        return item
+      })
+    });
+  }
 
+  confirmSearch() {}
   render() {
     console.log('render index');
     const tabHeadersList = this.state.imgUrl.map(item => (
@@ -303,6 +319,7 @@ class Index extends Component {
     ));
     return (
       <View className={styles.indexPage}>
+        <SearchBar onSearch={this.search} onConfirm={this.confirmSearch} placeholder='请输入式神名称' />
         <AtFloatLayout
           title='最新活动'
           isOpened={this.state.statusControl.showFloat}
