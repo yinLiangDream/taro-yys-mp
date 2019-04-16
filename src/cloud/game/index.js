@@ -51,6 +51,39 @@ exports.main = (event, context) => {
     };
   });
 
+  // 游戏更新列表
+  app.router('updateList', async (ctx, next) => {
+    ctx.data = await new Promise((resolve, reject) => {
+      request(
+        'https://mp-yys-1255362963.cos.ap-chengdu.myqcloud.com/gonggao_json/updateList.json',
+        (err, res, resData) => {
+          resolve(JSON.parse(resData));
+          err && reject(err);
+        }
+      )
+    });
+    ctx.body = {
+      data: ctx.data
+    };
+  });
+
+  // 获取更新详情
+  app.router('updateDetail', async (ctx, next) => {
+    const { time } = event;
+    ctx.data = await new Promise((resolve, reject) => {
+      request(
+        `https://mp-yys-1255362963.cos.ap-chengdu.myqcloud.com/gonggao_json/${time}.json`,
+        (err, res, resData) => {
+          resolve(JSON.parse(resData));
+          err && reject(err);
+        }
+      )
+    });
+    ctx.body = {
+      data: ctx.data
+    };
+  });
+
   // 获取御魂
   app.router('yuhun', async (ctx, next) => {
     ctx.data = await new Promise((resolve, reject) => {

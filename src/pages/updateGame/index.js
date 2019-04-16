@@ -49,18 +49,19 @@ class UpdateGame extends Component {
     const { gameModel } = this.props;
     let list = [];
     if (gameModel.update.length === 0) {
-      const res = await gameApi('update', {});
+      const res = await gameApi('updateList', {});
       console.log(res.result.data);
       list = res.result.data;
       gameModel.saveAllUpdate(list);
     }
     list = gameModel.update;
+    const detail = await this.getDetail(list[0].time);
     this.setState({
       list,
-      showDetail: list[0],
+      showDetail: detail,
       statusControl: {
         ...this.state.statusControl,
-        showLoading: false,
+        showLoading: false
       }
     });
   }
@@ -81,12 +82,29 @@ class UpdateGame extends Component {
       }
     });
   }
-  showDetail(index) {
-    this.setState({
-      showDetail: this.state.list[index],
-      scrollTop: Math.random()
+  async getDetail(time) {
+    const res = await gameApi('updateDetail', {
+      time
     });
-    this.hideHistory()
+    return res.result.data;
+  }
+  async showDetail(index) {
+    this.setState({
+      statusControl: {
+        ...this.state.statusControl,
+        showLoading: true
+      }
+    });
+    const data = await this.getDetail(this.state.list[index].time);
+    this.setState({
+      showDetail: data,
+      scrollTop: Math.random(),
+      statusControl: {
+        ...this.state.statusControl,
+        showLoading: false
+      }
+    });
+    this.hideHistory();
   }
   render() {
     return (
@@ -145,7 +163,9 @@ class UpdateGame extends Component {
                 onClick={this.showDetail.bind(this, index)}
               >
                 <View class='content'>
-                  <Text class='text-grey'>{item.title}（{item.time}）</Text>
+                  <Text class='text-grey'>
+                    {item.title}（{item.time}）
+                  </Text>
                 </View>
               </View>
             ))}

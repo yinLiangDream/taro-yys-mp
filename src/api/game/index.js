@@ -8,13 +8,19 @@ const returnObj = data => {
 };
 export default {
   /**
-   * 游戏公告
+   * 获取游戏公告列表
    * @param {*} data
    */
-  update(data = {}) {
+  updateList(data = {}) {
     return returnObj({
       ...data,
-      $url: 'update'
+      $url: 'updateList'
+    });
+  },
+  updateDetail(data = {}) {
+    return returnObj({
+      ...data,
+      $url: 'updateDetail'
     });
   },
   /**
