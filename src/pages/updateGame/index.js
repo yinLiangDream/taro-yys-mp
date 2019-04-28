@@ -1,7 +1,6 @@
 import Taro, { Component } from '@tarojs/taro';
 import { View, ScrollView, Button, Text } from '@tarojs/components';
 import { observer, inject } from '@tarojs/mobx';
-import { AtDrawer } from 'taro-ui';
 
 import { gameApi } from '../../api/index';
 

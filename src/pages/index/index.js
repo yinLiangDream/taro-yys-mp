@@ -1,19 +1,20 @@
-import Taro, { Component } from '@tarojs/taro';
+import Taro, {Component} from '@tarojs/taro';
 import {
   View,
   Text,
   ScrollView,
   Image,
   Swiper,
-  SwiperItem
+  SwiperItem,
+  Button
 } from '@tarojs/components';
-import { observer, inject } from '@tarojs/mobx';
-import { AtFloatLayout, AtAccordion, AtTag } from 'taro-ui';
+import {observer, inject} from '@tarojs/mobx';
+import {AtFloatLayout, AtAccordion, AtTag} from 'taro-ui';
 import dayjs from 'dayjs';
 
 import styles from './index.module.less';
 import updateData from '../../utils/mpUpdateModel';
-import { roleApi, gameApi } from '../../api/index';
+import {roleApi, gameApi} from '../../api/index';
 
 import Loading from '../../components/Loading/index';
 import FloatButton from '../../components/FloatButton/index';
@@ -31,7 +32,7 @@ class Index extends Component {
 
   constructor(props) {
     super(props);
-    const { indexModel } = this.props;
+    const {indexModel} = this.props;
     this.state = {
       imgUrl: [
         {
@@ -117,7 +118,8 @@ class Index extends Component {
       statusControl: {
         showLoading: true,
         showVersion: false,
-        showFloat: false
+        showFloat: false,
+        showBack: true
       }
     };
   }
@@ -134,7 +136,7 @@ class Index extends Component {
         return item;
       })
     });
-    const { indexModel } = this.props;
+    const {indexModel} = this.props;
     const res = await roleApi('list', {});
     const data = res.result.data;
     indexModel.saveAllRoles(data);
@@ -171,11 +173,14 @@ class Index extends Component {
     );
   }
 
-  componentWillUnmount() {}
+  componentWillUnmount() {
+  }
 
-  componentDidShow() {}
+  componentDidShow() {
+  }
 
-  componentDidHide() {}
+  componentDidHide() {
+  }
 
   hideVersion() {
     this.setState({
@@ -194,7 +199,7 @@ class Index extends Component {
     Taro.navigateTo({
       url: `/pages/roleDetail/index?id=${item.id}&level=${item.level}&name=${
         item.name
-      }&skins=${JSON.stringify(item.skins)}`
+        }&skins=${JSON.stringify(item.skins)}`
     });
   }
 
@@ -236,6 +241,7 @@ class Index extends Component {
       })
     });
   }
+
   closeFloat() {
     this.setState({
       statusControl: {
@@ -244,6 +250,7 @@ class Index extends Component {
       }
     });
   }
+
   search(key) {
     const {indexModel} = this.props;
     this.clickTap(0);
@@ -259,7 +266,22 @@ class Index extends Component {
     });
   }
 
-  confirmSearch() {}
+  confirmSearch() {
+  }
+
+  enterHome() {
+    this.setState({
+      statusControl: {
+        ...this.state.statusControl,
+        showBack: false
+      }
+    })
+  }
+
+  watchDetail() {
+    this.clickHeader('updateGame');
+  }
+
   render() {
     console.log('render index');
     const tabHeadersList = this.state.imgUrl.map(item => (
@@ -304,7 +326,7 @@ class Index extends Component {
                   <Image
                     src={`${this.state.staticUrl.baseUrl}list_head/${
                       itemI.id
-                    }.jpg`}
+                      }.jpg`}
                     mode='aspectFit'
                     className={styles.img}
                     lazyLoad
@@ -319,105 +341,116 @@ class Index extends Component {
     ));
     return (
       <View className={styles.indexPage}>
-        <SearchBar onSearch={this.search} onConfirm={this.confirmSearch} placeholder='请输入式神名称' />
-        <AtFloatLayout
-          title='最新活动'
-          isOpened={this.state.statusControl.showFloat}
-          onClose={this.closeFloat}
-        >
-          {this.state.activities.map((item, index) => (
-            <AtAccordion
-              key={item.title}
-              title={`${item.title}${
-                dayjs().isBefore(dayjs(item.time[0]))
-                  ? '（※未开始※）'
-                  : dayjs().isAfter(dayjs(item.time[1]))
-                  ? '（※已结束※）'
-                  : '（※进行中※）'
-              }`}
-              open={item.open}
-              onClick={this.changeActiveOpen.bind(this, index)}
-            >
-              <View className='padding-sm'>
-                <AtTag size='small' active type='primary'>
-                  活动时间：{item.time[0]}~{item.time[1]}
-                </AtTag>
+        {
+          this.state.statusControl.showBack ?
+            (<View className={styles.activeBack}>
+              <View className={styles.back_btn}>
+                <Button className='cu-btn margin-right-sm bg-black light shadow' onClick={this.enterHome}>进入首页</Button>
+                <Button className='cu-btn bg-black light shadow' onClick={this.watchDetail}>查看详情</Button>
               </View>
-              {item.desc.map((desc, descIndex) => (
-                <View
-                  className='text-sm text-gray text-content'
-                  key={descIndex}
-                >
-                  {desc}
-                </View>
-              ))}
-            </AtAccordion>
-          ))}
-        </AtFloatLayout>
-        {this.state.activities.length > 0 ? (
-          <FloatButton
-            type='text'
-            detail='最新活动'
-            onClickButton={this.clickFloatButton}
-          />
-        ) : (
-          ''
-        )}
-        <Loading show={this.state.statusControl.showLoading} />
-        <View className={styles.tabs}>
-          <ScrollView scroll-x className={styles.scroll}>
-            <View className={styles.long}>{tabHeadersList}</View>
-          </ScrollView>
-        </View>
-        <View className={styles.ssr}>
-          <View className={styles.header}>{tagList}</View>
-          <View className={styles.body}>
-            <Swiper
-              className={styles.swiper}
-              onChange={this.changeSwiper}
-              current={this.state.showIndex}
-            >
-              {roleTagList}
-            </Swiper>
-          </View>
-        </View>
-        <View className={styles.other}>
-          <View
-            className={`${
-              this.state.statusControl.showVersion ? 'show' : ''
-            } cu-modal`}
-          >
-            <View className='cu-dialog'>
-              <View className='bg-gradual-blue light'>
-                <View className='cu-bar justify-end text-Abc'>
-                  <View className='content'>
-                    版本更新：{this.state.currentVersion.version}
-                  </View>
-                  <View className='action' onClick={this.hideVersion}>
-                    <Text className='icon-close' />
-                  </View>
-                </View>
-                <View className='padding'>
-                  <View>
-                    {this.state.currentVersion.desc.map((item, index) => (
-                      <View key={index} className='text-sm'>
-                        {item}
+            </View>) :
+            (<View>
+              <SearchBar onSearch={this.search} onConfirm={this.confirmSearch} placeholder='请输入式神名称' />
+              <AtFloatLayout
+                title='最新活动'
+                isOpened={this.state.statusControl.showFloat}
+                onClose={this.closeFloat}
+              >
+                {this.state.activities.map((item, index) => (
+                  <AtAccordion
+                    key={item.title}
+                    title={`${item.title}${
+                      dayjs().isBefore(dayjs(item.time[0]))
+                        ? '（※未开始※）'
+                        : dayjs().isAfter(dayjs(item.time[1]))
+                        ? '（※已结束※）'
+                        : '（※进行中※）'
+                      }`}
+                    open={item.open}
+                    onClick={this.changeActiveOpen.bind(this, index)}
+                  >
+                    <View className='padding-sm'>
+                      <AtTag size='small' active type='primary'>
+                        活动时间：{item.time[0]}~{item.time[1]}
+                      </AtTag>
+                    </View>
+                    {item.desc.map((desc, descIndex) => (
+                      <View
+                        className='text-sm text-gray text-content'
+                        key={descIndex}
+                      >
+                        {desc}
                       </View>
                     ))}
+                  </AtAccordion>
+                ))}
+              </AtFloatLayout>
+              {this.state.activities.length > 0 ? (
+                <FloatButton
+                  type='text'
+                  detail='最新活动'
+                  onClickButton={this.clickFloatButton}
+                />
+              ) : (
+                ''
+              )}
+              <Loading show={this.state.statusControl.showLoading} />
+              <View className={styles.tabs}>
+                <ScrollView scroll-x className={styles.scroll}>
+                  <View className={styles.long}>{tabHeadersList}</View>
+                </ScrollView>
+              </View>
+              <View className={styles.ssr}>
+                <View className={styles.header}>{tagList}</View>
+                <View className={styles.body}>
+                  <Swiper
+                    className={styles.swiper}
+                    onChange={this.changeSwiper}
+                    current={this.state.showIndex}
+                  >
+                    {roleTagList}
+                  </Swiper>
+                </View>
+              </View>
+              <View className={styles.other}>
+                <View
+                  className={`${
+                    this.state.statusControl.showVersion ? 'show' : ''
+                    } cu-modal`}
+                >
+                  <View className='cu-dialog'>
+                    <View className='bg-gradual-blue light'>
+                      <View className='cu-bar justify-end text-Abc'>
+                        <View className='content'>
+                          版本更新：{this.state.currentVersion.version}
+                        </View>
+                        <View className='action' onClick={this.hideVersion}>
+                          <Text className='icon-close' />
+                        </View>
+                      </View>
+                      <View className='padding'>
+                        <View>
+                          {this.state.currentVersion.desc.map((item, index) => (
+                            <View key={index} className='text-sm'>
+                              {item}
+                            </View>
+                          ))}
+                        </View>
+                      </View>
+                    </View>
+                    <View className='cu-bar bg-white'>
+                      <View
+                        className='action margin-0 flex-sub solid-left'
+                        onClick={this.hideVersion}
+                      >
+                        我知道了
+                      </View>
+                    </View>
                   </View>
                 </View>
               </View>
-              <View className='cu-bar bg-white'>
-                <View
-                  className='action margin-0 flex-sub solid-left'
-                  onClick={this.hideVersion}
-                >
-                  我知道了
-                </View>
-              </View>
-            </View>
-          </View>
-        </View>
+            </View>)
+        }
       </View>
     );
   }
