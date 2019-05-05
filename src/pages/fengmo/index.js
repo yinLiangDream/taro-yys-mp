@@ -1,11 +1,12 @@
 import Taro, { Component } from '@tarojs/taro';
-import { View, Text, Input, Image } from '@tarojs/components';
+import {View, Text, Input, Image, ScrollView} from '@tarojs/components';
 import { observer, inject } from '@tarojs/mobx';
 
 import { rewardForSealApi } from '../../api/index';
 import { firstName } from '../../utils/index';
 
 import styles from './index.module.less';
+import StatusBar from "../../components/StatusBar";
 
 @inject('rewardForSealModel', 'indexModel')
 @observer
@@ -73,7 +74,8 @@ class Fengmo extends Component {
       </View>
     ));
     return (
-      <View className={`${styles.fengmo} padding`}>
+      <ScrollView className={`${styles.fengmo} padding`}>
+        <StatusBar content='逢魔密信' fontColor='text-black' isBack backText='返回首页' />
         <View className={styles.title}>
           <Image
             src={this.state.staticUrl.search_deatil_title}
@@ -92,7 +94,7 @@ class Fengmo extends Component {
             />
           </View>
         </View>
-        <View className={styles.find}>
+        <ScrollView className={styles.find} scrollY style={{height: `calc(100vh - ${Taro.pxTransform(520)})`}}>
           {this.state.showList.length === 0 &&
           this.state.statusControl.searchFlag ? (
             <Text className={styles.tip}>
@@ -102,8 +104,8 @@ class Fengmo extends Component {
             ''
           )}
           {detailList}
-        </View>
-      </View>
+        </ScrollView>
+      </ScrollView>
     );
   }
 }

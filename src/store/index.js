@@ -1,8 +1,10 @@
-import { observable, configure, action, computed, get } from 'mobx'
+import {observable, configure, action, computed, get} from 'mobx';
+import Taro from '@tarojs/taro';
 
-configure({ enforceActions: 'observed' });
+configure({enforceActions: 'observed'});
 
 const baseUrl = 'https://mp-yys-1255362963.cos.ap-chengdu.myqcloud.com/'
+const systemInfo = Taro.getSystemInfoSync();
 class Global {
   @observable mpUpdate = []
   @observable Custom = ''
@@ -32,6 +34,9 @@ class Global {
   }
   @observable baseUrl = baseUrl
   @observable allRoleDetail = []
+  @observable StatusBar = systemInfo.statusBarHeight;
+  @observable Custom =  wx.getMenuButtonBoundingClientRect();
+  @observable CustomBar = this.Custom.bottom + this.Custom.top - this.StatusBar;
 
   @action('获取所有式神') saveAllRoles = (params) => {
     this.allRoles = params
@@ -77,5 +82,6 @@ class Global {
     return this.allRoles.filter(item => item.level === 'N')
   }
 }
+
 const global = new Global()
 export default global

@@ -1,5 +1,5 @@
 import Taro, { Component } from '@tarojs/taro';
-import { View, Text, Image } from '@tarojs/components';
+import {View, Text, Image, ScrollView} from '@tarojs/components';
 import { observer, inject } from '@tarojs/mobx';
 
 import RewardForSealDetailBlock from '../../../components/RewardForSealDetailBlock/index';
@@ -7,6 +7,7 @@ import RewardForSealDetailBlock from '../../../components/RewardForSealDetailBlo
 import styles from './index.module.less';
 
 import { setNavTitle } from '../../../utils/index';
+import StatusBar from "../../../components/StatusBar";
 
 let routerParams = {};
 @inject('rewardForSealModel', 'indexModel')
@@ -34,7 +35,6 @@ class RewardForSeal extends Component {
     this.state.name = routerParams.name;
   }
   componentDidShow() {
-    setNavTitle(routerParams.name);
     const { rewardForSealModel } = this.props;
     const keys = ['chapter', 'yuhun', 'yqfy', 'jbyg', 'jyyg', 'secret'];
     const keyMap = {
@@ -77,7 +77,8 @@ class RewardForSeal extends Component {
       </View>
     ));
     return (
-      <View className={styles.rewardForSealDetail}>
+      <ScrollView className={styles.rewardForSealDetail} scrollY>
+        <StatusBar content={routerParams.name} fontColor='text-black' isBack backText='返回查询' />
         <View className={styles.title}>
           <Image
             src={this.state.staticUrl.search_deatil_title}
@@ -86,7 +87,7 @@ class RewardForSeal extends Component {
           />
           <Text className={styles.text}>{this.state.name}</Text>
         </View>
-        <View className={styles.body}>
+        <ScrollView className={styles.body} scrollY>
           {this.state.advice.length > 0 ? (
             <View className={`${styles.advice} ${styles.mainBody}`}>
               <View className={styles.title}>推荐副本：</View>
@@ -107,8 +108,8 @@ class RewardForSeal extends Component {
               )}
             </View>
           ))}
-        </View>
-      </View>
+        </ScrollView>
+      </ScrollView>
     );
   }
 }

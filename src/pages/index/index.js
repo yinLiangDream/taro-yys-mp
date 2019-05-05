@@ -19,6 +19,7 @@ import {roleApi, gameApi} from '../../api/index';
 import Loading from '../../components/Loading/index';
 import FloatButton from '../../components/FloatButton/index';
 import SearchBar from '../../components/SearchBar/index';
+import StatusBar from '../../components/StatusBar/index';
 
 @inject('indexModel')
 @observer
@@ -284,6 +285,7 @@ class Index extends Component {
 
   render() {
     console.log('render index');
+    const {indexModel}  = this.props;
     const tabHeadersList = this.state.imgUrl.map(item => (
       <View
         className={styles.content}
@@ -340,7 +342,8 @@ class Index extends Component {
       </SwiperItem>
     ));
     return (
-      <View className={styles.indexPage}>
+      <ScrollView className={styles.indexPage} style={{height: '100%'}}>
+        {this.state.statusControl.showBack ? '' : <StatusBar content='首页' fontColor='text-black' />}
         {
           this.state.statusControl.showBack ?
             (<View className={styles.activeBack}>
@@ -349,7 +352,7 @@ class Index extends Component {
                 <Button className='cu-btn bg-black light shadow' onClick={this.watchDetail}>查看详情</Button>
               </View>
             </View>) :
-            (<View>
+            (<ScrollView style={{height: `calc(100vh - ${indexModel.CustomBar}px)`}}>
               <SearchBar onSearch={this.search} onConfirm={this.confirmSearch} placeholder='请输入式神名称' />
               <AtFloatLayout
                 title='最新活动'
@@ -449,9 +452,9 @@ class Index extends Component {
                   </View>
                 </View>
               </View>
-            </View>)
+            </ScrollView>)
         }
-      </View>
+      </ScrollView>
     );
   }
 }

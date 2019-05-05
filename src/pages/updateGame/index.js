@@ -8,6 +8,7 @@ import Loading from '../../components/Loading';
 import UpdateDetail from './components/updateDetail';
 
 import './index.less';
+import StatusBar from "../../components/StatusBar";
 
 @inject('gameModel', 'indexModel')
 @observer
@@ -106,14 +107,17 @@ class UpdateGame extends Component {
     this.hideHistory();
   }
   render() {
+    const {indexModel} = this.props;
     return (
-      <View>
+      <ScrollView style={{height: '100vh'}}>
+        <StatusBar content='游戏更新记' fontColor='text-black' isBack backText='返回首页' />
         <Loading show={this.state.statusControl.showLoading} />
         {this.state.list.length > 0 ? (
           <ScrollView
             scrollY
             scrollTop={this.state.scrollTop}
             scrollWithAnimation
+            style={{background: 'none', height: `calc(100vh - ${indexModel.CustomBar + indexModel.StatusBar}px)`}}
             className={
               this.state.statusControl.showDrawer
                 ? 'DrawerPage show'
@@ -123,7 +127,7 @@ class UpdateGame extends Component {
             <View className='radius'>
               <UpdateDetail detail={this.state.showDetail} />
 
-              <View className='flex justify-center padding-bottom bg-gray'>
+              <View className='flex justify-center padding-bottom'>
                 <Button
                   className='cu-btn sm shadow bg-cyan radius'
                   onClick={this.showHistory}
@@ -170,7 +174,7 @@ class UpdateGame extends Component {
             ))}
           </View>
         </ScrollView>
-      </View>
+      </ScrollView>
     );
   }
 }

@@ -64,7 +64,7 @@ export default class SearchBar extends Component {
               addflag ? styles.tit_seabox_add : ''
             } ${this.state.searchflag ? styles.tit_start_search : ''}`}
           >
-            <Icon type='search' size='32rpx' />
+            <Icon type='search' size={Taro.pxTransform(32)} />
             <Input
               type='text'
               onInput={this.searchList}
@@ -77,7 +77,7 @@ export default class SearchBar extends Component {
               placeholder={placeholder}
             />
             {this.state.searchflag ? (
-              <Icon onClick={this.activity_clear} type='clear' size='28rpx' />
+              <Icon onClick={this.activity_clear} type='clear' size={Taro.pxTransform(28)} />
             ) : (
               ''
             )}

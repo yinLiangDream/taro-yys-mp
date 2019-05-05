@@ -1,10 +1,11 @@
 import Taro, { Component } from '@tarojs/taro';
-import { View, Text, Image, Input } from '@tarojs/components';
+import {View, Text, Image, Input, ScrollView} from '@tarojs/components';
 import { observer, inject } from '@tarojs/mobx';
 
 import styles from './index.module.less';
 import { rewardForSealApi } from '../../api/index';
 import { firstName } from '../../utils/index';
+import StatusBar from "../../components/StatusBar";
 
 @inject('rewardForSealModel')
 @observer
@@ -39,7 +40,6 @@ class RewardForSeal extends Component {
   }
   search(e) {
     const { rewardForSealModel } = this.props;
-    console.log(e.detail)
     this.setState({
       searchFlag: true,
       showList: !e.detail.value ? [] : this.state.showList
@@ -81,7 +81,8 @@ class RewardForSeal extends Component {
       </View>
     ));
     return (
-      <View className={styles.RewardForSeal}>
+      <ScrollView className={styles.RewardForSeal}>
+        <StatusBar content='悬赏封印' fontColor='text-black' isBack backText='返回首页' />
         <View className={styles.header}>
           <Image
             src='https://mp-yys-1255362963.cos.ap-chengdu.myqcloud.com/search_title.png'
@@ -97,7 +98,7 @@ class RewardForSeal extends Component {
             onInput={this.search}
           />
         </View>
-        <View className={styles.find}>
+        <ScrollView className={styles.find} scrollY>
           {this.showList.length === 0 && this.state.searchFlag ? (
             <Text className={styles.tip}>
               亲亲，没有找到符合条件的妖怪，请重新输入~
@@ -107,8 +108,8 @@ class RewardForSeal extends Component {
           )}
           <View />
           {findList}
-        </View>
-      </View>
+        </ScrollView>
+      </ScrollView>
     );
   }
 }
