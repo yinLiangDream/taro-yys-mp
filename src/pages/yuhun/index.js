@@ -89,7 +89,7 @@ class Yuhun extends Component {
     const { indexModel } = this.props;
     return (
       <View>
-        <StatusBar content='御魂查询' fontColor='text-black' isBack backText='返回首页' />
+        <StatusBar content='御魂查询' fontColor='text-black' isBack backText='' />
         <Loading show={this.state.statusControl.showLoading} />
         <ScrollView scrollY style={{height: `calc(100vh - ${indexModel.CustomBar + indexModel.StatusBar}px)`}}>
           <View>

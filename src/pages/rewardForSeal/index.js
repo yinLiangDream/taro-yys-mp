@@ -82,7 +82,7 @@ class RewardForSeal extends Component {
     ));
     return (
       <ScrollView className={styles.RewardForSeal}>
-        <StatusBar content='悬赏封印' fontColor='text-black' isBack backText='返回首页' />
+        <StatusBar content='悬赏封印' fontColor='text-black' isBack backText='' />
         <View className={styles.header}>
           <Image
             src='https://mp-yys-1255362963.cos.ap-chengdu.myqcloud.com/search_title.png'

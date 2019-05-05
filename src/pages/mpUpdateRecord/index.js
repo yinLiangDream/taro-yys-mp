@@ -52,7 +52,7 @@ class Record extends Component {
     ));
     return (
       <ScrollView className={styles.mpUpdateRecord}>
-        <StatusBar content='小程序更新记' fontColor='text-black' isBack backText='返回首页' />
+        <StatusBar content='小程序更新记' fontColor='text-black' isBack backText='' />
         <View className='padding'>
           <View className='text-grey sm bg-gray radius padding text-bold text-sm'>
             Tips: 如果您觉得好用，请点击{' '}

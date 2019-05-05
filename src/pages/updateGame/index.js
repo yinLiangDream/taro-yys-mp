@@ -110,7 +110,7 @@ class UpdateGame extends Component {
     const {indexModel} = this.props;
     return (
       <ScrollView style={{height: '100vh'}}>
-        <StatusBar content='游戏更新记' fontColor='text-black' isBack backText='返回首页' />
+        <StatusBar content='游戏更新记' fontColor='text-black' isBack backText='' />
         <Loading show={this.state.statusControl.showLoading} />
         {this.state.list.length > 0 ? (
           <ScrollView

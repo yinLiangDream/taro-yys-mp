@@ -352,7 +352,7 @@ class Index extends Component {
                 <Button className='cu-btn bg-black light shadow' onClick={this.watchDetail}>查看详情</Button>
               </View>
             </View>) :
-            (<ScrollView style={{height: `calc(100vh - ${indexModel.CustomBar}px)`}}>
+            (<ScrollView style={{height: `calc(100vh - ${indexModel.CustomBar+indexModel.StatusBar}px)`}}>
               <SearchBar onSearch={this.search} onConfirm={this.confirmSearch} placeholder='请输入式神名称' />
               <AtFloatLayout
                 title='最新活动'

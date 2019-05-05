@@ -75,7 +75,7 @@ class Fengmo extends Component {
     ));
     return (
       <ScrollView className={`${styles.fengmo} padding`}>
-        <StatusBar content='逢魔密信' fontColor='text-black' isBack backText='返回首页' />
+        <StatusBar content='逢魔密信' fontColor='text-black' isBack backText='' />
         <View className={styles.title}>
           <Image
             src={this.state.staticUrl.search_deatil_title}
