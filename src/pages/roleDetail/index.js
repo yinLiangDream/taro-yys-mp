@@ -565,8 +565,8 @@ class RoleDetail extends Component {
           border: '1px lightgray solid'
         }}
       >
-        <View title={item.title} isFull>
-          <View className='at-row at-row__align--center padding'>
+        <View>
+          <View className='flex padding'>
             <View className='at-col'>
               <View
                 className='cu-avatar lg round'
@@ -584,7 +584,7 @@ class RoleDetail extends Component {
               <Text>{item.main2}</Text>
             </View>
           </View>
-          <View className='at-row at-row__align--center margin-top-sm margin-bottom-sm text-sm'>
+          <View className='flex margin-top-sm margin-bottom-sm text-sm'>
             主属性：
             <View className={`${styles.yuhunAttrIcon} ${styles.mainAttr2}`} />
             <Text className='padding-lr-xs'>{item.mainAttr2}</Text>
@@ -593,8 +593,8 @@ class RoleDetail extends Component {
             <View className={`${styles.yuhunAttrIcon} ${styles.mainAttr6}`} />
             <Text className='padding-lr-xs'>{item.mainAttr6}</Text>
           </View>
-          <View className='at-row at-row__align--start text-sm'>
-            <View className='at-rol'>推荐理由：</View>
+          <View className='flex text-sm'>
+            <View className='at-rol'>理由：</View>
             <Text className='at-col at-col--wrap'>{item.reason}</Text>
           </View>
         </View>
