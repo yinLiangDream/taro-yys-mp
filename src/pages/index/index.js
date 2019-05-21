@@ -107,7 +107,7 @@ class Index extends Component {
         showLoading: true,
         showVersion: false,
         showFloat: false,
-        showBack: true
+        showBack: false
       }
     };
   }
