@@ -6,7 +6,6 @@ import RewardForSealDetailBlock from '../../../components/RewardForSealDetailBlo
 
 import styles from './index.module.less';
 
-import { setNavTitle } from '../../../utils/index';
 import StatusBar from "../../../components/StatusBar";
 
 let routerParams = {};
@@ -78,7 +77,7 @@ class RewardForSeal extends Component {
     ));
     return (
       <ScrollView className={styles.rewardForSealDetail} scrollY>
-        <StatusBar content={routerParams.name} fontColor='text-black' isBack backText='返回查询' />
+        <StatusBar content={routerParams.name} fontColor='text-black' isBack backText='' />
         <View className={styles.title}>
           <Image
             src={this.state.staticUrl.search_deatil_title}
@@ -97,7 +96,7 @@ class RewardForSeal extends Component {
             ''
           )}
           {this.state.categories.map((item, index) => (
-            <View key={index} style='width: 100%'>
+            <View key={index + Math.random()} style='width: 100%'>
               {item.data.length > 0 ? (
                 <RewardForSealDetailBlock
                   data={item.data}

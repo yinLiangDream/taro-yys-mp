@@ -148,7 +148,7 @@ class UpdateGame extends Component {
           }
           onClick={this.hideHistory}
         >
-          <Text className='icon-pullright' />
+          <Text className='cuIcon-pullright' />
         </View>
         <ScrollView
           scrollY

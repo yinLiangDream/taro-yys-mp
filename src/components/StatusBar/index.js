@@ -37,7 +37,7 @@ class StatusBar extends Component {
           {
             isBack ?
               <View className='action' onClick={this.backPage} style={{lineHeight: '100%'}}>
-                <Text className='icon-back' />
+                <Text className='cuIcon-back' />
                 <Text>{backText}</Text>
               </View> : ''
           }
@@ -48,8 +48,8 @@ class StatusBar extends Component {
                 height: `${indexModel.Custom.height}px`,
               }}
               >
-                <Text className='icon-back' onClick={this.backPage.bind(this)} />
-                <Text className='icon-homefill' onClick={this.toHome.bind(this)} />
+                <Text className='cuIcon-back' onClick={this.backPage.bind(this)} />
+                <Text className='cuIcon-homefill' onClick={this.toHome.bind(this)} />
               </View> : ''
           }
           <View className='content' style={{top: `${indexModel.StatusBar}px`}}>

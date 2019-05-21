@@ -1,12 +1,11 @@
-import Taro, { Component } from '@tarojs/taro';
-import {View, Text, ScrollView} from '@tarojs/components';
+import Taro, { Component, pxTransform } from '@tarojs/taro';
+import { View, ScrollView, Block } from '@tarojs/components';
 import { observer, inject } from '@tarojs/mobx';
-import { AtTabs, AtTabsPane, AtCard, AtAvatar, AtTag } from 'taro-ui';
-
+import { ClTabs, ClCard, ClAvatar, ClLayout, ClTag, ClText } from 'mp-colorui';
 import { gameApi } from '../../api/index';
 
 import Loading from '../../components/Loading';
-import StatusBar from "../../components/StatusBar";
+import StatusBar from '../../components/StatusBar';
 
 @inject('gameModel', 'indexModel')
 @observer
@@ -18,6 +17,7 @@ class Yuhun extends Component {
     super(props);
     this.state = {
       current: 0,
+      scroll: 0,
       tabList: [
         {
           title: '攻击类',
@@ -47,7 +47,7 @@ class Yuhun extends Component {
   }
 
   async componentDidMount() {
-    const {gameModel} = this.props
+    const { gameModel } = this.props;
     this.setState(
       {
         statusControl: {
@@ -56,18 +56,17 @@ class Yuhun extends Component {
         }
       },
       async () => {
-        let data = []
+        let data = [];
         if (gameModel.yuhunInfo.length === 0) {
           const res = await gameApi('yuhun', {});
-          gameModel.saveAllYuhun(res.result.data)
-          data = res.result.data
-        } else data = gameModel.yuhunInfo
-        data.forEach((item, index) => {
+          gameModel.saveAllYuhun(res.result.data);
+          data = res.result.data;
+        } else data = gameModel.yuhunInfo;
+        data.forEach(item => {
           this.state.tabList
             .find(tab => tab.title === item['御魂类型'])
             .data.push(item);
         });
-        console.log(this.state.tabList);
         this.setState({
           tabList: this.state.tabList,
           statusControl: {
@@ -81,104 +80,160 @@ class Yuhun extends Component {
 
   clickTitle(index) {
     this.setState({
-      current: index
+      current: index,
+      scroll: Math.random()
     });
   }
-
   render() {
     const { indexModel } = this.props;
+    const tabs = this.state.tabList.map(item => {
+      item.text = item.title;
+      return item;
+    });
+    const current = this.state.current;
+    const cards = tabs[current].data.map((yuhun, index) => (
+      <Block key={index}>
+        <ClCard bgColor='light-gray'>
+          <View>
+            <ClLayout
+              type='flex'
+              flexSelection={{
+                align: 'center'
+              }}
+            >
+              <View style={{ marginRight: pxTransform(20) }}>
+                <ClLayout type='flex' flexSelection={{ justify: 'center' }}>
+                  <ClAvatar
+                    headerArray={[
+                      {
+                        url: `${indexModel.baseUrl}yuhun_icon/${
+                          yuhun['御魂图标']
+                        }`
+                      }
+                    ]}
+                    shadow
+                    shape='round'
+                    size='large'
+                  />
+                </ClLayout>
+                <ClLayout type='flex' flexSelection={{ justify: 'center' }}>{`${
+                  yuhun['御魂名称']
+                }`}</ClLayout>
+              </View>
+              <View>
+                <ClLayout
+                  type='flex'
+                  flexSelection={{
+                    align: 'center',
+                    warp: true
+                  }}
+                >
+                  <View style={{ width: '100%', margin: pxTransform(10) }}>
+                    <ClLayout
+                      type='flex'
+                      flexSelection={{
+                        align: 'center',
+                        justify: 'start'
+                      }}
+                    >
+                      <ClTag
+                        shape='round'
+                        tags={[
+                          {
+                            text: '两件套',
+                            color: 'cyan'
+                          }
+                        ]}
+                      />
+                      <View style={{ marginLeft: pxTransform(10) }}>
+                        <ClText>{yuhun['二件套效果']}</ClText>
+                      </View>
+                    </ClLayout>
+                  </View>
+                  <View style={{ width: '100%', margin: pxTransform(10) }}>
+                    <ClLayout
+                      type='flex'
+                      flexSelection={{
+                        align: 'center',
+                        justify: 'start'
+                      }}
+                    >
+                      <ClTag
+                        tags={[
+                          {
+                            text: '四件套'
+                          }
+                        ]}
+                        shape='round'
+                      />
+                      <View style={{ marginLeft: pxTransform(10) }}>
+                        <ClText>{yuhun['四件套效果']}</ClText>
+                      </View>
+                    </ClLayout>
+                  </View>
+                  <View style={{ width: '100%', margin: pxTransform(10) }}>
+                    <ClLayout
+                      type='flex'
+                      flexSelection={{
+                        justify: 'start',
+                        align: 'center'
+                      }}
+                    >
+                      <ClTag
+                        tags={[
+                          {
+                            text: '获得方式',
+                            color: 'mauve'
+                          }
+                        ]}
+                        shape='round'
+                      />
+                      <View style={{ marginLeft: pxTransform(10) }}>
+                        <ClText>{yuhun['获得方式']}</ClText>
+                      </View>
+                    </ClLayout>
+                  </View>
+                </ClLayout>
+              </View>
+            </ClLayout>
+          </View>
+        </ClCard>
+      </Block>
+    ));
     return (
       <View>
-        <StatusBar content='御魂查询' fontColor='text-black' isBack backText='' />
+        <StatusBar
+          content='御魂查询'
+          fontColor='text-black'
+          isBack
+          backText=''
+        />
         <Loading show={this.state.statusControl.showLoading} />
-        <ScrollView scrollY style={{height: `calc(100vh - ${indexModel.CustomBar + indexModel.StatusBar}px)`}}>
-          <View>
-
-            <AtTabs
-              current={this.state.current}
-              tabList={this.state.tabList}
-              onClick={this.clickTitle.bind(this)}
-              swipeable
+        <ClTabs
+          tabs={tabs}
+          onClick={this.clickTitle.bind(this)}
+          activeColor='cyan'
+          type='verb'
+        />
+        <ScrollView
+          scrollY
+          style={{
+            height: `calc(100vh - ${indexModel.CustomBar +
+              indexModel.StatusBar +
+              40}px)`
+          }}
+          scrollWithAnimation
+          scrollTop={this.state.scroll}
+        >
+          <View className='padding-top'>
+            <ClLayout
+              type='flex'
+              flexSelection={{
+                justify: 'around'
+              }}
             >
-              {this.state.tabList.map((item, index) => (
-                <AtTabsPane key={index} index={index} current={this.state.current}>
-                  {item.data.map((yuhun, indexYuhun) => (
-                    <AtCard
-                      key={indexYuhun}
-                      className='margin'
-                      title={yuhun['御魂名称']}
-                    >
-                      <View className='at-row at-row__align--center at-row--wrap'>
-                        <View className='at-col-2 at-col at-col--auto' style='padding-right: 10px'>
-                          <AtAvatar
-                            circle
-                            image={`${indexModel.baseUrl}yuhun_icon/${
-                              yuhun['御魂图标']
-                              }`}
-                          />
-                        </View>
-                        <View className='at-col'>
-                          <View className='padding-bottom-sm'>
-                            <View className='at-row at-row__align--start at-row--wrap'>
-                              <View className='at-col-1 at-col--auto'>
-                                <AtTag
-                                  active
-                                  size='small'
-                                  type='primary'
-                                  className='margin-right-sm'
-                                >
-                                  两件套
-                                </AtTag>
-                              </View>
-                              <View className='at-col'>
-                                <Text>{yuhun['二件套效果']}</Text>
-                              </View>
-                            </View>
-                          </View>
-
-                          <View>
-                            <View className='at-row at-row__align--start'>
-                              <View className='at-col at-col-1 at-col--auto'>
-                                <AtTag
-                                  active
-                                  size='small'
-                                  type='primary'
-                                  className='margin-right-sm'
-                                >
-                                  四件套
-                                </AtTag>
-                              </View>
-                              <View className='at-col at-col--wrap'>
-                                <Text>{yuhun['四件套效果']}</Text>
-                              </View>
-                            </View>
-                          </View>
-
-                          <View className='padding-top-sm'>
-                            <View className='at-row at-row__align--start at-row--wrap'>
-                              <View className='at-col-1 at-col--auto'>
-                                <AtTag
-                                  active
-                                  size='small'
-                                  type='primary'
-                                  className='margin-right-sm'
-                                >
-                                  获得方式
-                                </AtTag>
-                              </View>
-                              <View className='at-col at-col--wrap'>
-                                <Text>{yuhun['获得方式']}</Text>
-                              </View>
-                            </View>
-                          </View>
-
-                        </View>
-                      </View>
-                    </AtCard>
-                  ))}
-                </AtTabsPane>
-              ))}
-            </AtTabs>
+              <View style={{ width: '100%' }}>{cards}</View>
+            </ClLayout>
           </View>
         </ScrollView>
       </View>

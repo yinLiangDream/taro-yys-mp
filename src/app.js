@@ -1,7 +1,7 @@
 import Taro, { Component } from '@tarojs/taro';
 import { Provider } from '@tarojs/mobx';
 import '@tarojs/async-await'
-import 'taro-ui/dist/style/index.scss'
+import 'mp-colorui/dist/style/index.scss';
 
 import Index from './pages/index';
 

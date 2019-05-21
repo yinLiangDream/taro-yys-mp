@@ -25,7 +25,7 @@ class Modal extends Component {
           <View className='cu-bar bg-white justify-end'>
             <View className='content'>{title}</View>
             <View className='action' onClick={this.hideModal}>
-              <Text claclassNamess='icon-close text-red' />
+              <Text claclassNamess='cucuIcon-close text-red' />
             </View>
           </View>
           <view className='padding-xl'>{this.props.children}</view>

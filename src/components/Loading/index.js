@@ -46,7 +46,6 @@ class Loading extends Component {
   }
 
   componentWillReceiveProps() {
-    console.log('componentWillReceiveProps');
     const { show } = this.props;
     if (!show) {
       this.setState({

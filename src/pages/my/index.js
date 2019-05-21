@@ -1,10 +1,9 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Button, Text } from '@tarojs/components'
-import { observer, inject } from '@tarojs/mobx'
+import { View } from '@tarojs/components'
+import { observer } from '@tarojs/mobx'
 
 import styles from './index.module.less'
 
-@inject('indexModel')
 @observer
 class My extends Component {
 
