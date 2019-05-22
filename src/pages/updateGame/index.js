@@ -8,7 +8,7 @@ import Loading from '../../components/Loading';
 import UpdateDetail from './components/updateDetail';
 
 import './index.less';
-import StatusBar from "../../components/StatusBar";
+import StatusBar from '../../components/StatusBar';
 
 @inject('gameModel', 'indexModel')
 @observer
@@ -48,13 +48,14 @@ class UpdateGame extends Component {
     });
     const { gameModel } = this.props;
     let list = [];
-    if (gameModel.update.length === 0) {
+    const update = gameModel.getUpdate;
+    if (update.length === 0) {
       const res = await gameApi('updateList', {});
       console.log(res.result.data);
       list = res.result.data;
       gameModel.saveAllUpdate(list);
     }
-    list = gameModel.update;
+    list = gameModel.getUpdate;
     const detail = await this.getDetail(list[0].time);
     this.setState({
       list,
@@ -107,17 +108,26 @@ class UpdateGame extends Component {
     this.hideHistory();
   }
   render() {
-    const {indexModel} = this.props;
+    const { indexModel } = this.props;
     return (
-      <ScrollView style={{height: '100vh'}}>
-        <StatusBar content='游戏更新记' fontColor='text-black' isBack backText='' />
+      <ScrollView style={{ height: '100vh' }}>
+        <StatusBar
+          content='游戏更新记'
+          fontColor='text-black'
+          isBack
+          backText=''
+        />
         <Loading show={this.state.statusControl.showLoading} />
         {this.state.list.length > 0 ? (
           <ScrollView
             scrollY
             scrollTop={this.state.scrollTop}
             scrollWithAnimation
-            style={{background: 'none', height: `calc(100vh - ${indexModel.CustomBar + indexModel.StatusBar}px)`}}
+            style={{
+              background: 'none',
+              height: `calc(100vh - ${indexModel.CustomBar +
+                indexModel.StatusBar}px)`
+            }}
             className={
               this.state.statusControl.showDrawer
                 ? 'DrawerPage show'

@@ -1,4 +1,4 @@
-import Taro, {Component} from '@tarojs/taro';
+import Taro, { Component } from '@tarojs/taro';
 import {
   View,
   Text,
@@ -7,18 +7,18 @@ import {
   Label,
   ScrollView
 } from '@tarojs/components';
-import {observer, inject} from '@tarojs/mobx';
+import { observer, inject } from '@tarojs/mobx';
 
 import styles from './index.module.less';
-import {roleApi} from '../../api/index';
-import {setNavTitle} from '../../utils/index';
+import { roleApi } from '../../api/index';
+import { setNavTitle } from '../../utils/index';
 
 import Loading from '../../components/Loading/index';
 import Modal from '../../components/Modal/index';
 import AttrSS from '../../components/Attr/index';
 import SkillItem from '../../components/SkillItem/index';
 import AwakeMaterial from '../../components/AwakeMaterial/index';
-import StatusBar from "../../components/StatusBar";
+import StatusBar from '../../components/StatusBar';
 
 let routerParams = {};
 let disabledJuexing = false;
@@ -32,7 +32,7 @@ class RoleDetail extends Component {
 
   constructor(props) {
     super(props);
-    const {indexModel} = this.props;
+    const { indexModel } = this.props;
     this.state = {
       id: '',
       ssLevel: '1',
@@ -87,7 +87,7 @@ class RoleDetail extends Component {
   }
 
   async getStory() {
-    const {roleModel} = this.props;
+    const { roleModel } = this.props;
     // 传记
     if (!roleModel.allStory.length) {
       const zhuanjires = await roleApi('story', {});
@@ -111,7 +111,7 @@ class RoleDetail extends Component {
   }
 
   async getSkill() {
-    const {indexModel, roleModel} = this.props;
+    const { indexModel, roleModel } = this.props;
     // 技能图标及说明
     if (!roleModel.allSkill.length) {
       const skills = await roleApi('skills', {});
@@ -135,14 +135,14 @@ class RoleDetail extends Component {
       });
     });
     if (this.state.awakeSkills.length === 0) {
-      this.state.awakeSkills.push({text: skillDesc.afterAwakeSkillDesc});
+      this.state.awakeSkills.push({ text: skillDesc.afterAwakeSkillDesc });
     }
     this.calLevel(this.state.ssStar);
   }
 
   async getRecommend() {
     await this.getSkill();
-    const {indexModel, roleModel} = this.props;
+    const { indexModel, roleModel } = this.props;
     // 御魂推荐
     let yuhunData = [];
     if (roleModel.allRecommend.length === 0) {
@@ -166,7 +166,7 @@ class RoleDetail extends Component {
         {
           icon1: `${indexModel.baseUrl}yuhun_icon/${
             skillOtherDesc['1御魂图标1']
-            }`,
+          }`,
           icon2: `${indexModel.baseUrl}yuhun.png`,
           main1: skillOtherDesc['1御魂数量1'],
           main2: skillOtherDesc['1御魂数量2'],
@@ -180,7 +180,7 @@ class RoleDetail extends Component {
         {
           icon1: `${indexModel.baseUrl}yuhun_icon/${
             skillOtherDesc['2御魂图标1']
-            }`,
+          }`,
           icon2: `${indexModel.baseUrl}yuhun.png`,
           main1: skillOtherDesc['2御魂数量1'],
           main2: skillOtherDesc['2御魂数量2'],
@@ -204,7 +204,7 @@ class RoleDetail extends Component {
 
   async componentDidMount() {
     setNavTitle(routerParams.name);
-    const {indexModel, roleModel} = this.props;
+    const { indexModel } = this.props;
     const id = routerParams.id;
     this.state.id = id;
     const routerSkins = JSON.parse(routerParams.skins).map((item, index) => ({
@@ -246,17 +246,17 @@ class RoleDetail extends Component {
         awakeUrl: `${indexModel.baseUrl}v2/${id}.png`,
         chushiButton: `${indexModel.baseUrl}${
           this.state.staticUrl.chushi_active
-          }`,
+        }`,
         juexingButton: `${indexModel.baseUrl}${
           !disabledJuexing
             ? this.state.staticUrl.juexing_normal
             : this.state.staticUrl.juexing_disabled
-          }`,
+        }`,
         skinButton: `${indexModel.baseUrl}${
           routerSkins.length
             ? this.state.staticUrl.skin_normal
             : this.state.staticUrl.skin_disabled
-          }`
+        }`
       }
     });
     console.log('===头像加载完毕===');
@@ -341,7 +341,7 @@ class RoleDetail extends Component {
   }
 
   async setAttr(level, star, ssStar) {
-    const {indexModel} = this.props;
+    const { indexModel } = this.props;
     this.setState(
       {
         ssStar,
@@ -368,10 +368,11 @@ class RoleDetail extends Component {
           'debuffEnhance'
         ];
         const attrData = attr.result.data;
+        const awakeMaterialModel = indexModel.getAwakeMaterial;
         const awakeMaterial = attrData.noAwake.awakeitem.map(list => ({
           name: list[0],
           num: list[2],
-          url: indexModel.awakeMaterial[list[0]]
+          url: awakeMaterialModel[list[0]]
         }));
         const attrs = names.map(key => {
           let beforeData = attrData.noAwake[key];
@@ -396,6 +397,7 @@ class RoleDetail extends Component {
           const ssAttr = disabledJuexing
             ? attrData.noAwake.score[key]
             : attrData.awake.score[key];
+          const attrLevel = indexModel.getAttrLevel;
           return {
             attr: {
               before_awake: beforeAwake,
@@ -403,8 +405,8 @@ class RoleDetail extends Component {
               diff
             },
             name: key,
-            noAwakeAttr: indexModel.attrLevel[attrData.noAwake.score[key]],
-            awakeAttr: indexModel.attrLevel[ssAttr]
+            noAwakeAttr: attrLevel[attrData.noAwake.score[key]],
+            awakeAttr: attrLevel[ssAttr]
           };
         });
         this.setState({
@@ -424,7 +426,7 @@ class RoleDetail extends Component {
    * 点击初始
    */
   chushiClick() {
-    const {indexModel} = this.props;
+    const { indexModel } = this.props;
     this.setState({
       statusControl: {
         ...this.state.statusControl,
@@ -442,7 +444,7 @@ class RoleDetail extends Component {
    * 点击觉醒
    */
   juexingClick() {
-    const {indexModel} = this.props;
+    const { indexModel } = this.props;
     if (disabledJuexing) return;
     this.setState({
       statusControl: {
@@ -480,17 +482,17 @@ class RoleDetail extends Component {
    * @param {*} type 类型 0初始 1觉醒 2皮肤
    */
   headerButtonReset(type) {
-    const {indexModel} = this.props;
+    const { indexModel } = this.props;
     const resetJuexing = `${indexModel.baseUrl}${
       !disabledJuexing
         ? this.state.staticUrl.juexing_normal
         : this.state.staticUrl.juexing_disabled
-      }`;
+    }`;
     const resetSkin = `${indexModel.baseUrl}${
       this.state.skins.length
         ? this.state.staticUrl.skin_normal
         : this.state.staticUrl.skin_disabled
-      }`;
+    }`;
     const chushiButton =
       type === 0
         ? `${indexModel.baseUrl}${this.state.staticUrl.chushi_active}`
@@ -532,7 +534,6 @@ class RoleDetail extends Component {
 
   render() {
     console.log('render roleDetail');
-    const {indexModel} = this.props;
     const storyList = this.state.story.map((item, index) => (
       <View key={index} className={styles.contentDetailItem}>
         <View className={styles.zhuanjiTitle}>
@@ -570,7 +571,7 @@ class RoleDetail extends Component {
             <View className='at-col'>
               <View
                 className='cu-avatar lg round'
-                style={{backgroundImage: `url(${item.icon1})`}}
+                style={{ backgroundImage: `url(${item.icon1})` }}
               />
             </View>
             <View className='at-col padding'>
@@ -578,7 +579,7 @@ class RoleDetail extends Component {
             </View>
             <View
               className='cu-avatar lg round'
-              style={{backgroundImage: `url(${item.icon2})`}}
+              style={{ backgroundImage: `url(${item.icon2})` }}
             />
             <View className='at-col padding'>
               <Text>{item.main2}</Text>
@@ -608,7 +609,6 @@ class RoleDetail extends Component {
           awakeAttr={item.awakeAttr}
           attr={item.attr}
           disabled={this.state.disabledJuexing}
-          indexModel={indexModel}
         />
       </View>
     ));
@@ -691,7 +691,7 @@ class RoleDetail extends Component {
                   <Button
                     className={`${
                       item.show ? 'bg-cyan' : 'bg-grey'
-                      } cu-btn bg-cyan round sm shadow buttons`}
+                    } cu-btn bg-cyan round sm shadow buttons`}
                     onClick={this.showSkin.bind(this, index)}
                   >
                     {item.name}

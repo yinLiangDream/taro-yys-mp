@@ -1,9 +1,11 @@
 import Taro, { Component } from '@tarojs/taro';
 import { View, Image } from '@tarojs/components';
 import PropTypes from 'prop-types';
+import { inject } from '@tarojs/mobx';
 
 import styles from './index.module.less';
 
+@inject('indexModel')
 class AttrSS extends Component {
   static options = {
     addGlobalClass: true
@@ -38,7 +40,15 @@ class AttrSS extends Component {
   }
 
   render() {
-    const { name, noAwakeAttr, awakeAttr, attr, disabled, indexModel } = this.props;
+    const {
+      name,
+      noAwakeAttr,
+      awakeAttr,
+      attr,
+      disabled,
+      indexModel
+    } = this.props;
+    const attrMap = indexModel.getAttrMap;
     return (
       <View className={styles.attr}>
         <View className={styles.title}>
@@ -51,7 +61,7 @@ class AttrSS extends Component {
         </View>
         <View className={styles.noAwakeAttr}>
           <Image
-            src={indexModel.attrMap[noAwakeAttr]}
+            src={attrMap[noAwakeAttr]}
             mode='widthFix'
             className={styles.img}
           />
@@ -62,7 +72,7 @@ class AttrSS extends Component {
         {!disabled ? (
           <View className={styles.awakeAttr}>
             <Image
-              src={indexModel.attrMap[awakeAttr]}
+              src={attrMap[awakeAttr]}
               className={styles.img}
               mode='widthFix'
             />
@@ -85,8 +95,7 @@ AttrSS.propTypes = {
   noAwakeAttr: PropTypes.string,
   awakeAttr: PropTypes.string,
   attr: PropTypes.object,
-  disabled: PropTypes.bool,
-  indexModel: PropTypes.object
+  disabled: PropTypes.bool
 };
 
 export default AttrSS;

@@ -7,10 +7,16 @@ class Game {
   @observable yuhunInfo = [];
 
   @action('获取所有更新信息') saveAllUpdate = params => {
-    this.update = params;
+    this.update.replace(params);
   };
   @action('获取所有御魂信息') saveAllYuhun = params => {
-    this.yuhunInfo = params;
+    this.yuhunInfo.replace(params);
+  };
+  @computed get getUpdate() {
+    return this.update;
+  }
+  @computed get getYuhunInfo() {
+    return this.yuhunInfo;
   }
 }
 
