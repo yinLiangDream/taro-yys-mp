@@ -36,9 +36,11 @@
 		"@tarojs/taro-weapp": "1.3.0-beta.3",
 		"dayjs": "^1.8.12",
 		"mobx": "5.9.4",
+		"mp-colorui": "^0.0.3-beta",
 		"nerv-devtools": "^1.3.13",
 		"nervjs": "^1.3.13",
-		"tiny-pinyin": "^1.3.0"
+		"tiny-pinyin": "^1.3.0",
+		"wx-server-sdk": "^0.5.1"
 	},
 	"devDependencies": {
 		"@tarojs/plugin-babel": "1.3.0-beta.3",

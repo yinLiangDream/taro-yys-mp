@@ -1,11 +1,11 @@
 import Taro, { Component, pxTransform } from '@tarojs/taro';
 import { View, ScrollView, Block } from '@tarojs/components';
 import { observer, inject } from '@tarojs/mobx';
-import { ClTabs, ClCard, ClAvatar, ClLayout, ClTag, ClText } from 'mp-colorui';
+import { ClTabs, ClCard, ClAvatar, ClLayout, ClTag, ClText, ClLoading } from 'mp-colorui';
 import { gameApi } from '../../api/index';
 
-import Loading from '../../components/Loading';
 import StatusBar from '../../components/StatusBar';
+import { LOADINGIMG } from '../../utils/model';
 
 @inject('gameModel', 'indexModel')
 @observer
@@ -208,7 +208,11 @@ class Yuhun extends Component {
           isBack
           backText=''
         />
-        <Loading show={this.state.statusControl.showLoading} />
+        <ClLoading
+          show={this.state.statusControl.showLoading}
+          type='image'
+          imgUrl={LOADINGIMG}
+        />
         <ClTabs
           tabs={tabs}
           onClick={this.clickTitle.bind(this)}

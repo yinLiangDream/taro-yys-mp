@@ -13,12 +13,13 @@ import styles from './index.module.less';
 import { roleApi } from '../../api/index';
 import { setNavTitle } from '../../utils/index';
 
-import Loading from '../../components/Loading/index';
 import Modal from '../../components/Modal/index';
 import AttrSS from '../../components/Attr/index';
 import SkillItem from '../../components/SkillItem/index';
 import AwakeMaterial from '../../components/AwakeMaterial/index';
 import StatusBar from '../../components/StatusBar';
+import { ClLoading } from 'mp-colorui';
+import { LOADINGIMG } from '../../utils/model';
 
 let routerParams = {};
 let disabledJuexing = false;
@@ -595,8 +596,8 @@ class RoleDetail extends Component {
             <Text className='padding-lr-xs'>{item.mainAttr6}</Text>
           </View>
           <View className='flex text-sm'>
-            <View className='at-rol'>理由：</View>
-            <Text className='at-col at-col--wrap'>{item.reason}</Text>
+            <View style={{ flex: '1 0 auto' }}>推荐理由：</View>
+            <Text className=''>{item.reason}</Text>
           </View>
         </View>
       </View>
@@ -615,8 +616,11 @@ class RoleDetail extends Component {
     return (
       <View className={styles.roleDetail}>
         <StatusBar isBack noHeight />
-        <Loading show={this.state.statusControl.showLoading} />
-
+        <ClLoading
+          type='image'
+          imgUrl={LOADINGIMG}
+          show={this.state.statusControl.showLoading}
+        />
         <View className={styles.header}>
           <Image
             src={this.state.staticUrl.shishen_bg}

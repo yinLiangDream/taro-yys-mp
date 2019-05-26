@@ -8,7 +8,7 @@ module.exports = {
     patterns: [
       {
         from: 'src/cloud/',
-        to: 'dist/cloud/'
+        to: 'dist/weapp/cloud/'
       }
     ],
     options: {

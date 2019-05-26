@@ -1,14 +1,13 @@
+import { Button, ScrollView, Text, View } from '@tarojs/components';
+import { inject, observer } from '@tarojs/mobx';
 import Taro, { Component } from '@tarojs/taro';
-import { View, ScrollView, Button, Text } from '@tarojs/components';
-import { observer, inject } from '@tarojs/mobx';
-
+import { ClLoading } from 'mp-colorui';
 import { gameApi } from '../../api/index';
-
-import Loading from '../../components/Loading';
-import UpdateDetail from './components/updateDetail';
-
-import './index.less';
 import StatusBar from '../../components/StatusBar';
+import { LOADINGIMG } from '../../utils/model';
+import UpdateDetail from './components/updateDetail';
+import './index.less';
+
 
 @inject('gameModel', 'indexModel')
 @observer
@@ -117,7 +116,11 @@ class UpdateGame extends Component {
           isBack
           backText=''
         />
-        <Loading show={this.state.statusControl.showLoading} />
+        <ClLoading
+          show={this.state.statusControl.showLoading}
+          type='image'
+          imgUrl={LOADINGIMG}
+        />
         {this.state.list.length > 0 ? (
           <ScrollView
             scrollY

@@ -1,16 +1,14 @@
-import Taro, { Component } from '@tarojs/taro';
+import '@tarojs/async-await';
 import { Provider } from '@tarojs/mobx';
-import '@tarojs/async-await'
-import 'mp-colorui/dist/style/index.scss';
-
+import Taro, { Component, getApp } from '@tarojs/taro';
+import './app.less';
 import Index from './pages/index';
-
-import indexModel from './store/index';
 import gameModel from './store/game';
+import indexModel from './store/index';
 import rewardForSealModel from './store/rewardForSeal';
 import roleModel from './store/role';
-
-import './app.less';
+import userModel from './store/user';
+import { userApi } from './api/index';
 
 // 如果需要在 h5 环境中开启 React Devtools
 // 取消以下注释：
@@ -22,7 +20,8 @@ const store = {
   indexModel,
   gameModel,
   rewardForSealModel,
-  roleModel
+  roleModel,
+  userModel
 };
 
 class App extends Component {
