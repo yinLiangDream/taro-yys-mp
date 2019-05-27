@@ -1,13 +1,12 @@
 import { Button, ScrollView, Text, View } from '@tarojs/components';
 import { inject, observer } from '@tarojs/mobx';
-import Taro, { Component } from '@tarojs/taro';
-import { ClLoading } from 'mp-colorui';
+import Taro, { Component, pxTransform } from '@tarojs/taro';
+import { ClLoading, ClScreenDrawer, ClMenuList, ClLayout } from 'mp-colorui';
 import { gameApi } from '../../api/index';
 import StatusBar from '../../components/StatusBar';
 import { LOADINGIMG } from '../../utils/model';
 import UpdateDetail from './components/updateDetail';
 import './index.less';
-
 
 @inject('gameModel', 'indexModel')
 @observer
@@ -153,40 +152,42 @@ class UpdateGame extends Component {
         ) : (
           ''
         )}
-        <View
-          className={
-            this.state.statusControl.showDrawer
-              ? 'DrawerClose show'
-              : 'DrawerClose'
-          }
-          onClick={this.hideHistory}
+        <ClScreenDrawer
+          show={this.state.statusControl.showDrawer}
+          onHide={() => {
+            this.setState({
+              statusControl: {
+                ...this.state.statusControl,
+                showDrawer: false
+              }
+            });
+          }}
         >
-          <Text className='cuIcon-pullright' />
-        </View>
-        <ScrollView
-          scrollY
-          className={
-            this.state.statusControl.showDrawer
-              ? 'DrawerWindow show'
-              : 'DrawerWindow'
-          }
-        >
-          <View className='cu-list menu card-menu margin-top-xl margin-bottom-xl shadow-lg'>
-            {this.state.list.map((item, index) => (
-              <View
-                className='cu-item arrow bg-gray'
-                key={item.title}
-                onClick={this.showDetail.bind(this, index)}
-              >
-                <View class='content'>
-                  <Text class='text-grey'>
-                    {item.title}（{item.time}）
-                  </Text>
-                </View>
-              </View>
-            ))}
-          </View>
-        </ScrollView>
+          <ClLayout
+            baseSelection={{
+              padding: 'xlarge',
+              paddingDirection: 'vertical'
+            }}
+          >
+            <View
+              style={{
+                padding: `${pxTransform(
+                  indexModel.CustomBar + indexModel.StatusBar
+                )} 0`
+              }}
+            >
+              <ClMenuList
+                card
+                onClick={this.showDetail.bind(this)}
+                list={this.state.list.map(item => ({
+                  title: `${item.title}（${item.time}）`,
+                  arrow: true,
+                  titleColor: 'gray'
+                }))}
+              />
+            </View>
+          </ClLayout>
+        </ClScreenDrawer>
       </ScrollView>
     );
   }
