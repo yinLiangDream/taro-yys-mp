@@ -137,7 +137,7 @@ class Yuhun extends Component {
       powerModalUrl: '',
       activeTab: 0,
       percent: 0,
-      yuhunLevel: 0,
+      times: 50,
       rateAttr,
       baseAttrMap,
       yuhunDetail: [
@@ -177,7 +177,8 @@ class Yuhun extends Component {
       ],
       statusControl: {
         showLoading: false,
-        showPowerModal: false
+        showPowerModal: false,
+        showStore: false
       }
     };
   }
@@ -212,6 +213,26 @@ class Yuhun extends Component {
         });
       }
     );
+    /**
+     * 初始化次数
+     */
+    this.getYuhun().then(async () => {
+      const date = new Date().toLocaleDateString();
+      const data = await getData.doc(COLLECTION, doc);
+      let times = this.state.times;
+      if (data.data.date === date) {
+        times = data.data.times;
+      } else {
+        await updateData.doc(COLLECTION, doc, {
+          date
+        });
+      }
+      console.log(times);
+      this.setState({
+        times
+      });
+      console.log(data.data);
+    });
     this.initYuhunData();
   }
   clickTitle(index) {
@@ -353,7 +374,7 @@ class Yuhun extends Component {
     });
   }
   /**
-   * 点击强化
+   * 点击强化或弃置
    * @param {*} index
    */
   clickPower(index) {
@@ -389,11 +410,23 @@ class Yuhun extends Component {
         }
       }, 200);
     } else {
+      if (this.state.times === 0) {
+        Taro.showToast({
+          title: '已无弃置次数',
+          icon: 'none'
+        });
+        return;
+      }
       const yuhunDetail = this.state.yuhunDetail;
       yuhunDetail[this.state.activeTab] = this.resetYuhun(this.state.activeTab);
+      let times = this.state.times - 1;
+      updateData.doc(COLLECTION, doc, {
+        times
+      });
       this.setState({
         percent: 0,
-        yuhunDetail
+        yuhunDetail,
+        times
       });
     }
   }
@@ -467,18 +500,10 @@ class Yuhun extends Component {
     });
   }
   /**
-   * 保存御魂
+   * 获取御魂存储信息并初始化
    */
-  async saveYuhun() {
+  async getYuhun() {
     const { userModel } = this.props;
-    const yuhunDetail = this.state.yuhunDetail[this.state.activeTab];
-    if (yuhunDetail.main.yuhunLevel !== 15) {
-      Taro.showToast({
-        title: '只有满级御魂才能进行收藏',
-        icon: 'none'
-      });
-      return;
-    }
     const res = await getData.collectionWhere(COLLECTION, {
       _openid: userModel.getUserOpenId
     });
@@ -492,6 +517,21 @@ class Yuhun extends Component {
       doc = res.data[0]._id;
       hasYuhun = res.data[0].yuhun;
     }
+    return hasYuhun;
+  }
+  /**
+   * 保存御魂
+   */
+  async saveYuhun() {
+    const yuhunDetail = this.state.yuhunDetail[this.state.activeTab];
+    if (yuhunDetail.main.yuhunLevel !== 15) {
+      Taro.showToast({
+        title: '只有满级御魂才能进行收藏',
+        icon: 'none'
+      });
+      return;
+    }
+    const hasYuhun = await this.getYuhun();
     const yuhunSavedIndex = hasYuhun.findIndex(
       item => item.main.id === yuhunDetail.main.id
     );
@@ -504,10 +544,12 @@ class Yuhun extends Component {
       yuhun: hasYuhun
     });
     Taro.showToast({
-      title: '收藏到云端成功',
+      title: '收藏到云端成功（御魂仓库功能正在开发中）',
       icon: 'success'
     });
   }
+  // TODO 御魂仓库
+  showStore() {}
   render() {
     const { indexModel } = this.props;
     const tabs = this.state.tabList.map(item => {
@@ -650,6 +692,10 @@ class Yuhun extends Component {
         />
       </Block>
     ));
+    // const floatButton = (
+    //   <FloatButton detail='仓库' onClickButton={this.showStore.bind(this)} />
+    // );
+    // const yuhunStore = <ClDrawer show={this.state.statusControl.showStore}></ClDrawer>
     return (
       <View>
         <StatusBar
@@ -711,9 +757,14 @@ class Yuhun extends Component {
           <ClText size='xsmall' bgColor='grey' align='center'>
             模拟强化以及随机概率完全遵循网易公司公布概率
           </ClText>
-          <ClText size='xsmall' bgColor='light-red' align='center'>
-            弃置、强化功能不可逆，弃置将重置属性(每天弃置上限 50 次)
-          </ClText>
+          <ClText
+            size='xsmall'
+            bgColor='light-red'
+            align='center'
+            text={`弃置、强化功能不可逆，弃置将重置属性(每日上限50次，剩余${
+              this.state.times
+            }次)`}
+          />
           <ClTabs
             activeColor='brown'
             type='verb'
