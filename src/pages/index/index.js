@@ -1,22 +1,13 @@
-import {
-  Button,
-  Image,
-  ScrollView,
-  Swiper,
-  SwiperItem,
-  Text,
-  View
-} from '@tarojs/components';
+import { Button, Image, ScrollView, Swiper, SwiperItem, Text, View } from '@tarojs/components';
 import { inject, observer } from '@tarojs/mobx';
 import Taro, { Component } from '@tarojs/taro';
-import { gameApi, roleApi, userApi } from '../../api/index';
-import Loading from '../../components/Loading/index';
+import { ClLoading } from 'mp-colorui';
+import { gameApi, roleApi } from '../../api/index';
 import SearchBar from '../../components/SearchBar/index';
 import StatusBar from '../../components/StatusBar/index';
+import { LOADINGIMG } from '../../utils/model';
 import updateData from '../../utils/mpUpdateModel';
 import styles from './index.module.less';
-import { ENV, LOADINGIMG } from '../../utils/model';
-import { ClLoading } from 'mp-colorui';
 
 @inject('indexModel', 'userModel')
 @observer
@@ -169,20 +160,6 @@ class Index extends Component {
         }
       }
     );
-
-    // 获取用户授权信息
-    Taro.getSetting({
-      success: e => {
-        const authSetting = e.authSetting;
-        const { userModel } = this.props;
-        userModel.saveUserSetting(authSetting);
-      }
-    });
-    // 获取用户 openId
-    userApi('login', { env: ENV }).then(e => {
-      const { userModel } = this.props;
-      userModel.saveUserOpenId(e.result.data.openId);
-    });
   }
 
   componentWillUnmount() {}

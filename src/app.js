@@ -1,5 +1,5 @@
 import '@tarojs/async-await';
-import { Provider } from '@tarojs/mobx';
+import { Provider, inject } from '@tarojs/mobx';
 import Taro, { Component, getApp } from '@tarojs/taro';
 import './app.less';
 import Index from './pages/index';
@@ -8,7 +8,8 @@ import indexModel from './store/index';
 import rewardForSealModel from './store/rewardForSeal';
 import roleModel from './store/role';
 import userModel from './store/user';
-import { userApi } from './api/index';
+import { ENV } from './utils/model';
+import { userApi } from './api';
 
 // 如果需要在 h5 环境中开启 React Devtools
 // 取消以下注释：
@@ -68,7 +69,19 @@ class App extends Component {
     cloud: true
   };
 
-  componentDidMount() {}
+  componentDidMount() {
+    // 获取用户 openId
+    userApi('login', { env: ENV }).then(e => {
+      userModel.saveUserOpenId(e.result.data.openId);
+    });
+    // 获取用户授权信息
+    Taro.getSetting({
+      success: e => {
+        const authSetting = e.authSetting;
+        userModel.saveUserSetting(authSetting);
+      }
+    });
+  }
 
   componentDidShow() {}
 

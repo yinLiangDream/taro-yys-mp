@@ -12,18 +12,10 @@ class AttrSS extends Component {
   };
   constructor(props) {
     super(props);
+    const { indexModel } = this.props;
     this.state = {
       percent: false,
-      keyMap: {
-        attack: '攻击',
-        maxHp: '生命',
-        defense: '防御',
-        speed: '速度',
-        critRate: '暴击',
-        critPower: '暴击伤害',
-        debuffResist: '效果抵抗',
-        debuffEnhance: '效果命中'
-      }
+      keyMap: indexModel.getAttrRoleMap
     };
   }
 

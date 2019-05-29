@@ -32,6 +32,16 @@ class Global {
     '风转符·低级': baseUrl + 'awakeMaterial/fzf_low.png',
     '风转符·高级': baseUrl + 'awakeMaterial/fzf_high.png'
   };
+  @observable attrRoleMap = {
+    attack: '攻击',
+    maxHp: '生命',
+    defense: '防御',
+    speed: '速度',
+    critRate: '暴击',
+    critPower: '暴击伤害',
+    debuffResist: '效果抵抗',
+    debuffEnhance: '效果命中'
+  };
   @observable baseUrl = baseUrl;
   @observable allRoleDetail = [];
   @observable StatusBar = systemInfo.statusBarHeight;
@@ -89,6 +99,9 @@ class Global {
   }
   @computed get getAttrMap() {
     return this.attrMap;
+  }
+  @computed get getAttrRoleMap() {
+    return this.attrRoleMap;
   }
 }
 

@@ -70,6 +70,7 @@ class RewardForSeal extends Component {
     const rewardRoles = [].concat(
       indexModel.all
         .filter(item => item.level !== 'SP')
+        .filter(item => item.level !== 'SSR')
         .filter(item => !item.material)
     );
     this.setState({

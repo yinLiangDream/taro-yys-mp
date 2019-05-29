@@ -1,4 +1,4 @@
-import { Button, ScrollView, Text, View } from '@tarojs/components';
+import { Button, ScrollView, View } from '@tarojs/components';
 import { inject, observer } from '@tarojs/mobx';
 import Taro, { Component, pxTransform } from '@tarojs/taro';
 import { ClLoading, ClScreenDrawer, ClMenuList, ClLayout } from 'mp-colorui';

@@ -36,7 +36,7 @@
 		"@tarojs/taro-weapp": "1.3.0-beta.5",
 		"dayjs": "^1.8.12",
 		"mobx": "5.9.4",
-		"mp-colorui": "^0.0.3-beta",
+		"mp-colorui": "^0.0.1-beta",
 		"nerv-devtools": "^1.3.13",
 		"nervjs": "^1.3.13",
 		"tiny-pinyin": "^1.3.0",
