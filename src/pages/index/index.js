@@ -1,6 +1,15 @@
-import { Button, Image, ScrollView, Swiper, SwiperItem, Text, View } from '@tarojs/components';
+import {
+  Button,
+  Image,
+  ScrollView,
+  Swiper,
+  SwiperItem,
+  Text,
+  View,
+  Navigator
+} from '@tarojs/components';
 import { inject, observer } from '@tarojs/mobx';
-import Taro, { Component } from '@tarojs/taro';
+import Taro, { Component, pxTransform } from '@tarojs/taro';
 import { ClLoading } from 'mp-colorui';
 import { gameApi, roleApi } from '../../api/index';
 import SearchBar from '../../components/SearchBar/index';
@@ -8,6 +17,8 @@ import StatusBar from '../../components/StatusBar/index';
 import { LOADINGIMG } from '../../utils/model';
 import updateData from '../../utils/mpUpdateModel';
 import styles from './index.module.less';
+import FloatButton from '../../components/FloatButton';
+import { feedbackRouter } from '../../utils/router';
 
 @inject('indexModel', 'userModel')
 @observer
@@ -267,6 +278,12 @@ class Index extends Component {
     this.clickHeader('updateGame');
   }
 
+  clickChat() {
+    Taro.navigateTo({
+      url: feedbackRouter
+    });
+  }
+
   render() {
     const { indexModel } = this.props;
     const tabHeadersList = this.state.imgUrl.map(item => (
@@ -288,6 +305,13 @@ class Index extends Component {
         {item.text}
       </View>
     ));
+    const float = (
+      <FloatButton
+        type='image'
+        detail='https://mp-yys-1255362963.cos.ap-chengdu.myqcloud.com/chat.png'
+        onClickButton={this.clickChat.bind(this)}
+      />
+    );
     const roleTagList = this.state.allTag.map((item, index) => (
       <SwiperItem className={styles.swiperItem} key={index}>
         <ScrollView className={styles.scroll} scroll-y>
@@ -324,8 +348,30 @@ class Index extends Component {
         </ScrollView>
       </SwiperItem>
     ));
+    const floatFeedback = (
+      <Navigator
+        target='miniProgram'
+        appId='wx8abaf00ee8c3202e'
+        extraData={{
+          id: '62665'
+        }}
+        style={{
+          position: 'fixed',
+          right: pxTransform(50),
+          bottom: pxTransform(300),
+          zIndex: 10
+        }}
+      >
+        <Image
+          src='https://mp-yys-1255362963.cos.ap-chengdu.myqcloud.com/chat.png'
+          mode='aspectFit'
+          style={{ width: pxTransform(100), height: pxTransform(100) }}
+        />
+      </Navigator>
+    );
     return (
       <ScrollView className={styles.indexPage} style={{ height: '100%' }}>
+        {floatFeedback}
         {this.state.statusControl.showBack ? (
           ''
         ) : (

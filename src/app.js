@@ -66,7 +66,8 @@ class App extends Component {
     //   ],
     //   position: 'bottom'
     // },
-    cloud: true
+    cloud: true,
+    navigateToMiniProgramAppIdList: ['wx8abaf00ee8c3202e']
   };
 
   componentDidMount() {
