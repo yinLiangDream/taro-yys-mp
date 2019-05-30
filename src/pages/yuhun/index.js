@@ -510,7 +510,9 @@ class Yuhun extends Component {
     let hasYuhun = [];
     if (res.data.length === 0) {
       const data = await addData.collection(COLLECTION, {
-        yuhun: []
+        yuhun: [],
+        times: 50,
+        time: new Date().toLocaleDateString()
       });
       doc = data._id;
     } else {
