@@ -1,6 +1,7 @@
 import '@tarojs/async-await';
 import { Provider, inject } from '@tarojs/mobx';
 import Taro, { Component, getApp } from '@tarojs/taro';
+import 'mp-colorui/dist/style/index.scss'
 import './app.less';
 import Index from './pages/index';
 import gameModel from './store/game';

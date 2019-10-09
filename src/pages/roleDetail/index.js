@@ -553,55 +553,55 @@ class RoleDetail extends Component {
     const materialList = this.state.awakeMaterial.map((item, index) => (
       <View key={index}>{item ? <AwakeMaterial data={item} /> : ''}</View>
     ));
-    const yuhuntuijian = this.state.recommendYuhun.map((item, index) => (
-      <View
-        className={
-          index === 1
-            ? 'margin-top margin-bottom radius bg-gray padding'
-            : 'radius bg-gray padding'
-        }
-        key={item.title}
-        style={{
-          overflow: 'hidden',
-          width: '100%',
-          border: '1px lightgray solid'
-        }}
-      >
-        <View>
-          <View className='flex padding'>
-            <View className='at-col'>
-              <View
-                className='cu-avatar lg round'
-                style={{ backgroundImage: `url(${item.icon1})` }}
-              />
-            </View>
-            <View className='at-col padding'>
-              <Text>{item.main1}</Text>
-            </View>
-            <View
-              className='cu-avatar lg round'
-              style={{ backgroundImage: `url(${item.icon2})` }}
-            />
-            <View className='at-col padding'>
-              <Text>{item.main2}</Text>
-            </View>
-          </View>
-          <View className='flex margin-top-sm margin-bottom-sm text-sm'>
-            主属性：
-            <View className={`${styles.yuhunAttrIcon} ${styles.mainAttr2}`} />
-            <Text className='padding-lr-xs'>{item.mainAttr2}</Text>
-            <View className={`${styles.yuhunAttrIcon} ${styles.mainAttr4}`} />
-            <Text className='padding-lr-xs'>{item.mainAttr4}</Text>
-            <View className={`${styles.yuhunAttrIcon} ${styles.mainAttr6}`} />
-            <Text className='padding-lr-xs'>{item.mainAttr6}</Text>
-          </View>
-          <View className='flex text-sm'>
-            <View style={{ flex: '1 0 auto' }}>推荐理由：</View>
-            <Text className=''>{item.reason}</Text>
-          </View>
-        </View>
-      </View>
-    ));
+    // const yuhuntuijian = this.state.recommendYuhun.map((item, index) => (
+    //   <View
+    //     className={
+    //       index === 1
+    //         ? 'margin-top margin-bottom radius bg-gray padding'
+    //         : 'radius bg-gray padding'
+    //     }
+    //     key={item.title}
+    //     style={{
+    //       overflow: 'hidden',
+    //       width: '100%',
+    //       border: '1px lightgray solid'
+    //     }}
+    //   >
+    //     <View>
+    //       <View className='flex padding'>
+    //         <View className='at-col'>
+    //           <View
+    //             className='cu-avatar lg round'
+    //             style={{ backgroundImage: `url(${item.icon1})` }}
+    //           />
+    //         </View>
+    //         <View className='at-col padding'>
+    //           <Text>{item.main1}</Text>
+    //         </View>
+    //         <View
+    //           className='cu-avatar lg round'
+    //           style={{ backgroundImage: `url(${item.icon2})` }}
+    //         />
+    //         <View className='at-col padding'>
+    //           <Text>{item.main2}</Text>
+    //         </View>
+    //       </View>
+    //       <View className='flex margin-top-sm margin-bottom-sm text-sm'>
+    //         主属性：
+    //         <View className={`${styles.yuhunAttrIcon} ${styles.mainAttr2}`} />
+    //         <Text className='padding-lr-xs'>{item.mainAttr2}</Text>
+    //         <View className={`${styles.yuhunAttrIcon} ${styles.mainAttr4}`} />
+    //         <Text className='padding-lr-xs'>{item.mainAttr4}</Text>
+    //         <View className={`${styles.yuhunAttrIcon} ${styles.mainAttr6}`} />
+    //         <Text className='padding-lr-xs'>{item.mainAttr6}</Text>
+    //       </View>
+    //       <View className='flex text-sm'>
+    //         <View style={{ flex: '1 0 auto' }}>推荐理由：</View>
+    //         <Text className=''>{item.reason}</Text>
+    //       </View>
+    //     </View>
+    //   </View>
+    // ));
     const attrsList = this.state.attrs.map((item, index) => (
       <View key={index}>
         <AttrSS
@@ -824,11 +824,6 @@ class RoleDetail extends Component {
             ) : (
               ''
             )}
-          </View>
-
-          <View className={styles.recommend}>
-            <View className={styles.title}>04/ 御魂推荐</View>
-            {yuhuntuijian}
           </View>
         </View>
       </View>

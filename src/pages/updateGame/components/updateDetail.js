@@ -1,5 +1,5 @@
 import Taro, { Component } from '@tarojs/taro';
-import { View } from '@tarojs/components';
+import {Text, View} from '@tarojs/components';
 import PropTypes from 'prop-types';
 
 
@@ -16,7 +16,7 @@ export default class UpdateDetail extends Component {
     return (
       <View className='flex flex-direction justify-center margin' style={{ border: '1px solid lightgray', borderRadius: '10px' }} >
         <View className='flex text-lg text-bold justify-center padding'>
-          {this.props.detail.title}
+          <Text>{this.props.detail.title}</Text>
         </View>
         <View className='text-sm justify-end flex padding-right text-gray'>
           {this.props.detail.time}
@@ -26,9 +26,9 @@ export default class UpdateDetail extends Component {
             <View key={item.title}>
               <View className='text-bold text-red text-df'>{item.title}</View>
               {item.desc.map(itemDesc => (
-                <View className='text-sm' key={itemDesc}>
+                <Text className='text-sm' key={itemDesc}>
                   {itemDesc}
-                </View>
+                </Text>
               ))}
             </View>
           ))}

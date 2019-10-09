@@ -29,23 +29,6 @@ class SkillItem extends Component {
                     className={styles.img}
                   />
                   <View className={styles.title}>{item.text.name}</View>
-                  {!awake ? (
-                    <View className={styles.xiaohao}>
-                      <Image
-                        src='https://mp-yys-1255362963.cos.ap-chengdu.myqcloud.com/yuhun_icon/fire.png'
-                        mode='widthFix'
-                        className={styles.xiaohaoimg}
-                      />
-                      <Text>x {item.need}</Text>
-                    </View>
-                  ) : (
-                    ''
-                  )}
-                  {!awake ? (
-                    <View className={styles.attackType}>{item.type}</View>
-                  ) : (
-                    ''
-                  )}
                 </View>
               ) : (
                 ''

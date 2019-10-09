@@ -107,6 +107,58 @@ class UpdateGame extends Component {
   }
   render() {
     const { indexModel } = this.props;
+    const otherList = <ClLayout
+      baseSelection={{
+        padding: 'xlarge',
+        paddingDirection: 'vertical'
+      }}
+    >
+      <View
+        style={{
+          padding: `${pxTransform(
+            indexModel.CustomBar + indexModel.StatusBar
+          )} 0`
+        }}
+      >
+        <ClMenuList
+          card
+          onClick={this.showDetail.bind(this)}
+          list={this.state.list.map(item => ({
+            title: `${item.title}（${item.time}）`,
+            arrow: true,
+            titleColor: 'gray'
+          }))}
+        />
+      </View>
+    </ClLayout>
+    const content = <ScrollView
+      scrollY
+      scrollTop={this.state.scrollTop}
+      scrollWithAnimation
+      style={{
+        background: 'none',
+        height: `calc(100vh - ${indexModel.CustomBar +
+        indexModel.StatusBar}px)`,
+        zIndex: 100
+      }}
+      className={
+        this.state.statusControl.showDrawer
+          ? 'DrawerPage show'
+          : 'DrawerPage'
+      }
+    >
+      <View className='radius'>
+        <UpdateDetail detail={this.state.showDetail} />
+        <View className='flex justify-center padding-bottom'>
+          <Button
+            className='cu-btn sm shadow bg-cyan radius'
+            onClick={this.showHistory}
+          >
+            查看历史更新
+          </Button>
+        </View>
+      </View>
+    </ScrollView>
     return (
       <ScrollView style={{ height: '100vh' }}>
         <StatusBar
@@ -120,38 +172,6 @@ class UpdateGame extends Component {
           type='image'
           imgUrl={LOADINGIMG}
         />
-        {this.state.list.length > 0 ? (
-          <ScrollView
-            scrollY
-            scrollTop={this.state.scrollTop}
-            scrollWithAnimation
-            style={{
-              background: 'none',
-              height: `calc(100vh - ${indexModel.CustomBar +
-                indexModel.StatusBar}px)`
-            }}
-            className={
-              this.state.statusControl.showDrawer
-                ? 'DrawerPage show'
-                : 'DrawerPage'
-            }
-          >
-            <View className='radius'>
-              <UpdateDetail detail={this.state.showDetail} />
-
-              <View className='flex justify-center padding-bottom'>
-                <Button
-                  className='cu-btn sm shadow bg-cyan radius'
-                  onClick={this.showHistory}
-                >
-                  查看历史更新
-                </Button>
-              </View>
-            </View>
-          </ScrollView>
-        ) : (
-          ''
-        )}
         <ClScreenDrawer
           show={this.state.statusControl.showDrawer}
           onHide={() => {
@@ -162,31 +182,9 @@ class UpdateGame extends Component {
               }
             });
           }}
+          renderDrawer={otherList}
+          renderPage={content}
         >
-          <ClLayout
-            baseSelection={{
-              padding: 'xlarge',
-              paddingDirection: 'vertical'
-            }}
-          >
-            <View
-              style={{
-                padding: `${pxTransform(
-                  indexModel.CustomBar + indexModel.StatusBar
-                )} 0`
-              }}
-            >
-              <ClMenuList
-                card
-                onClick={this.showDetail.bind(this)}
-                list={this.state.list.map(item => ({
-                  title: `${item.title}（${item.time}）`,
-                  arrow: true,
-                  titleColor: 'gray'
-                }))}
-              />
-            </View>
-          </ClLayout>
         </ClScreenDrawer>
       </ScrollView>
     );

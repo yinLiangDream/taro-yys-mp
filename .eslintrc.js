@@ -1,6 +1,6 @@
 module.exports = {
   "root": true,
-  "extends": ["taro"],
+  "extends": ["taro", "prettier"],
   "rules": {
     "no-unused-vars": ["error", { "varsIgnorePattern": "Taro" }],
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx", ".tsx"] }]
