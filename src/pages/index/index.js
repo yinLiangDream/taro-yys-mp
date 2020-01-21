@@ -7,27 +7,25 @@ import {
   Text,
   View,
   Navigator
-} from '@tarojs/components';
-import { inject, observer } from '@tarojs/mobx';
-import Taro, { Component, pxTransform } from '@tarojs/taro';
-import { ClLoading } from 'mp-colorui';
-import { gameApi, roleApi } from '../../api/index';
-import SearchBar from '../../components/SearchBar/index';
-import StatusBar from '../../components/StatusBar/index';
-import { LOADINGIMG } from '../../utils/model';
-import updateData from '../../utils/mpUpdateModel';
-import styles from './index.module.less';
-import FloatButton from '../../components/FloatButton';
-import { feedbackRouter } from '../../utils/router';
+} from "@tarojs/components";
+import { inject, observer } from "@tarojs/mobx";
+import Taro, { Component, pxTransform } from "@tarojs/taro";
+import { ClLoading, ClSearchBar, ClText } from "mp-colorui";
+import { gameApi, roleApi } from "../../api/index";
+import StatusBar from "../../components/StatusBar/index";
+import { LOADINGIMG } from "../../utils/model";
+import updateData from "../../utils/mpUpdateModel";
+import styles from "./index.module.less";
+import { feedbackRouter } from "../../utils/router";
 
-@inject('indexModel', 'userModel')
+@inject("indexModel", "userModel")
 @observer
 class Index extends Component {
   static options = {
     addGlobalClass: true
   };
-  config = {
-    navigationBarTitleText: '首页'
+  static config = {
+    navigationBarTitleText: "首页"
   };
 
   constructor(props) {
@@ -36,29 +34,34 @@ class Index extends Component {
     this.state = {
       imgUrl: [
         {
-          text: '封印悬赏',
+          text: "封印悬赏",
           key: `${indexModel.baseUrl}rewardForSeal.png`,
-          click: 'rewardForSeal'
+          click: "rewardForSeal"
         },
         {
-          text: '逢魔密信',
+          text: "逢魔密信",
           key: `${indexModel.baseUrl}fengmo.png`,
-          click: 'fengmo'
+          click: "fengmo"
         },
+        // {
+        //   text: '御魂',
+        //   key: `${indexModel.baseUrl}yuhun.png`,
+        //   click: 'yuhun'
+        // },
         {
-          text: '御魂',
-          key: `${indexModel.baseUrl}yuhun.png`,
-          click: 'yuhun'
-        },
-        {
-          text: '游戏更新记',
+          text: "游戏更新记",
           key: `${indexModel.baseUrl}eventRecord.png`,
-          click: 'updateGame'
+          click: "updateGame"
         },
         {
-          text: '小程序更新记',
+          text: "小程序更新记",
           key: `${indexModel.baseUrl}gameCalendar.png`,
-          click: 'mpUpdateRecord'
+          click: "mpUpdateRecord"
+        },
+        {
+          text: "留言",
+          key: "https://mp-yys-1255362963.cos.ap-chengdu.myqcloud.com/chat.png",
+          click: ""
         }
         // {
         //   text: '主角录',
@@ -75,37 +78,37 @@ class Index extends Component {
       ],
       allTag: [
         {
-          text: '全部',
-          key: 'all',
+          text: "全部",
+          key: "all",
           active: true
         },
         {
-          text: '联动',
-          key: 'interactive'
+          text: "联动",
+          key: "interactive"
         },
         {
-          text: 'SP',
-          key: 'sp'
+          text: "SP",
+          key: "sp"
         },
         {
-          text: 'SSR',
-          key: 'ssr'
+          text: "SSR",
+          key: "ssr"
         },
         {
-          text: 'SR',
-          key: 'sr'
+          text: "SR",
+          key: "sr"
         },
         {
-          text: 'R',
-          key: 'r'
+          text: "R",
+          key: "r"
         },
         {
-          text: 'N',
-          key: 'n'
+          text: "N",
+          key: "n"
         },
         {
-          text: '呱太',
-          key: 'material'
+          text: "呱太",
+          key: "material"
         }
       ],
       showIndex: 0,
@@ -113,7 +116,7 @@ class Index extends Component {
       activities: [],
       staticUrl: {
         baseUrl: indexModel.baseUrl,
-        new: indexModel.baseUrl + 'new.png'
+        new: indexModel.baseUrl + "new.png"
       },
       statusControl: {
         showLoading: true,
@@ -124,12 +127,8 @@ class Index extends Component {
     };
   }
 
-  componentWillReact() {
-    console.log('componentWillReact');
-  }
-
   async componentDidMount() {
-    const resActive = await gameApi('active', {});
+    const resActive = await gameApi("active", {});
     this.setState({
       activities: resActive.result.data.map(item => {
         item.open = false;
@@ -137,12 +136,12 @@ class Index extends Component {
       })
     });
     const { indexModel } = this.props;
-    const res = await roleApi('list', {});
+    const res = await roleApi("list", {});
     const data = res.result.data;
     indexModel.saveAllRoles(data);
     this.state.allTag = this.state.allTag.map((item, index) => {
       item.active = index === 0;
-      const key = `all${item.key === 'all' ? '' : item.key}`;
+      const key = `all${item.key === "all" ? "" : item.key}`;
       item.showList = indexModel[key];
       return item;
     });
@@ -157,7 +156,7 @@ class Index extends Component {
       },
       () => {
         try {
-          const value = Taro.getStorageSync('version');
+          const value = Taro.getStorageSync("version");
           if (value !== this.state.currentVersion.version) {
             this.setState({
               statusControl: {
@@ -187,7 +186,7 @@ class Index extends Component {
       }
     });
     Taro.setStorage({
-      key: 'version',
+      key: "version",
       data: this.state.currentVersion.version
     });
   }
@@ -216,9 +215,10 @@ class Index extends Component {
   }
 
   clickHeader(clickName) {
-    Taro.navigateTo({
-      url: `/pages/${clickName}/index`
-    });
+    clickName &&
+      Taro.navigateTo({
+        url: `/pages/${clickName}/index`
+      });
   }
 
   clickFloatButton() {
@@ -263,8 +263,6 @@ class Index extends Component {
     });
   }
 
-  confirmSearch() {}
-
   enterHome() {
     this.setState({
       statusControl: {
@@ -275,7 +273,7 @@ class Index extends Component {
   }
 
   watchDetail() {
-    this.clickHeader('updateGame');
+    this.clickHeader("updateGame");
   }
 
   clickChat() {
@@ -286,13 +284,32 @@ class Index extends Component {
 
   render() {
     const { indexModel } = this.props;
+    const floatFeedback = (
+      <Navigator
+        target="miniProgram"
+        appId="wx8abaf00ee8c3202e"
+        extraData={{
+          id: "62665"
+        }}
+      >
+        <Image
+          src="https://mp-yys-1255362963.cos.ap-chengdu.myqcloud.com/chat.png"
+          mode="aspectFit"
+          className={styles.img}
+        />
+      </Navigator>
+    );
     const tabHeadersList = this.state.imgUrl.map(item => (
       <View
         className={styles.content}
         onClick={this.clickHeader.bind(this, item.click)}
         key={item.key}
       >
-        <Image src={item.key} className={styles.img} mode='aspectFit' />
+        {item.text === "留言" ? (
+          floatFeedback
+        ) : (
+          <Image src={item.key} className={styles.img} mode="aspectFit" />
+        )}
         <Text className={styles.text}>{item.text}</Text>
       </View>
     ));
@@ -305,13 +322,6 @@ class Index extends Component {
         {item.text}
       </View>
     ));
-    const float = (
-      <FloatButton
-        type='image'
-        detail='https://mp-yys-1255362963.cos.ap-chengdu.myqcloud.com/chat.png'
-        onClickButton={this.clickChat.bind(this)}
-      />
-    );
     const roleTagList = this.state.allTag.map((item, index) => (
       <SwiperItem className={styles.swiperItem} key={index}>
         <ScrollView className={styles.scroll} scroll-y>
@@ -326,17 +336,15 @@ class Index extends Component {
                   {itemI.isNew ? (
                     <Image
                       src={this.state.staticUrl.new}
-                      mode='aspectFit'
+                      mode="aspectFit"
                       className={styles.new}
                     />
                   ) : (
-                    ''
+                    ""
                   )}
                   <Image
-                    src={`${this.state.staticUrl.baseUrl}list_head/${
-                      itemI.id
-                    }.jpg`}
-                    mode='aspectFit'
+                    src={`${this.state.staticUrl.baseUrl}list_head/${itemI.id}.jpg`}
+                    mode="aspectFit"
                     className={styles.img}
                     lazyLoad
                   />
@@ -348,46 +356,24 @@ class Index extends Component {
         </ScrollView>
       </SwiperItem>
     ));
-    const floatFeedback = (
-      <Navigator
-        target='miniProgram'
-        appId='wx8abaf00ee8c3202e'
-        extraData={{
-          id: '62665'
-        }}
-        style={{
-          position: 'fixed',
-          right: pxTransform(50),
-          bottom: pxTransform(300),
-          zIndex: 10
-        }}
-      >
-        <Image
-          src='https://mp-yys-1255362963.cos.ap-chengdu.myqcloud.com/chat.png'
-          mode='aspectFit'
-          style={{ width: pxTransform(100), height: pxTransform(100) }}
-        />
-      </Navigator>
-    );
     return (
-      <ScrollView className={styles.indexPage} style={{ height: '100%' }}>
-        {floatFeedback}
+      <ScrollView className={styles.indexPage} style={{ height: "100%" }}>
         {this.state.statusControl.showBack ? (
-          ''
+          ""
         ) : (
-          <StatusBar content='首页' fontColor='text-black' />
+          <StatusBar content="首页" fontColor="text-black" />
         )}
         {this.state.statusControl.showBack ? (
           <View className={styles.activeBack}>
             <View className={styles.back_btn}>
               <Button
-                className='cu-btn margin-right-sm bg-black light shadow'
+                className="cu-btn margin-right-sm bg-black light shadow"
                 onClick={this.enterHome}
               >
                 进入首页
               </Button>
               <Button
-                className='cu-btn bg-black light shadow'
+                className="cu-btn bg-black light shadow"
                 onClick={this.watchDetail}
               >
                 查看详情
@@ -401,14 +387,15 @@ class Index extends Component {
                 indexModel.StatusBar}px)`
             }}
           >
-            <SearchBar
-              onSearch={this.search}
-              onConfirm={this.confirmSearch}
-              placeholder='请输入式神名称'
+            <ClSearchBar
+              placeholder="请输入式神名称"
+              onSearch={this.search.bind(this)}
+              onInput={this.search.bind(this)}
+              shape="round"
             />
             <ClLoading
               show={this.state.statusControl.showLoading}
-              type='image'
+              type="image"
               imgUrl={LOADINGIMG}
             />
             <View className={styles.tabs}>
@@ -431,32 +418,32 @@ class Index extends Component {
             <View className={styles.other}>
               <View
                 className={`${
-                  this.state.statusControl.showVersion ? 'show' : ''
+                  this.state.statusControl.showVersion ? "show" : ""
                 } cu-modal`}
               >
-                <View className='cu-dialog'>
-                  <View className='bg-gradual-blue light'>
-                    <View className='cu-bar justify-end text-Abc'>
-                      <View className='content'>
+                <View className="cu-dialog">
+                  <View className="bg-gradual-blue light">
+                    <View className="cu-bar justify-end text-Abc">
+                      <View className="content">
                         版本更新：{this.state.currentVersion.version}
                       </View>
-                      <View className='action' onClick={this.hideVersion}>
-                        <Text className='cuIcon-close' />
+                      <View className="action" onClick={this.hideVersion}>
+                        <Text className="cuIcon-close" />
                       </View>
                     </View>
-                    <View className='padding'>
+                    <View className="padding">
                       <View>
                         {this.state.currentVersion.desc.map((item, index) => (
-                          <View key={index} className='text-sm'>
+                          <View key={index} className="text-sm">
                             {item}
                           </View>
                         ))}
                       </View>
                     </View>
                   </View>
-                  <View className='cu-bar bg-white'>
+                  <View className="cu-bar bg-white">
                     <View
-                      className='action margin-0 flex-sub solid-left'
+                      className="action margin-0 flex-sub solid-left"
                       onClick={this.hideVersion}
                     >
                       我知道了

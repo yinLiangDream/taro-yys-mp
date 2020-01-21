@@ -1,4 +1,4 @@
-import Taro, { Component } from '@tarojs/taro';
+import Taro, { Component } from "@tarojs/taro";
 import {
   View,
   Text,
@@ -6,25 +6,25 @@ import {
   Button,
   Label,
   ScrollView
-} from '@tarojs/components';
-import { observer, inject } from '@tarojs/mobx';
+} from "@tarojs/components";
+import { observer, inject } from "@tarojs/mobx";
+import { ClLoading } from "mp-colorui";
 
-import styles from './index.module.less';
-import { roleApi } from '../../api/index';
-import { setNavTitle } from '../../utils/index';
+import styles from "./index.module.less";
+import { roleApi } from "../../api/index";
+import { setNavTitle } from "../../utils/index";
 
-import Modal from '../../components/Modal/index';
-import AttrSS from '../../components/Attr/index';
-import SkillItem from '../../components/SkillItem/index';
-import AwakeMaterial from '../../components/AwakeMaterial/index';
-import StatusBar from '../../components/StatusBar';
-import { ClLoading } from 'mp-colorui';
-import { LOADINGIMG } from '../../utils/model';
+import Modal from "../../components/Modal/index";
+import AttrSS from "../../components/Attr/index";
+import SkillItem from "../../components/SkillItem/index";
+import AwakeMaterial from "../../components/AwakeMaterial/index";
+import StatusBar from "../../components/StatusBar";
+import { LOADINGIMG } from "../../utils/model";
 
 let routerParams = {};
 let disabledJuexing = false;
 
-@inject('indexModel', 'roleModel')
+@inject("indexModel", "roleModel")
 @observer
 class RoleDetail extends Component {
   static options = {
@@ -35,45 +35,42 @@ class RoleDetail extends Component {
     super(props);
     const { indexModel } = this.props;
     this.state = {
-      id: '',
-      ssLevel: '1',
+      id: "",
+      ssLevel: "1",
       allLevels: [],
       ssStar: [true, true, false, false, false, false],
-      notJuexing: ['N', 'SP'],
+      notJuexing: ["N", "SP"],
       story: [],
       attrs: [],
       skills: [],
       skins: [],
       awakeMaterial: [],
       awakeSkills: [],
-      storyUnlock: [],
-      recommendYuhun: [],
-      zrRecommend: [],
       disabledJuexing: false,
       staticUrl: {
-        awakeUrl: '',
-        chushiButton: '',
-        juexingButton: '',
-        skinButton: '',
-        chushi_active: 'chushi-btn_active.png',
-        chushi_normal: 'chushi-btn_normal.png',
-        juexing_normal: 'juexing-btn_normal.png',
-        juexing_active: 'juexing-btn_active.png',
-        juexing_disabled: 'juexing-btn_disabled.png',
-        skin_normal: 'skin-btn_normal.png',
-        skin_active: 'skin-btn_active.png',
-        skin_disabled: 'skin-btn_disabled.png',
-        shishen_bg: indexModel.baseUrl + 'shishen_bg.jpg',
-        ssl: indexModel.baseUrl + 'ssl.png',
-        name_role: indexModel.baseUrl + 'name_role.png',
-        yys: indexModel.baseUrl + 'yys.png',
-        lotus: indexModel.baseUrl + 'lotus.png',
-        noAwakeHead: '',
-        awakeHead: '',
-        skillItemBg: indexModel.baseUrl + 'skill_item_bg.jpg',
-        normalStar: indexModel.baseUrl + 'normal_page.png',
-        activeStar: indexModel.baseUrl + 'active_page.png',
-        skinBaseUrl: indexModel.baseUrl + 'skin/'
+        awakeUrl: "",
+        chushiButton: "",
+        juexingButton: "",
+        skinButton: "",
+        chushi_active: "chushi-btn_active.png",
+        chushi_normal: "chushi-btn_normal.png",
+        juexing_normal: "juexing-btn_normal.png",
+        juexing_active: "juexing-btn_active.png",
+        juexing_disabled: "juexing-btn_disabled.png",
+        skin_normal: "skin-btn_normal.png",
+        skin_active: "skin-btn_active.png",
+        skin_disabled: "skin-btn_disabled.png",
+        shishen_bg: indexModel.baseUrl + "shishen_bg.jpg",
+        ssl: indexModel.baseUrl + "ssl.png",
+        name_role: indexModel.baseUrl + "name_role.png",
+        yys: indexModel.baseUrl + "yys.png",
+        lotus: indexModel.baseUrl + "lotus.png",
+        noAwakeHead: "",
+        awakeHead: "",
+        skillItemBg: indexModel.baseUrl + "skill_item_bg.jpg",
+        normalStar: indexModel.baseUrl + "normal_page.png",
+        activeStar: indexModel.baseUrl + "active_page.png",
+        skinBaseUrl: indexModel.baseUrl + "skin/"
       },
       statusControl: {
         showLoading: true,
@@ -91,47 +88,47 @@ class RoleDetail extends Component {
     const { roleModel } = this.props;
     // 传记
     if (!roleModel.allStory.length) {
-      const zhuanjires = await roleApi('story', {});
+      const zhuanjires = await roleApi("story", {});
       roleModel.saveAllStory(zhuanjires.result.data);
     }
     const story = roleModel.getStoryById(this.state.id);
     // const showUnlock = this.state.storyUnlock.find(
     //   item => item.id === Number(id)
     // );
-    const zhuanji = ['一', '二', '三', '四', '五', '六', '七', '八', '九'];
+    const zhuanji = ["一", "二", "三", "四", "五", "六", "七", "八", "九"];
     if (Object.keys(story).length) {
       this.setState({
         story: story.map((item, index) => ({
-          title: '传记' + zhuanji[index],
+          title: "传记" + zhuanji[index],
           desc: item
           // unlock: showUnlock ? showUnlock.jx[index] : null
         }))
       });
     }
-    console.log('===传记加载完毕===');
+    console.log("===传记加载完毕===");
   }
 
   async getSkill() {
     const { indexModel, roleModel } = this.props;
     // 技能图标及说明
     if (!roleModel.allSkill.length) {
-      const skills = await roleApi('skills', {});
+      const skills = await roleApi("skills", {});
       roleModel.saveAllSKill(skills.result.data);
     }
     const skillDesc = roleModel.getSkillById(this.state.id);
     this.state.skills = [];
     this.state.awakeSkills = [];
     Object.keys(skillDesc.beforeAwakeSkillDesc).forEach(noAwakeId => {
-      if (['add', 'add_type'].includes(noAwakeId)) return;
+      if (["add", "add_type"].includes(noAwakeId)) return;
       this.state.skills.push({
-        url: indexModel.baseUrl + 'skill_icons/' + noAwakeId + '.png',
+        url: indexModel.baseUrl + "skill_icons/" + noAwakeId + ".png",
         text: skillDesc.beforeAwakeSkillDesc[noAwakeId]
       });
     });
     Object.keys(skillDesc.afterAwakeSkillDesc).forEach(awakeId => {
-      if (['add', 'add_type'].includes(awakeId)) return;
+      if (["add", "add_type"].includes(awakeId)) return;
       this.state.awakeSkills.push({
-        url: indexModel.baseUrl + 'skill_icons/' + awakeId + '.png',
+        url: indexModel.baseUrl + "skill_icons/" + awakeId + ".png",
         text: skillDesc.afterAwakeSkillDesc[awakeId]
       });
     });
@@ -147,59 +144,26 @@ class RoleDetail extends Component {
     // 御魂推荐
     let yuhunData = [];
     if (roleModel.allRecommend.length === 0) {
-      const yuhuntuijian = await roleApi('yuhuntuijian', {});
+      const yuhuntuijian = await roleApi("yuhuntuijian", {});
       roleModel.saveAllRecommend(yuhuntuijian.result.data);
       yuhunData = yuhuntuijian.result.data;
     } else yuhunData = roleModel.allRecommend;
     const skillOtherDesc = yuhunData.find(
-      item => item['式神名称'] === routerParams.name
+      item => item["式神名称"] === routerParams.name
     );
     console.log(skillOtherDesc);
-    let recommendYuhun = [];
     if (skillOtherDesc) {
       this.state.skills.forEach((item, index) => {
         item.type = skillOtherDesc[`${index + 1}技能类型`];
         item.need = skillOtherDesc[`${index + 1}技能消耗`];
       });
-      console.log('===技能类型===');
-
-      recommendYuhun = [
-        {
-          icon1: `${indexModel.baseUrl}yuhun_icon/${
-            skillOtherDesc['1御魂图标1']
-          }`,
-          icon2: `${indexModel.baseUrl}yuhun.png`,
-          main1: skillOtherDesc['1御魂数量1'],
-          main2: skillOtherDesc['1御魂数量2'],
-          title: '方案一',
-          mainAttr: `${indexModel.baseUrl}yuhun_icon/yuhun_icon.png`,
-          mainAttr2: skillOtherDesc['1主属性1'],
-          mainAttr4: skillOtherDesc['1主属性2'],
-          mainAttr6: skillOtherDesc['1主属性3'],
-          reason: skillOtherDesc['1理由']
-        },
-        {
-          icon1: `${indexModel.baseUrl}yuhun_icon/${
-            skillOtherDesc['2御魂图标1']
-          }`,
-          icon2: `${indexModel.baseUrl}yuhun.png`,
-          main1: skillOtherDesc['2御魂数量1'],
-          main2: skillOtherDesc['2御魂数量2'],
-          title: '方案二',
-          mainAttr: `${indexModel.baseUrl}yuhun_icon/yuhun_icon.png`,
-          mainAttr2: skillOtherDesc['2主属性1'],
-          mainAttr4: skillOtherDesc['2主属性2'],
-          mainAttr6: skillOtherDesc['2主属性3'],
-          reason: skillOtherDesc['2理由']
-        }
-      ];
+      console.log("===技能类型===");
     }
-    console.log('===技能加载完毕===');
+    console.log("===技能加载完毕===");
 
     this.setState({
       skills: this.state.skills,
-      awakeSkills: this.state.awakeSkills,
-      recommendYuhun
+      awakeSkills: this.state.awakeSkills
     });
   }
 
@@ -221,14 +185,14 @@ class RoleDetail extends Component {
     //     showSkin: false
     //   }
     // });
-    console.log('===皮肤数据加载完毕===');
+    console.log("===皮肤数据加载完毕===");
 
     // 式神传记解锁
     // const res = await roleApi('storyUnlock');
     // this.setState({
     //   storyUnlock: res.result.data
     // });
-    console.log('===传记解锁===');
+    console.log("===传记解锁===");
 
     // 按钮及式神图片
     this.setState({
@@ -245,9 +209,7 @@ class RoleDetail extends Component {
           ? this.state.staticUrl.noAwakeHead
           : `${indexModel.baseUrl}awake_head/${id}.jpg`,
         awakeUrl: `${indexModel.baseUrl}v2/${id}.png`,
-        chushiButton: `${indexModel.baseUrl}${
-          this.state.staticUrl.chushi_active
-        }`,
+        chushiButton: `${indexModel.baseUrl}${this.state.staticUrl.chushi_active}`,
         juexingButton: `${indexModel.baseUrl}${
           !disabledJuexing
             ? this.state.staticUrl.juexing_normal
@@ -260,8 +222,8 @@ class RoleDetail extends Component {
         }`
       }
     });
-    console.log('===头像加载完毕===');
-    console.log('===按钮及式神图片加载完毕===');
+    console.log("===头像加载完毕===");
+    console.log("===按钮及式神图片加载完毕===");
 
     this.getStory();
 
@@ -353,20 +315,20 @@ class RoleDetail extends Component {
         }
       },
       async () => {
-        const attr = await roleApi('attr', {
+        const attr = await roleApi("attr", {
           id: this.state.id,
           level,
           star
         });
         const names = [
-          'attack',
-          'maxHp',
-          'defense',
-          'speed',
-          'critRate',
-          'critPower',
-          'debuffResist',
-          'debuffEnhance'
+          "attack",
+          "maxHp",
+          "defense",
+          "speed",
+          "critRate",
+          "critPower",
+          "debuffResist",
+          "debuffEnhance"
         ];
         const attrData = attr.result.data;
         const awakeMaterialModel = indexModel.getAwakeMaterial;
@@ -379,16 +341,16 @@ class RoleDetail extends Component {
           let beforeData = attrData.noAwake[key];
           let afterData = disabledJuexing ? beforeData : attrData.awake[key];
           const rate = [
-            'critRate',
-            'critPower',
-            'debuffResist',
-            'debuffEnhance'
+            "critRate",
+            "critPower",
+            "debuffResist",
+            "debuffEnhance"
           ];
           if (rate.includes(key)) {
             beforeData *= 100;
             afterData *= 100;
           }
-          if (key === 'critPower') {
+          if (key === "critPower") {
             beforeData += 100;
             afterData += 100;
           }
@@ -418,7 +380,7 @@ class RoleDetail extends Component {
             showLoading: false
           }
         });
-        console.log('===式神属性加载完毕===');
+        console.log("===式神属性加载完毕===");
       }
     );
   }
@@ -534,24 +496,24 @@ class RoleDetail extends Component {
   }
 
   render() {
-    console.log('render roleDetail');
+    console.log("render roleDetail");
     const storyList = this.state.story.map((item, index) => (
       <View key={index} className={styles.contentDetailItem}>
         <View className={styles.zhuanjiTitle}>
           {item.title}
-          {item.unlock ? <Text>({item.unlock})</Text> : ''}
+          {item.unlock ? <Text>({item.unlock})</Text> : ""}
         </View>
         <Label className={styles.zhuanjiContext}>{item.desc}</Label>
       </View>
     ));
     const skillList = (
-      <SkillItem skills={this.state.skills} style='width: 100%' />
+      <SkillItem skills={this.state.skills} style="width: 100%" />
     );
     const awakeSkillList = (
-      <SkillItem skills={this.state.awakeSkills} awake style='width: 100%' />
+      <SkillItem skills={this.state.awakeSkills} awake style="width: 100%" />
     );
     const materialList = this.state.awakeMaterial.map((item, index) => (
-      <View key={index}>{item ? <AwakeMaterial data={item} /> : ''}</View>
+      <View key={index}>{item ? <AwakeMaterial data={item} /> : ""}</View>
     ));
     // const yuhuntuijian = this.state.recommendYuhun.map((item, index) => (
     //   <View
@@ -617,7 +579,7 @@ class RoleDetail extends Component {
       <View className={styles.roleDetail}>
         <StatusBar isBack noHeight />
         <ClLoading
-          type='image'
+          type="image"
           imgUrl={LOADINGIMG}
           show={this.state.statusControl.showLoading}
         />
@@ -625,14 +587,14 @@ class RoleDetail extends Component {
           <Image
             src={this.state.staticUrl.shishen_bg}
             className={styles.header_bg}
-            mode='aspectFill'
+            mode="aspectFill"
           />
 
           <View className={styles.left}>
             <View className={styles.top}>
               <Image
                 src={this.state.staticUrl.ssl}
-                mode='widthFix'
+                mode="widthFix"
                 className={styles.ssl}
               />
             </View>
@@ -640,7 +602,7 @@ class RoleDetail extends Component {
               <Image
                 src={this.state.staticUrl.name_role}
                 className={styles.img}
-                mode='widthFix'
+                mode="widthFix"
               />
               <View className={styles.text}>
                 <View className={styles.level}>{routerParams.level}</View>
@@ -655,34 +617,34 @@ class RoleDetail extends Component {
 
           <Image
             src={this.state.staticUrl.yys}
-            mode='widthFix'
+            mode="widthFix"
             className={styles.yys}
           />
           <Image
             src={this.state.staticUrl.awakeUrl}
             className={styles.role}
-            mode='widthFix'
+            mode="widthFix"
           />
 
           <View className={styles.awake}>
             <View className={styles.chushi} onClick={this.chushiClick}>
               <Image
                 src={this.state.staticUrl.chushiButton}
-                mode='widthFix'
+                mode="widthFix"
                 className={styles.img}
               />
             </View>
             <View className={styles.juexing} onClick={this.juexingClick}>
               <Image
                 src={this.state.staticUrl.juexingButton}
-                mode='widthFix'
+                mode="widthFix"
                 className={styles.img}
               />
             </View>
             <View className={styles.skin} onClick={this.skinClick}>
               <Image
                 src={this.state.staticUrl.skinButton}
-                mode='widthFix'
+                mode="widthFix"
                 className={styles.img}
               />
             </View>
@@ -694,7 +656,7 @@ class RoleDetail extends Component {
                 <View key={item.name}>
                   <Button
                     className={`${
-                      item.show ? 'bg-cyan' : 'bg-grey'
+                      item.show ? "bg-cyan" : "bg-grey"
                     } cu-btn bg-cyan round sm shadow buttons`}
                     onClick={this.showSkin.bind(this, index)}
                   >
@@ -704,7 +666,7 @@ class RoleDetail extends Component {
               ))}
             </View>
           ) : (
-            ''
+            ""
           )}
         </View>
 
@@ -716,13 +678,13 @@ class RoleDetail extends Component {
                 <View className={styles.contentName}>
                   <Image
                     src={this.state.staticUrl.lotus}
-                    mode='widthFix'
+                    mode="widthFix"
                     className={styles.img}
                   />
                   <Text className={styles.text}>{routerParams.name}</Text>
                 </View>
                 <View className={styles.contentDetail}>
-                  <ScrollView scroll-y style='height: 300px;'>
+                  <ScrollView scroll-y style="height: 300px;">
                     {storyList}
                   </ScrollView>
                 </View>
@@ -737,7 +699,7 @@ class RoleDetail extends Component {
                 <View className={styles.noAwake}>
                   <Image
                     src={this.state.staticUrl.noAwakeHead}
-                    mode='widthFix'
+                    mode="widthFix"
                     className={styles.noAwakeHead}
                   />
                 </View>
@@ -745,12 +707,12 @@ class RoleDetail extends Component {
                   <View className={styles.awake}>
                     <Image
                       src={this.state.staticUrl.awakeHead}
-                      mode='widthFix'
+                      mode="widthFix"
                       className={styles.awakeHead}
                     />
                   </View>
                 ) : (
-                  ''
+                  ""
                 )}
               </View>
 
@@ -758,14 +720,14 @@ class RoleDetail extends Component {
                 <View className={styles.sslevel}>
                   <Modal
                     show={this.state.statusControl.showLevelModal}
-                    title='请选择等级'
+                    title="请选择等级"
                     onClose={this.closeLevel.bind(this)}
                   >
                     <View className={styles.levelModal}>
                       {this.state.allLevels.map((item, index) => (
                         <View key={index} className={styles.levelModalBtn}>
                           <Button
-                            className='cu-btn bg-cyan round sm shadow'
+                            className="cu-btn bg-cyan round sm shadow"
                             onClick={this.closeLevel.bind(this, index + 1)}
                           >
                             {item}
@@ -776,7 +738,7 @@ class RoleDetail extends Component {
                   </Modal>
                   <View className={styles.action}>
                     <Button
-                      className='cu-btn bg-mauve round sm shadow'
+                      className="cu-btn bg-mauve round sm shadow"
                       onClick={this.showLevel}
                     >
                       {this.state.ssLevel}级
@@ -800,7 +762,7 @@ class RoleDetail extends Component {
                               ? this.state.staticUrl.activeStar
                               : this.state.staticUrl.normalStar
                           }
-                          mode='widthFix'
+                          mode="widthFix"
                           className={styles.ssStarImg}
                         />
                       </View>
@@ -816,13 +778,13 @@ class RoleDetail extends Component {
           <View className={styles.skill}>
             <View className={styles.title}>03/ 技能</View>
             {skillList}
-            {!disabledJuexing ? awakeSkillList : ''}
+            {!disabledJuexing ? awakeSkillList : ""}
             {!disabledJuexing ? (
               <View className={`${styles.metarial} shadow-blur bg-gray`}>
                 {materialList}
               </View>
             ) : (
-              ''
+              ""
             )}
           </View>
         </View>

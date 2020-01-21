@@ -2,20 +2,16 @@ module.exports = {
   env: {
     NODE_ENV: '"development"'
   },
-  defineConstants: {
-  },
+  defineConstants: {},
   copy: {
     patterns: [
       {
-        from: 'src/cloud/',
-        to: 'dist/weapp/cloud/'
+        from: "src/cloud/",
+        to: "dist/weapp/cloud/"
       }
     ],
-    options: {
-    }
+    options: {}
   },
-  weapp: {
-  },
-  h5: {
-  }
-}
+  mini: {},
+  h5: {}
+};

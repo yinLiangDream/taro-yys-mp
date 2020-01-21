@@ -1,16 +1,16 @@
-import '@tarojs/async-await';
-import { Provider, inject } from '@tarojs/mobx';
-import Taro, { Component, getApp } from '@tarojs/taro';
-import 'mp-colorui/dist/style/index.scss'
-import './app.less';
-import Index from './pages/index';
-import gameModel from './store/game';
-import indexModel from './store/index';
-import rewardForSealModel from './store/rewardForSeal';
-import roleModel from './store/role';
-import userModel from './store/user';
-import { ENV } from './utils/model';
-import { userApi } from './api';
+import "@tarojs/async-await";
+import { Provider, inject } from "@tarojs/mobx";
+import Taro, { Component, getApp } from "@tarojs/taro";
+import "mp-colorui/dist/style/index.scss";
+import "./app.less";
+import Index from "./pages/index";
+import gameModel from "./store/game";
+import indexModel from "./store/index";
+import rewardForSealModel from "./store/rewardForSeal";
+import roleModel from "./store/role";
+import userModel from "./store/user";
+import { ENV } from "./utils/model";
+import { userApi } from "./api";
 
 // 如果需要在 h5 环境中开启 React Devtools
 // 取消以下注释：
@@ -29,22 +29,22 @@ const store = {
 class App extends Component {
   config = {
     pages: [
-      'pages/index/index',
-      'pages/my/index',
-      'pages/rewardForSeal/index',
-      'pages/rewardForSeal/rewardForSealDetail/index',
-      'pages/fengmo/index',
-      'pages/mpUpdateRecord/index',
-      'pages/updateGame/index',
-      'pages/roleDetail/index',
-      'pages/yuhun/index'
+      "pages/index/index",
+      "pages/my/index",
+      "pages/rewardForSeal/index",
+      "pages/rewardForSeal/rewardForSealDetail/index",
+      "pages/fengmo/index",
+      "pages/mpUpdateRecord/index",
+      "pages/updateGame/index",
+      "pages/roleDetail/index",
+      "pages/yuhun/index"
     ],
     window: {
-      backgroundTextStyle: 'light',
-      navigationBarBackgroundColor: '#fff',
-      navigationBarTitleText: '痒痒鼠式神录',
-      navigationBarTextStyle: 'black',
-      navigationStyle: 'custom'
+      backgroundTextStyle: "light",
+      navigationBarBackgroundColor: "#fff",
+      navigationBarTitleText: "痒痒鼠式神录",
+      navigationBarTextStyle: "black",
+      navigationStyle: "custom"
     },
     // tabBar: {
     //   color: '#999',
@@ -68,12 +68,12 @@ class App extends Component {
     //   position: 'bottom'
     // },
     cloud: true,
-    navigateToMiniProgramAppIdList: ['wx8abaf00ee8c3202e']
+    navigateToMiniProgramAppIdList: ["wx8abaf00ee8c3202e"]
   };
 
   componentDidMount() {
     // 获取用户 openId
-    userApi('login', { env: ENV }).then(e => {
+    userApi("login", { env: ENV }).then(e => {
       userModel.saveUserOpenId(e.result.data.openId);
     });
     // 获取用户授权信息
@@ -102,4 +102,4 @@ class App extends Component {
   }
 }
 
-Taro.render(<App />, document.getElementById('app'));
+Taro.render(<App />, document.getElementById("app"));

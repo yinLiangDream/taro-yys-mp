@@ -1,19 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2bf8f961-5fb3-4fd5-bfd9-41697a285ef1" name="Default Changelist" comment="1、解决式神详情切换图片有延迟的 bug&#10;2、改写 cloud ，皮肤数据加载速度提升100%">
-      <change beforePath="$PROJECT_DIR$/.eslintrc.js" beforeDir="false" afterPath="$PROJECT_DIR$/.eslintrc.js" afterDir="false" />
+    <list default="true" id="2bf8f961-5fb3-4fd5-bfd9-41697a285ef1" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app.less" beforeDir="false" afterPath="$PROJECT_DIR$/src/app.less" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/SkillItem/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/SkillItem/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/roleDetail/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/roleDetail/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/updateGame/components/updateDetail.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/updateGame/components/updateDetail.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/updateGame/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/updateGame/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils/mpUpdateModel.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/mpUpdateModel.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/yarn-error.log" beforeDir="false" afterPath="$PROJECT_DIR$/yarn-error.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -82,8 +71,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="npm.dev:weapp" />
         <item itemvalue="npm.build:weapp" />
+        <item itemvalue="npm.dev:weapp" />
       </list>
     </recent_temporary>
   </component>
@@ -104,7 +93,7 @@
       <workItem from="1556898149284" duration="18343000" />
       <workItem from="1563177904407" duration="109000" />
       <workItem from="1563181383132" duration="840000" />
-      <workItem from="1570552789455" duration="2006000" />
+      <workItem from="1570552789455" duration="2178000" />
     </task>
     <task id="LOCAL-00001" summary="1、解决式神详情切换图片有延迟的 bug&#10;2、改写 cloud ，皮肤数据加载速度提升100%">
       <created>1554361492217</created>
@@ -127,7 +116,14 @@
       <option name="project" value="LOCAL" />
       <updated>1557051083375</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="'✨去除式神详情一些无效信息'&#10;'✨修复游戏公告不换行问题'">
+      <created>1570587364746</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1570587364746</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -148,7 +144,8 @@
     <MESSAGE value="1、解决式神详情切换图片有延迟的 bug&#10;2、改写 cloud ，皮肤数据加载速度提升100%" />
     <MESSAGE value="0.0.9&#10;优化使用体验" />
     <MESSAGE value="修复一些bug" />
-    <option name="LAST_COMMIT_MESSAGE" value="修复一些bug" />
+    <MESSAGE value="'✨去除式神详情一些无效信息'&#10;'✨修复游戏公告不换行问题'" />
+    <option name="LAST_COMMIT_MESSAGE" value="'✨去除式神详情一些无效信息'&#10;'✨修复游戏公告不换行问题'" />
   </component>
   <component name="masterDetails">
     <states>
