@@ -1,0 +1,19 @@
+Resources:
+  yys:
+    Type: TencentCloud::Serverless::Namespace
+    partner-story:
+      Properties:
+        CodeUri: .
+        Description: 式神传记
+        Environment:
+          Variables: {}
+        Events: {}
+        Handler: index.main_handler
+        MemorySize: 128
+        Role: SCF_QcsRole
+        Runtime: Nodejs8.9
+        Timeout: 3
+        VpcConfig:
+          SubnetId: ''
+          VpcId: ''
+      Type: TencentCloud::Serverless::Function

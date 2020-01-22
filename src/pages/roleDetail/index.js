@@ -11,7 +11,7 @@ import { observer, inject } from "@tarojs/mobx";
 import { ClLoading } from "mp-colorui";
 
 import styles from "./index.module.less";
-import { roleApi } from "../../api/index";
+import parterService from "../../service/partner";
 import { setNavTitle } from "../../utils/index";
 
 import Modal from "../../components/Modal/index";
@@ -84,89 +84,6 @@ class RoleDetail extends Component {
     routerParams = this.$router.params;
   }
 
-  async getStory() {
-    const { roleModel } = this.props;
-    // 传记
-    if (!roleModel.allStory.length) {
-      const zhuanjires = await roleApi("story", {});
-      roleModel.saveAllStory(zhuanjires.result.data);
-    }
-    const story = roleModel.getStoryById(this.state.id);
-    // const showUnlock = this.state.storyUnlock.find(
-    //   item => item.id === Number(id)
-    // );
-    const zhuanji = ["一", "二", "三", "四", "五", "六", "七", "八", "九"];
-    if (Object.keys(story).length) {
-      this.setState({
-        story: story.map((item, index) => ({
-          title: "传记" + zhuanji[index],
-          desc: item
-          // unlock: showUnlock ? showUnlock.jx[index] : null
-        }))
-      });
-    }
-    console.log("===传记加载完毕===");
-  }
-
-  async getSkill() {
-    const { indexModel, roleModel } = this.props;
-    // 技能图标及说明
-    if (!roleModel.allSkill.length) {
-      const skills = await roleApi("skills", {});
-      roleModel.saveAllSKill(skills.result.data);
-    }
-    const skillDesc = roleModel.getSkillById(this.state.id);
-    this.state.skills = [];
-    this.state.awakeSkills = [];
-    Object.keys(skillDesc.beforeAwakeSkillDesc).forEach(noAwakeId => {
-      if (["add", "add_type"].includes(noAwakeId)) return;
-      this.state.skills.push({
-        url: indexModel.baseUrl + "skill_icons/" + noAwakeId + ".png",
-        text: skillDesc.beforeAwakeSkillDesc[noAwakeId]
-      });
-    });
-    Object.keys(skillDesc.afterAwakeSkillDesc).forEach(awakeId => {
-      if (["add", "add_type"].includes(awakeId)) return;
-      this.state.awakeSkills.push({
-        url: indexModel.baseUrl + "skill_icons/" + awakeId + ".png",
-        text: skillDesc.afterAwakeSkillDesc[awakeId]
-      });
-    });
-    if (this.state.awakeSkills.length === 0) {
-      this.state.awakeSkills.push({ text: skillDesc.afterAwakeSkillDesc });
-    }
-    this.calLevel(this.state.ssStar);
-  }
-
-  async getRecommend() {
-    await this.getSkill();
-    const { indexModel, roleModel } = this.props;
-    // 御魂推荐
-    let yuhunData = [];
-    if (roleModel.allRecommend.length === 0) {
-      const yuhuntuijian = await roleApi("yuhuntuijian", {});
-      roleModel.saveAllRecommend(yuhuntuijian.result.data);
-      yuhunData = yuhuntuijian.result.data;
-    } else yuhunData = roleModel.allRecommend;
-    const skillOtherDesc = yuhunData.find(
-      item => item["式神名称"] === routerParams.name
-    );
-    console.log(skillOtherDesc);
-    if (skillOtherDesc) {
-      this.state.skills.forEach((item, index) => {
-        item.type = skillOtherDesc[`${index + 1}技能类型`];
-        item.need = skillOtherDesc[`${index + 1}技能消耗`];
-      });
-      console.log("===技能类型===");
-    }
-    console.log("===技能加载完毕===");
-
-    this.setState({
-      skills: this.state.skills,
-      awakeSkills: this.state.awakeSkills
-    });
-  }
-
   async componentDidMount() {
     setNavTitle(routerParams.name);
     const { indexModel } = this.props;
@@ -178,21 +95,7 @@ class RoleDetail extends Component {
       show: index === 0
     }));
     disabledJuexing = this.state.notJuexing.includes(routerParams.level);
-    // this.setState({
-    //   skins: routerSkins,
-    //   statusControl: {
-    //     ...this.state.statusControl,
-    //     showSkin: false
-    //   }
-    // });
     console.log("===皮肤数据加载完毕===");
-
-    // 式神传记解锁
-    // const res = await roleApi('storyUnlock');
-    // this.setState({
-    //   storyUnlock: res.result.data
-    // });
-    console.log("===传记解锁===");
 
     // 按钮及式神图片
     this.setState({
@@ -227,9 +130,61 @@ class RoleDetail extends Component {
 
     this.getStory();
 
-    this.getRecommend();
-
     this.setAttr(1, 2, this.state.ssStar);
+  }
+
+  async getStory() {
+    const { roleModel } = this.props;
+    // 传记
+    if (!roleModel.allStory.length) {
+      const zhuanjires = await parterService.getStory();
+      roleModel.saveAllStory(zhuanjires);
+    }
+    const story = roleModel.getStoryById(this.state.id);
+    // const showUnlock = this.state.storyUnlock.find(
+    //   item => item.id === Number(id)
+    // );
+    const zhuanji = ["一", "二", "三", "四", "五", "六", "七", "八", "九"];
+    if (Object.keys(story).length) {
+      this.setState({
+        story: story.map((item, index) => ({
+          title: "传记" + zhuanji[index],
+          desc: item
+          // unlock: showUnlock ? showUnlock.jx[index] : null
+        }))
+      });
+    }
+    console.log("===传记加载完毕===");
+  }
+
+  async getSkill() {
+    const { indexModel, roleModel } = this.props;
+    // 技能图标及说明
+    if (!roleModel.allSkill.length) {
+      const skills = await parterService.getSkills();
+      roleModel.saveAllSKill(skills);
+    }
+    const skillDesc = roleModel.getSkillById(this.state.id);
+    this.state.skills = [];
+    this.state.awakeSkills = [];
+    Object.keys(skillDesc.beforeAwakeSkillDesc).forEach(noAwakeId => {
+      if (["add", "add_type"].includes(noAwakeId)) return;
+      this.state.skills.push({
+        url: indexModel.baseUrl + "skill_icons/" + noAwakeId + ".png",
+        text: skillDesc.beforeAwakeSkillDesc[noAwakeId]
+      });
+    });
+    Object.keys(skillDesc.afterAwakeSkillDesc).forEach(awakeId => {
+      if (["add", "add_type"].includes(awakeId)) return;
+      this.state.awakeSkills.push({
+        url: indexModel.baseUrl + "skill_icons/" + awakeId + ".png",
+        text: skillDesc.afterAwakeSkillDesc[awakeId]
+      });
+    });
+    if (this.state.awakeSkills.length === 0) {
+      this.state.awakeSkills.push({ text: skillDesc.afterAwakeSkillDesc });
+    }
+    this.calLevel(this.state.ssStar);
   }
 
   /**
@@ -315,7 +270,7 @@ class RoleDetail extends Component {
         }
       },
       async () => {
-        const attr = await roleApi("attr", {
+        const attr = await parterService.getAttr({
           id: this.state.id,
           level,
           star

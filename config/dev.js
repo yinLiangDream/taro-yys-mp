@@ -4,12 +4,6 @@ module.exports = {
   },
   defineConstants: {},
   copy: {
-    patterns: [
-      {
-        from: "src/cloud/",
-        to: "dist/weapp/cloud/"
-      }
-    ],
     options: {}
   },
   mini: {},

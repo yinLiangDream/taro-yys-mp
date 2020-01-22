@@ -2,7 +2,7 @@ import { Button, ScrollView, View } from "@tarojs/components";
 import { inject, observer } from "@tarojs/mobx";
 import Taro, { Component, pxTransform } from "@tarojs/taro";
 import { ClLoading, ClScreenDrawer, ClMenuList, ClLayout } from "mp-colorui";
-import { gameApi } from "../../api/index";
+import announcementService from "../../service/announcement";
 import StatusBar from "../../components/StatusBar";
 import { LOADINGIMG } from "../../utils/model";
 import UpdateDetail from "./components/updateDetail";
@@ -41,9 +41,8 @@ class UpdateGame extends Component {
     let list = [];
     const update = gameModel.getUpdate;
     if (update.length === 0) {
-      const res = await gameApi("updateList", {});
-      console.log(res.result.data);
-      list = res.result.data;
+      const res = await announcementService.getList();
+      list = res;
       gameModel.saveAllUpdate(list);
     }
     list = gameModel.getUpdate;
@@ -82,10 +81,10 @@ class UpdateGame extends Component {
     });
   }
   async getDetail(time) {
-    const res = await gameApi("updateDetail", {
+    const res = await announcementService.getDetail({
       time
     });
-    return res.result.data;
+    return res;
   }
   async showDetail(index) {
     this.setState({

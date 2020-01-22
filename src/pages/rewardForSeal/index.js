@@ -5,7 +5,7 @@ import { observer, inject } from "@tarojs/mobx";
 import styles from "./index.module.less";
 import { firstName, debounce } from "../../utils/index";
 import StatusBar from "../../components/StatusBar";
-import { rewardForSealApi } from "../../api";
+import rewardService from "../../service/reward";
 
 @inject("rewardForSealModel", "indexModel", "userModel")
 @observer
@@ -25,16 +25,16 @@ class RewardForSeal extends Component {
   async componentDidMount() {
     const { rewardForSealModel } = this.props;
     try {
-      const res = await rewardForSealApi("list", {});
-      rewardForSealModel.saveAllReward(res.result.data);
+      const res = await rewardService.getList();
+      rewardForSealModel.saveAllReward(res);
     } catch (err) {
       console.error(err);
     }
     if (!Object.keys(rewardForSealModel.allRewardsDetails).length) {
       try {
-        const res = await rewardForSealApi("detail", {});
-        rewardForSealModel.saveAllRewardsDetails(res.result.data);
-        this.state.data = res.result.data;
+        const res = await rewardService.getDetail();
+        rewardForSealModel.saveAllRewardsDetails(res);
+        this.state.data = res;
       } catch (err) {
         console.error(err);
       }

@@ -18,6 +18,7 @@ export default class UpdateDetail extends Component {
   }
 
   render() {
+    const { detail = { desc: [] } } = this.props;
     return (
       <View
         className="flex flex-direction justify-center margin"
@@ -27,22 +28,23 @@ export default class UpdateDetail extends Component {
         }}
       >
         <View className="flex text-lg text-bold justify-center padding">
-          <Text>{this.props.detail.title}</Text>
+          <Text>{detail.title}</Text>
         </View>
         <View className="text-sm justify-end flex padding-right text-gray">
-          {this.props.detail.time}
+          {detail.time}
         </View>
         <View className="padding text-gray">
-          {this.props.detail.desc.map(item => (
-            <View key={item.title}>
-              <View className="text-bold text-red text-df">{item.title}</View>
-              {item.desc.map((itemDesc, index) => (
-                <View key={"key_" + index}>
-                  <ClText text={itemDesc} size="small" textColor="grey" />
-                </View>
-              ))}
-            </View>
-          ))}
+          {detail.desc &&
+            detail.desc.map(item => (
+              <View key={item.title}>
+                <View className="text-bold text-red text-df">{item.title}</View>
+                {item.desc.map((itemDesc, index) => (
+                  <View key={"key_" + index}>
+                    <ClText text={itemDesc} size="small" textColor="grey" />
+                  </View>
+                ))}
+              </View>
+            ))}
         </View>
       </View>
     );

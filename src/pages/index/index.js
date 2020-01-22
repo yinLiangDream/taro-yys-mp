@@ -9,14 +9,14 @@ import {
   Navigator
 } from "@tarojs/components";
 import { inject, observer } from "@tarojs/mobx";
-import Taro, { Component, pxTransform } from "@tarojs/taro";
-import { ClLoading, ClSearchBar, ClText } from "mp-colorui";
-import { gameApi, roleApi } from "../../api/index";
+import Taro, { Component } from "@tarojs/taro";
+import { ClLoading, ClSearchBar } from "mp-colorui";
 import StatusBar from "../../components/StatusBar/index";
 import { LOADINGIMG } from "../../utils/model";
 import updateData from "../../utils/mpUpdateModel";
 import styles from "./index.module.less";
 import { feedbackRouter } from "../../utils/router";
+import partnerService from "../../service/partner";
 
 @inject("indexModel", "userModel")
 @observer
@@ -113,7 +113,6 @@ class Index extends Component {
       ],
       showIndex: 0,
       currentVersion: updateData[0],
-      activities: [],
       staticUrl: {
         baseUrl: indexModel.baseUrl,
         new: indexModel.baseUrl + "new.png"
@@ -128,16 +127,9 @@ class Index extends Component {
   }
 
   async componentDidMount() {
-    const resActive = await gameApi("active", {});
-    this.setState({
-      activities: resActive.result.data.map(item => {
-        item.open = false;
-        return item;
-      })
-    });
     const { indexModel } = this.props;
-    const res = await roleApi("list", {});
-    const data = res.result.data;
+    const res = await partnerService.getList();
+    const data = res;
     indexModel.saveAllRoles(data);
     this.state.allTag = this.state.allTag.map((item, index) => {
       item.active = index === 0;
@@ -227,15 +219,6 @@ class Index extends Component {
         ...this.state.statusControl,
         showFloat: true
       }
-    });
-  }
-
-  changeActiveOpen(index) {
-    this.setState({
-      activities: this.state.activities.map((item, i) => {
-        item.open = index === i ? !item.open : false;
-        return item;
-      })
     });
   }
 

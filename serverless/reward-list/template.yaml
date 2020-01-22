@@ -1,0 +1,19 @@
+Resources:
+  yys:
+    Type: TencentCloud::Serverless::Namespace
+    reward-list:
+      Properties:
+        CodeUri: .
+        Description: 获取悬赏封印详情
+        Environment:
+          Variables: {}
+        Events: {}
+        Handler: index.main_handler
+        MemorySize: 128
+        Role: SCF_QcsRole
+        Runtime: Nodejs8.9
+        Timeout: 3
+        VpcConfig:
+          SubnetId: ''
+          VpcId: ''
+      Type: TencentCloud::Serverless::Function
