@@ -1379,6 +1379,16 @@
     raf "^3.4.1"
     whatwg-fetch "^2.0.4"
 
+"@tarojs/taro-qq@2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@tarojs/taro-qq/-/taro-qq-2.0.1.tgz#924851366ae319f74be7757c17c9cbddad9dd1fd"
+  integrity sha512-OJvLQHUBiz3/ykzteZk6Ik4b2GFl8VHQjxJzca4bFv4xZQAKTqAI9fGYO7V9lT/rW+lVFOgQGKu7OMWrMA36qg==
+  dependencies:
+    "@tarojs/taro" "2.0.1"
+    "@tarojs/utils" "2.0.1"
+    lodash "^4.17.10"
+    prop-types "^15.6.1"
+
 "@tarojs/taro-rn@2.0.1":
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/@tarojs/taro-rn/-/taro-rn-2.0.1.tgz#3a6f75eef4f5903669d57bbfcc46e4f28fd4f3da"

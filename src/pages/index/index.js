@@ -57,12 +57,12 @@ class Index extends Component {
           text: "小程序更新记",
           key: `${indexModel.baseUrl}gameCalendar.png`,
           click: "mpUpdateRecord"
-        },
-        {
-          text: "留言",
-          key: "https://mp-yys-1255362963.cos.ap-chengdu.myqcloud.com/chat.png",
-          click: ""
         }
+        // {
+        //   text: "留言",
+        //   key: "https://mp-yys-1255362963.cos.ap-chengdu.myqcloud.com/chat.png",
+        //   click: ""
+        // }
         // {
         //   text: '主角录',
         //   key: '/static/headerTabs/theProtagonistRecord.png'
