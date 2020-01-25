@@ -1,14 +1,13 @@
 import { Button, ScrollView, View } from "@tarojs/components";
 import { inject, observer } from "@tarojs/mobx";
-import Taro, { Component, pxTransform } from "@tarojs/taro";
+import Taro, { Component } from "@tarojs/taro";
 import { ClLoading, ClScreenDrawer, ClMenuList, ClLayout } from "mp-colorui";
 import announcementService from "../../service/announcement";
-import StatusBar from "../../components/StatusBar";
 import { LOADINGIMG } from "../../utils/model";
 import UpdateDetail from "./components/updateDetail";
 import "./index.less";
 
-@inject("gameModel", "indexModel")
+@inject("gameModel")
 @observer
 class UpdateGame extends Component {
   static options = {
@@ -105,69 +104,8 @@ class UpdateGame extends Component {
     this.hideHistory();
   }
   render() {
-    const { indexModel } = this.props;
-    const otherList = (
-      <ClLayout
-        baseSelection={{
-          padding: "xlarge",
-          paddingDirection: "vertical"
-        }}
-      >
-        <View
-          style={{
-            padding: `${pxTransform(
-              indexModel.CustomBar + indexModel.StatusBar
-            )} 0`
-          }}
-        >
-          <ClMenuList
-            card
-            onClick={this.showDetail.bind(this)}
-            list={this.state.list.map(item => ({
-              title: `${item.title}（${item.time}）`,
-              arrow: true,
-              titleColor: "gray"
-            }))}
-          />
-        </View>
-      </ClLayout>
-    );
-    const content = (
-      <ScrollView
-        scrollY
-        scrollTop={this.state.scrollTop}
-        scrollWithAnimation
-        style={{
-          background: "none",
-          height: `calc(100vh - ${indexModel.CustomBar +
-            indexModel.StatusBar}px)`,
-          zIndex: 100
-        }}
-        className={
-          this.state.statusControl.showDrawer ? "DrawerPage show" : "DrawerPage"
-        }
-      >
-        <View className="radius">
-          <UpdateDetail detail={this.state.showDetail} />
-          <View className="flex justify-center padding-bottom">
-            <Button
-              className="cu-btn sm shadow bg-cyan radius"
-              onClick={this.showHistory}
-            >
-              查看历史更新
-            </Button>
-          </View>
-        </View>
-      </ScrollView>
-    );
     return (
       <ScrollView style={{ height: "100vh" }}>
-        <StatusBar
-          content="游戏更新记"
-          fontColor="text-black"
-          isBack
-          backText=""
-        />
         <ClLoading
           show={this.state.statusControl.showLoading}
           type="image"
@@ -183,8 +121,48 @@ class UpdateGame extends Component {
               }
             });
           }}
-          renderDrawer={otherList}
-          renderPage={content}
+          renderDrawer={
+            <ClLayout padding="normal" paddingDirection="vertical">
+              <ClMenuList
+                card
+                onClick={this.showDetail.bind(this)}
+                list={this.state.list.map(item => ({
+                  title: `${item.title}（${item.time}）`,
+                  arrow: true,
+                  titleColor: "gray"
+                }))}
+              />
+            </ClLayout>
+          }
+          renderPage={
+            <ScrollView
+              scrollY
+              scrollTop={this.state.scrollTop}
+              scrollWithAnimation
+              style={{
+                background: "none",
+                height: `100vh`,
+                zIndex: 100
+              }}
+              className={
+                this.state.statusControl.showDrawer
+                  ? "DrawerPage show"
+                  : "DrawerPage"
+              }
+            >
+              <View className="radius">
+                <UpdateDetail detail={this.state.showDetail} />
+                <View className="flex justify-center padding-bottom">
+                  <Button
+                    className="cu-btn sm shadow bg-cyan radius"
+                    onClick={this.showHistory}
+                  >
+                    查看历史更新
+                  </Button>
+                </View>
+              </View>
+            </ScrollView>
+          }
         ></ClScreenDrawer>
       </ScrollView>
     );

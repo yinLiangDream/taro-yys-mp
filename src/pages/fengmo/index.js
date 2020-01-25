@@ -6,7 +6,6 @@ import fengmoService from "../../service/fengmo";
 import { firstName } from "../../utils/index";
 
 import styles from "./index.module.less";
-import StatusBar from "../../components/StatusBar";
 
 @inject("rewardForSealModel", "indexModel")
 @observer
@@ -14,9 +13,10 @@ class Fengmo extends Component {
   static options = {
     addGlobalClass: true
   };
-  config = {
+  static config = {
     navigationBarTitleText: "逢魔密信查询"
   };
+
   constructor(props) {
     super(props);
     const { indexModel } = this.props;
@@ -30,6 +30,21 @@ class Fengmo extends Component {
         search_deatil_title: `${indexModel.baseUrl}search_detail_title.png`
       }
     };
+  }
+
+  async componentDidMount() {
+    const { rewardForSealModel } = this.props;
+    if (rewardForSealModel.allFengmo.length === 0) {
+      try {
+        const res = await fengmoService.getFengmo();
+        rewardForSealModel.saveAllFengmo(res);
+        this.setState({
+          allDatas: res
+        });
+      } catch (err) {
+        console.error(err);
+      }
+    }
   }
 
   search(e) {
@@ -52,22 +67,6 @@ class Fengmo extends Component {
       }
     );
   }
-
-  async componentDidMount() {
-    const { rewardForSealModel } = this.props;
-    if (rewardForSealModel.allFengmo.length === 0) {
-      try {
-        const res = await fengmoService.getFengmo();
-        rewardForSealModel.saveAllFengmo(res);
-        this.setState({
-          allDatas: res
-        });
-      } catch (err) {
-        console.error(err);
-      }
-    }
-  }
-
   render() {
     console.log("render fengmo");
     const detailList = this.state.showList.map((item, index) => (
@@ -78,12 +77,6 @@ class Fengmo extends Component {
     ));
     return (
       <ScrollView className={`${styles.fengmo} padding`}>
-        <StatusBar
-          content="逢魔密信"
-          fontColor="text-black"
-          isBack
-          backText=""
-        />
         <View className={styles.title}>
           <Image
             src={this.state.staticUrl.search_deatil_title}

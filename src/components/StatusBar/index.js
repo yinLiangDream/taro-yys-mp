@@ -1,64 +1,96 @@
-import Taro, {Component} from '@tarojs/taro';
-import {Text, View} from '@tarojs/components';
-import {inject} from "@tarojs/mobx";
-import PropTypes from 'prop-types';
-import {homeRouter} from '../../utils/router';
+import Taro, { Component } from "@tarojs/taro";
+import { Text, View } from "@tarojs/components";
+import { inject } from "@tarojs/mobx";
+import PropTypes from "prop-types";
+import { homeRouter } from "../../utils/router";
 
-@inject('indexModel')
+@inject("indexModel")
 class StatusBar extends Component {
   static options = {
     addGlobalClass: true
   };
+  static defaultProps = {
+    backText: ""
+  };
+
   state = {};
 
   backPage() {
-    Taro.navigateBack()
+    Taro.navigateBack();
   }
   toHome() {
     Taro.redirectTo({
       url: homeRouter
-    })
+    });
   }
-  static defaultProps = {
-    backText: ''
-  };
   render() {
-    const {indexModel, bgImage, isBack, isCustom, bgColor, fontColor, backText, noHeight} = this.props;
+    const {
+      indexModel,
+      bgImage,
+      isBack,
+      isCustom,
+      bgColor,
+      fontColor,
+      backText,
+      noHeight
+    } = this.props;
     return (
-      <View className={`cu-custom ${fontColor || ''}`} style={{height: `${noHeight ? 0 : indexModel.CustomBar}px`}}>
+      <View
+        className={`cu-custom ${fontColor || ""}`}
+        style={{ height: `${noHeight ? 0 : indexModel.CustomBar}px` }}
+      >
         <View
-          className={`cu-bar fixed ${bgImage ? 'none-bg text-white bg-img' : ''} ${bgColor}`}
+          className={`cu-bar fixed ${
+            bgImage ? "none-bg text-white bg-img" : ""
+          } ${bgColor}`}
           style={{
             height: `${indexModel.CustomBar}px`,
             paddingTop: `${indexModel.StatusBar}px`,
-            backgroundImage: `${bgImage ? 'url(' + bgImage + ')' : 'none'}`
+            backgroundImage: `${bgImage ? "url(" + bgImage + ")" : "none"}`
           }}
         >
-          {
-            isBack ?
-              <View className='action' onClick={this.backPage} style={{lineHeight: '100%'}}>
-                <Text className='cuIcon-back' />
-                <Text>{backText}</Text>
-              </View> : ''
-          }
-          {
-            isCustom ?
-              <View className='action border-custom' style={{
+          {isBack ? (
+            <View
+              className="action"
+              onClick={this.backPage}
+              style={{ lineHeight: "100%" }}
+            >
+              <Text className="cuIcon-back" />
+              <Text>{backText}</Text>
+            </View>
+          ) : (
+            ""
+          )}
+          {isCustom ? (
+            <View
+              className="action border-custom"
+              style={{
                 width: `${indexModel.Custom.width}px`,
-                height: `${indexModel.Custom.height}px`,
+                height: `${indexModel.Custom.height}px`
               }}
-              >
-                <Text className='cuIcon-back' onClick={this.backPage.bind(this)} />
-                <Text className='cuIcon-homefill' onClick={this.toHome.bind(this)} />
-              </View> : ''
-          }
-          <View className='content' style={{top: `${indexModel.StatusBar}px`}}>
-            {this.props.content || ''}
+            >
+              <Text
+                className="cuIcon-back"
+                onClick={this.backPage.bind(this)}
+              />
+              <Text
+                className="cuIcon-homefill"
+                onClick={this.toHome.bind(this)}
+              />
+            </View>
+          ) : (
+            ""
+          )}
+          <View
+            className="content"
+            style={{ top: `${indexModel.StatusBar}px` }}
+          >
+            {this.props.content || ""}
           </View>
-          {this.props.rightContent || ''}
+          {this.props.rightContent || ""}
         </View>
       </View>
-    )
+    );
   }
 }
 

@@ -1,6 +1,6 @@
 import "@tarojs/async-await";
 import { Provider, inject } from "@tarojs/mobx";
-import Taro, { Component, getApp } from "@tarojs/taro";
+import Taro, { Component } from "@tarojs/taro";
 import "mp-colorui/dist/style/index.scss";
 import "./app.less";
 import Index from "./pages/index";
@@ -28,7 +28,6 @@ class App extends Component {
   config = {
     pages: [
       "pages/index/index",
-      "pages/my/index",
       "pages/rewardForSeal/index",
       "pages/rewardForSeal/rewardForSealDetail/index",
       "pages/fengmo/index",
@@ -38,10 +37,9 @@ class App extends Component {
     ],
     window: {
       backgroundTextStyle: "light",
-      navigationBarBackgroundColor: "#fff",
+      navigationBarBackgroundColor: "#e1e1e1",
       navigationBarTitleText: "痒痒鼠式神录",
-      navigationBarTextStyle: "black",
-      navigationStyle: "custom"
+      navigationBarTextStyle: "black"
     },
     // tabBar: {
     //   color: '#999',
@@ -64,8 +62,7 @@ class App extends Component {
     //   ],
     //   position: 'bottom'
     // },
-    cloud: true,
-    navigateToMiniProgramAppIdList: ["wx8abaf00ee8c3202e"]
+    cloud: true
   };
 
   componentDidMount() {

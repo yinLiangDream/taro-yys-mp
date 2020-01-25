@@ -1,25 +1,26 @@
-import Taro, { Component } from '@tarojs/taro';
-import {View, Text, Image, ScrollView} from '@tarojs/components';
-import { observer, inject } from '@tarojs/mobx';
+import Taro, { Component } from "@tarojs/taro";
+import { View, Text, Image, ScrollView } from "@tarojs/components";
+import { observer, inject } from "@tarojs/mobx";
 
-import RewardForSealDetailBlock from '../../../components/RewardForSealDetailBlock/index';
+import RewardForSealDetailBlock from "../../../components/RewardForSealDetailBlock/index";
 
-import styles from './index.module.less';
-
-import StatusBar from "../../../components/StatusBar";
+import styles from "./index.module.less";
 
 let routerParams = {};
-@inject('rewardForSealModel', 'indexModel')
+@inject("rewardForSealModel", "indexModel")
 @observer
 class RewardForSeal extends Component {
   static options = {
     addGlobalClass: true
   };
+  static config = {
+    navigationBarTitleText: "式神详情"
+  };
   constructor(props) {
     super(props);
     const { indexModel } = this.props;
     this.state = {
-      name: '',
+      name: "",
       advice: [],
       categories: [],
       staticUrl: {
@@ -28,21 +29,21 @@ class RewardForSeal extends Component {
       }
     };
   }
-  async componentDidMount() {}
   async componentWillMount() {
     routerParams = this.$router.params;
     this.state.name = routerParams.name;
+    this.config.navigationBarTitleText = routerParams.name;
   }
   componentDidShow() {
     const { rewardForSealModel } = this.props;
-    const keys = ['chapter', 'yuhun', 'yqfy', 'jbyg', 'jyyg', 'secret'];
+    const keys = ["chapter", "yuhun", "yqfy", "jbyg", "jyyg", "secret"];
     const keyMap = {
-      chapter: '章节',
-      yuhun: '御魂副本',
-      yqfy: '妖气封印',
-      jbyg: '金币妖怪',
-      jyyg: '经验妖怪',
-      secret: '秘闻副本'
+      chapter: "章节",
+      yuhun: "御魂副本",
+      yqfy: "妖气封印",
+      jbyg: "金币妖怪",
+      jyyg: "经验妖怪",
+      secret: "秘闻副本"
     };
     const categories = keys.map(key => ({
       category: keyMap[key],
@@ -56,7 +57,7 @@ class RewardForSeal extends Component {
   }
 
   render() {
-    console.log('render rewardForSealDetail');
+    console.log("render rewardForSealDetail");
     const adviceList = this.state.advice.map((item, index) => (
       <View key={index}>
         <Text className={styles.adviceName}>{item[0][0]}</Text>
@@ -77,11 +78,10 @@ class RewardForSeal extends Component {
     ));
     return (
       <ScrollView className={styles.rewardForSealDetail} scrollY>
-        <StatusBar content={routerParams.name} fontColor='text-black' isBack backText='' />
         <View className={styles.title}>
           <Image
             src={this.state.staticUrl.search_deatil_title}
-            mode='aspectFit'
+            mode="aspectFit"
             className={styles.img}
           />
           <Text className={styles.text}>{this.state.name}</Text>
@@ -93,17 +93,17 @@ class RewardForSeal extends Component {
               <View className={styles.detail}>{adviceList}</View>
             </View>
           ) : (
-            ''
+            ""
           )}
           {this.state.categories.map((item, index) => (
-            <View key={index + Math.random()} style='width: 100%'>
+            <View key={index + Math.random()} style="width: 100%">
               {item.data.length > 0 ? (
                 <RewardForSealDetailBlock
                   data={item.data}
                   category={item.category}
                 />
               ) : (
-                ''
+                ""
               )}
             </View>
           ))}

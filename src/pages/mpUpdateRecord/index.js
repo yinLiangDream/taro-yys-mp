@@ -5,7 +5,6 @@ import { observer, inject } from "@tarojs/mobx";
 import styles from "./index.module.less";
 
 import updateData from "../../utils/mpUpdateModel";
-import StatusBar from "../../components/StatusBar";
 
 @inject("indexModel")
 @observer
@@ -52,12 +51,6 @@ class Record extends Component {
     ));
     return (
       <ScrollView className={styles.mpUpdateRecord}>
-        <StatusBar
-          content="小程序更新记"
-          fontColor="text-black"
-          isBack
-          backText=""
-        />
         <View className="padding">
           <View className="text-grey sm bg-gray radius padding text-bold text-sm">
             Tips: 如果您觉得好用，请点击{" "}

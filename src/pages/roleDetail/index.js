@@ -18,7 +18,6 @@ import Modal from "../../components/Modal/index";
 import AttrSS from "../../components/Attr/index";
 import SkillItem from "../../components/SkillItem/index";
 import AwakeMaterial from "../../components/AwakeMaterial/index";
-import StatusBar from "../../components/StatusBar";
 import { LOADINGIMG } from "../../utils/model";
 
 let routerParams = {};
@@ -253,7 +252,6 @@ class RoleDetail extends Component {
   changeStar(index) {
     if (index < 1) return;
     const ssStar = this.state.ssStar.map((item, ssIndex) => ssIndex <= index);
-    this.calLevel(ssStar);
     const starLen = ssStar.filter(item => item).length;
     const maxLevel = 10 + starLen * 5;
     let ssLevel = this.state.ssLevel;
@@ -454,9 +452,21 @@ class RoleDetail extends Component {
   }
 
   render() {
-    console.log("render roleDetail");
-    const storyList = this.state.story.map((item, index) => (
-      <View key={index} className={styles.contentDetailItem}>
+    const {
+      story,
+      skills,
+      awakeSkills,
+      awakeMaterial,
+      attrs,
+      statusControl,
+      staticUrl,
+      skins,
+      allLevels,
+      ssLevel,
+      ssStar
+    } = this.state;
+    const storyList = story.map((item, index) => (
+      <View key={"key-" + index} className={styles.contentDetailItem}>
         <View className={styles.zhuanjiTitle}>
           {item.title}
           {item.unlock ? <Text>({item.unlock})</Text> : ""}
@@ -464,17 +474,17 @@ class RoleDetail extends Component {
         <Label className={styles.zhuanjiContext}>{item.desc}</Label>
       </View>
     ));
-    const skillList = (
-      <SkillItem skills={this.state.skills} style="width: 100%" />
-    );
+    const skillList = <SkillItem skills={skills} style="width: 100%" />;
     const awakeSkillList = (
-      <SkillItem skills={this.state.awakeSkills} awake style="width: 100%" />
+      <SkillItem skills={awakeSkills} awake style="width: 100%" />
     );
-    const materialList = this.state.awakeMaterial.map((item, index) => (
-      <View key={index}>{item ? <AwakeMaterial data={item} /> : ""}</View>
+    const materialList = awakeMaterial.map((item, index) => (
+      <View key={"key-" + index}>
+        {item ? <AwakeMaterial data={item} /> : ""}
+      </View>
     ));
-    const attrsList = this.state.attrs.map((item, index) => (
-      <View key={index}>
+    const attrsList = attrs.map((item, index) => (
+      <View key={"key-" + index}>
         <AttrSS
           name={item.name}
           noAwakeAttr={item.noAwakeAttr}
@@ -486,15 +496,14 @@ class RoleDetail extends Component {
     ));
     return (
       <View className={styles.roleDetail}>
-        <StatusBar isBack noHeight />
         <ClLoading
           type="image"
           imgUrl={LOADINGIMG}
-          show={this.state.statusControl.showLoading}
+          show={statusControl.showLoading}
         />
         <View className={styles.header}>
           <Image
-            src={this.state.staticUrl.shishen_bg}
+            src={staticUrl.shishen_bg}
             className={styles.header_bg}
             mode="aspectFill"
           />
@@ -502,35 +511,32 @@ class RoleDetail extends Component {
           <View className={styles.left}>
             <View className={styles.top}>
               <Image
-                src={this.state.staticUrl.ssl}
+                src={staticUrl.ssl}
                 mode="widthFix"
                 className={styles.ssl}
               />
             </View>
             <View className={styles.name}>
               <Image
-                src={this.state.staticUrl.name_role}
+                src={staticUrl.name_role}
                 className={styles.img}
                 mode="widthFix"
               />
               <View className={styles.text}>
                 <View className={styles.level}>{routerParams.level}</View>
-                {routerParams.name.map((item, index) => (
-                  <View key={index} className={styles.names}>
-                    {item}
-                  </View>
-                ))}
+                {routerParams.name &&
+                  Array.from(routerParams.name).map((item, index) => (
+                    <View key={"key-" + index} className={styles.names}>
+                      {item}
+                    </View>
+                  ))}
               </View>
             </View>
           </View>
 
+          <Image src={staticUrl.yys} mode="widthFix" className={styles.yys} />
           <Image
-            src={this.state.staticUrl.yys}
-            mode="widthFix"
-            className={styles.yys}
-          />
-          <Image
-            src={this.state.staticUrl.awakeUrl}
+            src={staticUrl.awakeUrl}
             className={styles.role}
             mode="widthFix"
           />
@@ -538,30 +544,30 @@ class RoleDetail extends Component {
           <View className={styles.awake}>
             <View className={styles.chushi} onClick={this.chushiClick}>
               <Image
-                src={this.state.staticUrl.chushiButton}
+                src={staticUrl.chushiButton}
                 mode="widthFix"
                 className={styles.img}
               />
             </View>
             <View className={styles.juexing} onClick={this.juexingClick}>
               <Image
-                src={this.state.staticUrl.juexingButton}
+                src={staticUrl.juexingButton}
                 mode="widthFix"
                 className={styles.img}
               />
             </View>
             <View className={styles.skin} onClick={this.skinClick}>
               <Image
-                src={this.state.staticUrl.skinButton}
+                src={staticUrl.skinButton}
                 mode="widthFix"
                 className={styles.img}
               />
             </View>
           </View>
 
-          {this.state.statusControl.showSkin ? (
+          {statusControl.showSkin ? (
             <View className={styles.skinGroup}>
-              {this.state.skins.map((item, index) => (
+              {skins.map((item, index) => (
                 <View key={item.name}>
                   <Button
                     className={`${
@@ -586,7 +592,7 @@ class RoleDetail extends Component {
               <View className={styles.content}>
                 <View className={styles.contentName}>
                   <Image
-                    src={this.state.staticUrl.lotus}
+                    src={staticUrl.lotus}
                     mode="widthFix"
                     className={styles.img}
                   />
@@ -607,7 +613,7 @@ class RoleDetail extends Component {
               <View className={styles.head}>
                 <View className={styles.noAwake}>
                   <Image
-                    src={this.state.staticUrl.noAwakeHead}
+                    src={staticUrl.noAwakeHead}
                     mode="widthFix"
                     className={styles.noAwakeHead}
                   />
@@ -615,7 +621,7 @@ class RoleDetail extends Component {
                 {!disabledJuexing ? (
                   <View className={styles.awake}>
                     <Image
-                      src={this.state.staticUrl.awakeHead}
+                      src={staticUrl.awakeHead}
                       mode="widthFix"
                       className={styles.awakeHead}
                     />
@@ -628,13 +634,16 @@ class RoleDetail extends Component {
               <View className={styles.level}>
                 <View className={styles.sslevel}>
                   <Modal
-                    show={this.state.statusControl.showLevelModal}
+                    show={statusControl.showLevelModal}
                     title="请选择等级"
                     onClose={this.closeLevel.bind(this)}
                   >
                     <View className={styles.levelModal}>
-                      {this.state.allLevels.map((item, index) => (
-                        <View key={index} className={styles.levelModalBtn}>
+                      {allLevels.map((item, index) => (
+                        <View
+                          key={"key-" + index}
+                          className={styles.levelModalBtn}
+                        >
                           <Button
                             className="cu-btn bg-cyan round sm shadow"
                             onClick={this.closeLevel.bind(this, index + 1)}
@@ -650,7 +659,7 @@ class RoleDetail extends Component {
                       className="cu-btn bg-mauve round sm shadow"
                       onClick={this.showLevel}
                     >
-                      {this.state.ssLevel}级
+                      {ssLevel}级
                     </Button>
                   </View>
                   <Text className={styles.levelTip}>
@@ -659,17 +668,15 @@ class RoleDetail extends Component {
                 </View>
 
                 <View className={styles.ssStar}>
-                  {this.state.ssStar.map((item, index) => (
-                    <View key={index}>
+                  {ssStar.map((item, index) => (
+                    <View key={"key-" + index}>
                       <View
                         className={styles.ssStarBlock}
                         onClick={this.changeStar.bind(this, index)}
                       >
                         <Image
                           src={
-                            item
-                              ? this.state.staticUrl.activeStar
-                              : this.state.staticUrl.normalStar
+                            item ? staticUrl.activeStar : staticUrl.normalStar
                           }
                           mode="widthFix"
                           className={styles.ssStarImg}

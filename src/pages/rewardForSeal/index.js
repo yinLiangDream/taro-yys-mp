@@ -4,7 +4,6 @@ import { observer, inject } from "@tarojs/mobx";
 
 import styles from "./index.module.less";
 import { firstName, debounce } from "../../utils/index";
-import StatusBar from "../../components/StatusBar";
 import rewardService from "../../service/reward";
 
 @inject("rewardForSealModel", "indexModel", "userModel")
@@ -12,6 +11,9 @@ import rewardService from "../../service/reward";
 class RewardForSeal extends Component {
   static options = {
     addGlobalClass: true
+  };
+  static config = {
+    navigationBarTitleText: "悬赏封印查询"
   };
   constructor(props) {
     super(props);
@@ -107,12 +109,6 @@ class RewardForSeal extends Component {
     ));
     return (
       <ScrollView className={styles.RewardForSeal}>
-        <StatusBar
-          content="悬赏封印"
-          fontColor="text-black"
-          isBack
-          backText=""
-        />
         <View className={styles.header}>
           <Image
             src="https://mp-yys-1255362963.cos.ap-chengdu.myqcloud.com/search_title.png"
