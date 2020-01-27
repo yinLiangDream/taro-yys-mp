@@ -5,10 +5,11 @@ import {
   Image,
   Button,
   Label,
-  ScrollView
+  ScrollView,
+  Picker
 } from "@tarojs/components";
 import { observer, inject } from "@tarojs/mobx";
-import { ClLoading } from "mp-colorui";
+import { ClLoading, ClButton } from "mp-colorui";
 
 import styles from "./index.module.less";
 import parterService from "../../service/partner";
@@ -73,7 +74,6 @@ class RoleDetail extends Component {
       },
       statusControl: {
         showLoading: true,
-        showLevelModal: false,
         showSkin: false
       }
     };
@@ -206,42 +206,13 @@ class RoleDetail extends Component {
   }
 
   /**
-   * 展示选择等级
-   */
-  showLevel() {
-    this.setState({
-      statusControl: {
-        ...this.state.statusControl,
-        showLevelModal: true
-      }
-    });
-  }
-
-  /**
    * 关闭展示选择等级
    * @param {*} level
    */
   closeLevel(level, star, ssStar = this.state.ssStar) {
     if (level) {
       const starLen = ssStar.filter(item => item).length;
-      this.setState(
-        {
-          statusControl: {
-            ...this.state.statusControl,
-            showLevelModal: false
-          }
-        },
-        () => {
-          this.setAttr(level, starLen, ssStar);
-        }
-      );
-    } else {
-      this.setState({
-        statusControl: {
-          ...this.state.statusControl,
-          showLevelModal: false
-        }
-      });
+      this.setAttr(level, starLen, ssStar);
     }
   }
 
@@ -256,6 +227,7 @@ class RoleDetail extends Component {
     const maxLevel = 10 + starLen * 5;
     let ssLevel = this.state.ssLevel;
     if (this.state.ssLevel > maxLevel) ssLevel = maxLevel;
+    this.calLevel(ssStar);
     this.closeLevel(ssLevel, starLen, ssStar);
   }
 
@@ -633,34 +605,19 @@ class RoleDetail extends Component {
 
               <View className={styles.level}>
                 <View className={styles.sslevel}>
-                  <Modal
-                    show={statusControl.showLevelModal}
-                    title="请选择等级"
-                    onClose={this.closeLevel.bind(this)}
-                  >
-                    <View className={styles.levelModal}>
-                      {allLevels.map((item, index) => (
-                        <View
-                          key={"key-" + index}
-                          className={styles.levelModalBtn}
-                        >
-                          <Button
-                            className="cu-btn bg-cyan round sm shadow"
-                            onClick={this.closeLevel.bind(this, index + 1)}
-                          >
-                            {item}
-                          </Button>
-                        </View>
-                      ))}
-                    </View>
-                  </Modal>
                   <View className={styles.action}>
-                    <Button
-                      className="cu-btn bg-mauve round sm shadow"
-                      onClick={this.showLevel}
+                    <Picker
+                      range={allLevels}
+                      mode="selector"
+                      value={ssLevel - 1}
+                      onChange={e => {
+                        this.closeLevel(Number(e.detail.value) + 1);
+                      }}
                     >
-                      {ssLevel}级
-                    </Button>
+                      <ClButton size="small" shape="round">
+                        {ssLevel}级
+                      </ClButton>
+                    </Picker>
                   </View>
                   <Text className={styles.levelTip}>
                     Tips: 可以选择星级和等级~

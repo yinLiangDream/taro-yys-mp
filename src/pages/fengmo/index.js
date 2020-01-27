@@ -98,7 +98,7 @@ class Fengmo extends Component {
         <ScrollView
           className={styles.find}
           scrollY
-          style={{ height: `calc(100vh - ${Taro.pxTransform(520)})` }}
+          style={{ height: `calc(100vh - ${Taro.pxTransform(400)})` }}
         >
           {this.state.showList.length === 0 &&
           this.state.statusControl.searchFlag ? (

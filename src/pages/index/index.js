@@ -1,11 +1,22 @@
 import { Image, ScrollView, Text, View } from "@tarojs/components";
 import { inject, observer } from "@tarojs/mobx";
 import Taro, { Component, pxTransform } from "@tarojs/taro";
-import { ClLoading, ClSearchBar, ClTabs } from "mp-colorui";
+import {
+  ClLoading,
+  ClSearchBar,
+  ClTabs,
+  ClTabBar,
+  ClLayout,
+  ClCard,
+  ClFlex,
+  ClText,
+  ClTitleBar
+} from "mp-colorui";
 import { LOADINGIMG } from "../../utils/model";
 import updateData from "../../utils/mpUpdateModel";
 import styles from "./index.module.less";
 import partnerService from "../../service/partner";
+import ShowDOM from "../../components/ShowDOM";
 
 @inject("indexModel", "userModel")
 @observer
@@ -21,49 +32,62 @@ class Index extends Component {
     super(props);
     const { indexModel } = this.props;
     this.state = {
-      imgUrl: [
+      toolAction: [
         {
-          text: "封印悬赏",
-          key: `${indexModel.baseUrl}rewardForSeal.png`,
-          click: "rewardForSeal"
+          title: "资料查询",
+          children: [
+            {
+              text: "封印悬赏",
+              key: `${indexModel.baseUrl}rewardForSeal.png`,
+              click: "rewardForSeal"
+            },
+            {
+              text: "逢魔密信",
+              key: `${indexModel.baseUrl}fengmo.png`,
+              click: "fengmo"
+            },
+            {
+              text: "御魂查询",
+              key: `${indexModel.baseUrl}yuhun.png`,
+              click: "yuhun"
+            }
+          ]
         },
         {
-          text: "逢魔密信",
-          key: `${indexModel.baseUrl}fengmo.png`,
-          click: "fengmo"
+          title: "斗技阵容",
+          children: [
+            {
+              text: "对弈竞猜",
+              key: `${indexModel.baseUrl}zhenrong.png`,
+              click: "compare"
+            },
+            {
+              text: "斗技排行",
+              key: `${indexModel.baseUrl}theProtagonistRecord.png`,
+              click: "charts"
+            },
+            {
+              text: "斗技阵容",
+              key: `${indexModel.baseUrl}openServicePlan.png`,
+              click: "battleArray"
+            }
+          ]
         },
-        // {
-        //   text: '御魂',
-        //   key: `${indexModel.baseUrl}yuhun.png`,
-        //   click: 'yuhun'
-        // },
         {
-          text: "游戏更新记",
-          key: `${indexModel.baseUrl}eventRecord.png`,
-          click: "updateGame"
-        },
-        {
-          text: "小程序更新记",
-          key: `${indexModel.baseUrl}gameCalendar.png`,
-          click: "mpUpdateRecord"
+          title: "更新记录",
+          children: [
+            {
+              text: "游戏更新记",
+              key: `${indexModel.baseUrl}eventRecord.png`,
+              click: "updateGame"
+            },
+            {
+              text: "小程序更新记",
+              key: `${indexModel.baseUrl}gameCalendar.png`,
+              click: "mpUpdateRecord"
+            }
+          ]
         }
-        // {
-        //   text: "留言",
-        //   key: "https://mp-yys-1255362963.cos.ap-chengdu.myqcloud.com/chat.png",
-        //   click: ""
-        // }
-        // {
-        //   text: '主角录',
-        //   key: '/static/headerTabs/theProtagonistRecord.png'
-        // },
-        // {
-        //   text: '开服计划',
-        //   key: '/static/headerTabs/openServicePlan.png'
-        // },
-        // {
-        //   text: '同人赏',
-        //   key: '/static/headerTabs/peopleEnjoy.png'
-        // }
       ],
       allTag: [
         {
@@ -110,7 +134,9 @@ class Index extends Component {
         showVersion: false,
         showFloat: false,
         showBack: false
-      }
+      },
+      activeTab: 0,
+      showIndex: 0
     };
   }
 
@@ -158,19 +184,6 @@ class Index extends Component {
 
   componentDidHide() {}
 
-  hideVersion() {
-    this.setState({
-      statusControl: {
-        ...this.state.statusControl,
-        showVersion: false
-      }
-    });
-    Taro.setStorage({
-      key: "version",
-      data: this.state.currentVersion.version
-    });
-  }
-
   clikshishen(item) {
     Taro.navigateTo({
       url: `/pages/roleDetail/index?id=${item.id}&level=${item.level}&name=${
@@ -184,7 +197,8 @@ class Index extends Component {
       item.active = index === thisIndex;
     });
     this.setState({
-      allTag: this.state.allTag
+      allTag: this.state.allTag,
+      showIndex: 0
     });
   }
 
@@ -193,24 +207,6 @@ class Index extends Component {
       Taro.navigateTo({
         url: `/pages/${clickName}/index`
       });
-  }
-
-  clickFloatButton() {
-    this.setState({
-      statusControl: {
-        ...this.state.statusControl,
-        showFloat: true
-      }
-    });
-  }
-
-  closeFloat() {
-    this.setState({
-      statusControl: {
-        ...this.state.statusControl,
-        showFloat: false
-      }
-    });
   }
 
   search(key) {
@@ -228,48 +224,35 @@ class Index extends Component {
     });
   }
 
-  enterHome() {
-    this.setState({
-      statusControl: {
-        ...this.state.statusControl,
-        showBack: false
-      }
-    });
-  }
-
   watchDetail() {
     this.clickHeader("updateGame");
   }
 
   render() {
-    const { imgUrl, allTag, staticUrl, statusControl } = this.state;
-    const tabHeadersList = imgUrl.map(item => (
-      <View
-        className={styles.content}
-        onClick={this.clickHeader.bind(this, item.click)}
-        key={item.key}
-      >
-        <Image src={item.key} className={styles.img} mode="aspectFit" />
-        <Text className={styles.text}>{item.text}</Text>
-      </View>
-    ));
+    const {
+      allTag,
+      staticUrl,
+      statusControl,
+      activeTab,
+      showIndex,
+      toolAction
+    } = this.state;
     const roleTagList = allTag.map((item, index) => (
-      <View key={"key-" + index} id={`id${index}`}>
+      <View key={"key-" + index} id={`id${index}`} className={styles.content}>
         <ScrollView
           className={styles.scroll}
           scroll-y
           style={{
-            height: `calc(100vh - ${pxTransform(400)})`
+            height: `calc(100vh - ${pxTransform(280)})`
           }}
         >
-          <view>
-            <View className={styles.div}>
-              {item.showList &&
-                item.showList.map((itemI, index1) => (
+          <View className={styles.singleSS}>
+            {item.showList &&
+              item.showList.map((itemI, index1) => (
+                <View key={"key-" + index1}>
                   <View
                     className={`${styles.head} shadow`}
                     onClick={this.clikshishen.bind(this, itemI)}
-                    key={"key-" + index1}
                   >
                     {itemI.isNew ? (
                       <Image
@@ -288,22 +271,20 @@ class Index extends Component {
                     />
                     <Text className={styles.text}>{itemI.name}</Text>
                   </View>
-                ))}
-            </View>
-          </view>
+                </View>
+              ))}
+          </View>
         </ScrollView>
       </View>
     ));
-    return (
-      <ScrollView
-        style={{
-          height: `100vh`
-        }}
-      >
+
+    const tabSS = (
+      <View>
         <ClSearchBar
           placeholder="请输入式神名称"
           onSearch={this.search.bind(this)}
           onInput={this.search.bind(this)}
+          onClear={this.search.bind(this, "")}
           shape="round"
           searchType="none"
           clear
@@ -313,11 +294,6 @@ class Index extends Component {
           type="image"
           imgUrl={LOADINGIMG}
         />
-        <View className={styles.tabs}>
-          <ScrollView scroll-x className={styles.scroll}>
-            <View className={styles.long}>{tabHeadersList}</View>
-          </ScrollView>
-        </View>
         <View className={styles.ssr}>
           <View className={styles.body}>
             <ClTabs
@@ -327,12 +303,85 @@ class Index extends Component {
               }))}
               activeColor="blue"
               touchMove
+              active={showIndex}
+              onClick={index => {
+                this.setState({
+                  showIndex: index
+                });
+              }}
             >
               {roleTagList}
             </ClTabs>
           </View>
         </View>
-      </ScrollView>
+      </View>
+    );
+
+    const toolActionComponent = toolAction.map((item, index) => (
+      <View key={"key-" + index}>
+        <ClCard>
+          <ClTitleBar
+            title={item.title}
+            textColor="white"
+            borderColor="white"
+            bgColor="grey"
+          />
+          <ClFlex wrap className={styles.scroll}>
+            {item.children.map((child, indexChild) => (
+              <View className={styles.long} key={"key-" + indexChild}>
+                <View
+                  className={styles.content}
+                  onClick={this.clickHeader.bind(this, child.click)}
+                  key={child.key}
+                >
+                  <Image
+                    src={child.key}
+                    className={styles.img}
+                    mode="aspectFit"
+                  />
+                  <ClLayout padding="xsmall" paddingDirection="vertical">
+                    <ClText size="small" text={child.text} />
+                  </ClLayout>
+                </View>
+              </View>
+            ))}
+          </ClFlex>
+        </ClCard>
+      </View>
+    ));
+    return (
+      <View>
+        <ScrollView
+          scrollY
+          style={{
+            height: `calc(100vh - ${pxTransform(120)})`
+          }}
+        >
+          <ShowDOM show={activeTab === 0}>{tabSS}</ShowDOM>
+          <ShowDOM show={activeTab === 1}>{toolActionComponent}</ShowDOM>
+        </ScrollView>
+        <ClTabBar
+          fix
+          tabs={[
+            {
+              icon: "likefill",
+              title: "崽崽们",
+              badge: false
+            },
+            {
+              icon: "searchlist",
+              title: "工具集",
+              badge: false
+            }
+          ]}
+          bgColor="gray"
+          onClick={index => {
+            this.setState({
+              activeTab: index
+            });
+          }}
+        />
+      </View>
     );
   }
 }

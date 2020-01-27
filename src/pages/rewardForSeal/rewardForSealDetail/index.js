@@ -5,6 +5,7 @@ import { observer, inject } from "@tarojs/mobx";
 import RewardForSealDetailBlock from "../../../components/RewardForSealDetailBlock/index";
 
 import styles from "./index.module.less";
+import { ClLayout } from "mp-colorui";
 
 let routerParams = {};
 @inject("rewardForSealModel", "indexModel")
@@ -32,7 +33,9 @@ class RewardForSeal extends Component {
   async componentWillMount() {
     routerParams = this.$router.params;
     this.state.name = routerParams.name;
-    this.config.navigationBarTitleText = routerParams.name;
+    Taro.setNavigationBarTitle({
+      title: routerParams.name
+    });
   }
   componentDidShow() {
     const { rewardForSealModel } = this.props;
@@ -77,7 +80,7 @@ class RewardForSeal extends Component {
       </View>
     ));
     return (
-      <ScrollView className={styles.rewardForSealDetail} scrollY>
+      <View className={styles.rewardForSealDetail}>
         <View className={styles.title}>
           <Image
             src={this.state.staticUrl.search_deatil_title}
@@ -86,29 +89,31 @@ class RewardForSeal extends Component {
           />
           <Text className={styles.text}>{this.state.name}</Text>
         </View>
-        <ScrollView className={styles.body} scrollY>
-          {this.state.advice.length > 0 ? (
-            <View className={`${styles.advice} ${styles.mainBody}`}>
-              <View className={styles.title}>推荐副本：</View>
-              <View className={styles.detail}>{adviceList}</View>
-            </View>
-          ) : (
-            ""
-          )}
-          {this.state.categories.map((item, index) => (
-            <View key={index + Math.random()} style="width: 100%">
-              {item.data.length > 0 ? (
-                <RewardForSealDetailBlock
-                  data={item.data}
-                  category={item.category}
-                />
-              ) : (
-                ""
-              )}
-            </View>
-          ))}
-        </ScrollView>
-      </ScrollView>
+        <ClLayout className={`${styles.body} solid radius`} padding="normal">
+          <ScrollView className={`${styles.body}`} scrollY>
+            {this.state.advice.length > 0 ? (
+              <View className={`${styles.advice} ${styles.mainBody}`}>
+                <View className={styles.title}>推荐副本：</View>
+                <View className={styles.detail}>{adviceList}</View>
+              </View>
+            ) : (
+              ""
+            )}
+            {this.state.categories.map((item, index) => (
+              <View key={index + Math.random()} style="width: 100%">
+                {item.data.length > 0 ? (
+                  <RewardForSealDetailBlock
+                    data={item.data}
+                    category={item.category}
+                  />
+                ) : (
+                  ""
+                )}
+              </View>
+            ))}
+          </ScrollView>
+        </ClLayout>
+      </View>
     );
   }
 }
