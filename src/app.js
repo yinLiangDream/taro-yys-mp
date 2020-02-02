@@ -25,15 +25,24 @@ const store = {
 };
 
 class App extends Component {
-  config = {
+  static config = {
     pages: [
+      // 首页
       "pages/index/index",
+      // 悬赏封印
       "pages/rewardForSeal/index",
+      // 悬赏封印详情
       "pages/rewardForSeal/rewardForSealDetail/index",
+      // 逢魔
       "pages/fengmo/index",
+      // 小程序更新
       "pages/mpUpdateRecord/index",
+      // 游戏更新
       "pages/updateGame/index",
-      "pages/roleDetail/index"
+      // 式神详情
+      "pages/roleDetail/index",
+      // 御魂
+      "pages/yuhun/index"
     ],
     window: {
       backgroundTextStyle: "light",

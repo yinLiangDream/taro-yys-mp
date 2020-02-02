@@ -202,13 +202,14 @@ class Index extends Component {
     });
   }
 
+  // 点击各种工具，进行页面跳转
   clickHeader(clickName) {
-    clickName &&
-      Taro.navigateTo({
-        url: `/pages/${clickName}/index`
-      });
+    Taro.navigateTo({
+      url: `/pages/${clickName}/index`
+    });
   }
 
+  // 搜索式神
   search(key) {
     const { indexModel } = this.props;
     this.clickTap(0);
@@ -237,6 +238,8 @@ class Index extends Component {
       showIndex,
       toolAction
     } = this.state;
+
+    // 式神角色
     const roleTagList = allTag.map((item, index) => (
       <View key={"key-" + index} id={`id${index}`} className={styles.content}>
         <ScrollView
@@ -278,6 +281,7 @@ class Index extends Component {
       </View>
     ));
 
+    // 式神列表
     const tabSS = (
       <View>
         <ClSearchBar
@@ -317,6 +321,7 @@ class Index extends Component {
       </View>
     );
 
+    // 工具列表
     const toolActionComponent = toolAction.map((item, index) => (
       <View key={"key-" + index}>
         <ClCard>
