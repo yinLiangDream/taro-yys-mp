@@ -1,5 +1,10 @@
 export default [
   {
+    version: "0.3.1",
+    date: "2020-02-02",
+    desc: ["✨使用 mp-colorui 组件库进行开发", "✨重构整体架构，方便使用"]
+  },
+  {
     version: "0.3.0",
     date: "2020-01-21",
     desc: [

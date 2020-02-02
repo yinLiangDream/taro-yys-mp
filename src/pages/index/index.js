@@ -50,29 +50,34 @@ class Index extends Component {
               text: "御魂查询",
               key: `${indexModel.baseUrl}yuhun.png`,
               click: "yuhun"
+              // },
+              // {
+              //   text: "神秘图案查询",
+              //   key: `${indexModel.baseUrl}mystery.png`,
+              //   click: "mystery"
             }
           ]
         },
-        {
-          title: "斗技阵容",
-          children: [
-            {
-              text: "对弈竞猜",
-              key: `${indexModel.baseUrl}zhenrong.png`,
-              click: "compare"
-            },
-            {
-              text: "斗技排行",
-              key: `${indexModel.baseUrl}theProtagonistRecord.png`,
-              click: "charts"
-            },
-            {
-              text: "斗技阵容",
-              key: `${indexModel.baseUrl}openServicePlan.png`,
-              click: "battleArray"
-            }
-          ]
-        },
+        // {
+        //   title: "斗技阵容",
+        //   children: [
+        //     {
+        //       text: "对弈竞猜",
+        //       key: `${indexModel.baseUrl}zhenrong.png`,
+        //       click: "compare"
+        //     },
+        //     {
+        //       text: "斗技排行",
+        //       key: `${indexModel.baseUrl}theProtagonistRecord.png`,
+        //       click: "charts"
+        //     },
+        //     {
+        //       text: "斗技阵容",
+        //       key: `${indexModel.baseUrl}openServicePlan.png`,
+        //       click: "battleArray"
+        //     }
+        //   ]
+        // },
         {
           title: "更新记录",
           children: [
@@ -141,6 +146,7 @@ class Index extends Component {
   }
 
   async componentDidMount() {
+    this.checkVersion();
     const { indexModel } = this.props;
     const res = await partnerService.getList();
     const data = res;
@@ -183,6 +189,40 @@ class Index extends Component {
   componentDidShow() {}
 
   componentDidHide() {}
+
+  checkVersion() {
+    if (
+      Taro.getEnv() !== Taro.ENV_TYPE.WEB &&
+      Taro.canIUse("getUpdateManager")
+    ) {
+      let updateManager = Taro.getUpdateManager();
+      updateManager.onCheckForUpdate(res => {
+        if (res.hasUpdate) {
+          updateManager.onUpdateReady(() => {
+            Taro.showModal({
+              title: "更新提示",
+              content: "有新版本，是否重启应用？",
+              success: ress => {
+                if (ress.confirm) {
+                  updateManager.applyUpdate();
+                } else if (ress.cancel) {
+                  return false;
+                }
+              }
+            });
+          });
+          updateManager.onUpdateFailed(() => {
+            Taro.hideLoading();
+            Taro.showModal({
+              title: "更新失败",
+              content: "新版本更新失败，请检查网络",
+              showCancel: false
+            });
+          });
+        }
+      });
+    }
+  }
 
   clikshishen(item) {
     Taro.navigateTo({
