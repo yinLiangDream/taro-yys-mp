@@ -133,7 +133,6 @@ class RewardForSeal extends Component {
           ) : (
             findList
           )}
-          <View />
         </ScrollView>
       </ScrollView>
     );

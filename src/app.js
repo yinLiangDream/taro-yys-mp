@@ -42,7 +42,9 @@ class App extends Component {
       // 式神详情
       "pages/roleDetail/index",
       // 御魂
-      "pages/yuhun/index"
+      "pages/yuhun/index",
+      // 神秘图案
+      "pages/mystery/index"
     ],
     window: {
       backgroundTextStyle: "light",

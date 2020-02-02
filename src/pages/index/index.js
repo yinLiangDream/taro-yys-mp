@@ -50,11 +50,11 @@ class Index extends Component {
               text: "御魂查询",
               key: `${indexModel.baseUrl}yuhun.png`,
               click: "yuhun"
-              // },
-              // {
-              //   text: "神秘图案查询",
-              //   key: `${indexModel.baseUrl}mystery.png`,
-              //   click: "mystery"
+            },
+            {
+              text: "神秘图案查询",
+              key: `${indexModel.baseUrl}shenmitu.png`,
+              click: "mystery"
             }
           ]
         },
