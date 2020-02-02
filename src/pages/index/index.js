@@ -7,7 +7,6 @@ import {
   ClTabs,
   ClTabBar,
   ClLayout,
-  ClCard,
   ClFlex,
   ClText,
   ClTitleBar
@@ -364,7 +363,7 @@ class Index extends Component {
     // 工具列表
     const toolActionComponent = toolAction.map((item, index) => (
       <View key={"key-" + index}>
-        <ClCard>
+        <ClLayout padding="normal">
           <ClTitleBar
             title={item.title}
             textColor="white"
@@ -391,7 +390,7 @@ class Index extends Component {
               </View>
             ))}
           </ClFlex>
-        </ClCard>
+        </ClLayout>
       </View>
     ));
     return (
