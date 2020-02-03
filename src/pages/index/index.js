@@ -17,7 +17,7 @@ import styles from "./index.module.less";
 import partnerService from "../../service/partner";
 import ShowDOM from "../../components/ShowDOM";
 
-@inject("indexModel", "userModel")
+@inject("indexModel")
 @observer
 class Index extends Component {
   static options = {
@@ -57,26 +57,26 @@ class Index extends Component {
             }
           ]
         },
-        // {
-        //   title: "斗技阵容",
-        //   children: [
-        //     {
-        //       text: "对弈竞猜",
-        //       key: `${indexModel.baseUrl}zhenrong.png`,
-        //       click: "compare"
-        //     },
-        //     {
-        //       text: "斗技排行",
-        //       key: `${indexModel.baseUrl}theProtagonistRecord.png`,
-        //       click: "charts"
-        //     },
-        //     {
-        //       text: "斗技阵容",
-        //       key: `${indexModel.baseUrl}openServicePlan.png`,
-        //       click: "battleArray"
-        //     }
-        //   ]
-        // },
+        {
+          title: "斗技阵容",
+          children: [
+            // {
+            //   text: "对弈竞猜",
+            //   key: `${indexModel.baseUrl}zhenrong.png`,
+            //   click: "compare"
+            // },
+            {
+              text: "斗技排行",
+              key: `${indexModel.baseUrl}theProtagonistRecord.png`,
+              click: "charts"
+            },
+            {
+              text: "斗技阵容",
+              key: `${indexModel.baseUrl}openServicePlan.png`,
+              click: "battleArray"
+            }
+          ]
+        },
         {
           title: "更新记录",
           children: [

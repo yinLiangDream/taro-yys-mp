@@ -44,7 +44,9 @@ class App extends Component {
       // 御魂
       "pages/yuhun/index",
       // 神秘图案
-      "pages/mystery/index"
+      "pages/mystery/index",
+      // 斗技排行
+      "pages/charts/index"
     ],
     window: {
       backgroundTextStyle: "light",
