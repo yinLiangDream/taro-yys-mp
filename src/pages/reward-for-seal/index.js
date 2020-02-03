@@ -69,7 +69,7 @@ class RewardForSeal extends Component {
   }
   async deatil(item) {
     Taro.navigateTo({
-      url: `/pages/rewardForSeal/rewardForSealDetail/index?id=${
+      url: `/pages/reward-for-seal/reward-for-seal-detail/index?id=${
         item.id
       }&advice=${JSON.stringify(item.advice)}&name=${item.name}`
     });

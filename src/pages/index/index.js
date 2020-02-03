@@ -38,7 +38,7 @@ class Index extends Component {
             {
               text: "封印悬赏",
               key: `${indexModel.baseUrl}rewardForSeal.png`,
-              click: "rewardForSeal"
+              click: "reward-for-seal"
             },
             {
               text: "逢魔密信",
@@ -73,7 +73,7 @@ class Index extends Component {
             {
               text: "斗技阵容",
               key: `${indexModel.baseUrl}openServicePlan.png`,
-              click: "battleArray"
+              click: "battle-array"
             }
           ]
         },
@@ -83,12 +83,12 @@ class Index extends Component {
             {
               text: "游戏更新记",
               key: `${indexModel.baseUrl}eventRecord.png`,
-              click: "updateGame"
+              click: "update-game"
             },
             {
               text: "小程序更新记",
               key: `${indexModel.baseUrl}gameCalendar.png`,
-              click: "mpUpdateRecord"
+              click: "mp-update-record"
             }
           ]
         }
@@ -225,7 +225,7 @@ class Index extends Component {
 
   clikshishen(item) {
     Taro.navigateTo({
-      url: `/pages/roleDetail/index?id=${item.id}&level=${item.level}&name=${
+      url: `/pages/role-detail/index?id=${item.id}&level=${item.level}&name=${
         item.name
       }&skins=${JSON.stringify(item.skins)}`
     });
@@ -265,7 +265,7 @@ class Index extends Component {
   }
 
   watchDetail() {
-    this.clickHeader("updateGame");
+    this.clickHeader("update-game");
   }
 
   render() {

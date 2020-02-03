@@ -30,17 +30,17 @@ class App extends Component {
       // 首页
       "pages/index/index",
       // 悬赏封印
-      "pages/rewardForSeal/index",
+      "pages/reward-for-seal/index",
       // 悬赏封印详情
-      "pages/rewardForSeal/rewardForSealDetail/index",
+      "pages/reward-for-seal/reward-for-seal-detail/index",
       // 逢魔
       "pages/fengmo/index",
       // 小程序更新
-      "pages/mpUpdateRecord/index",
+      "pages/mp-update-record/index",
       // 游戏更新
-      "pages/updateGame/index",
+      "pages/update-game/index",
       // 式神详情
-      "pages/roleDetail/index",
+      "pages/role-detail/index",
       // 御魂
       "pages/yuhun/index",
       // 神秘图案
