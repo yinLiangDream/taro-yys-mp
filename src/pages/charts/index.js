@@ -166,9 +166,11 @@ class Charts extends Component {
               <ClText
                 size="small"
                 lineSpacing="small"
-                text={`总积分:${item.score} / 星级：${Math.floor(
-                  (item.score - 3000) / 30
-                )}`}
+                text={`总积分:${item.score}${
+                  item.score > 3000
+                    ? " / 星级：" + Math.floor((item.score - 3000) / 30)
+                    : ""
+                }`}
                 textColor="red"
               />
             </ClFlex>
