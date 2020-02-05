@@ -299,7 +299,7 @@ class ChartsDetail extends Component {
                           },
                           {
                             text: dayjs(item.battle_time * 1000).format(
-                              "YYYY-MM-DD hh:mm"
+                              "YYYY-MM-DD HH:mm"
                             ),
                             plain: true,
                             color: "blue"

@@ -71,11 +71,11 @@ class Index extends Component {
               text: "斗技排行",
               key: `${indexModel.baseUrl}theProtagonistRecord.png`,
               click: "charts"
-            },
-            {
-              text: "斗技阵容",
-              key: `${indexModel.baseUrl}openServicePlan.png`,
-              click: "battle-array"
+              // },
+              // {
+              //   text: "斗技阵容",
+              //   key: `${indexModel.baseUrl}openServicePlan.png`,
+              //   click: "battle-array"
             }
           ]
         },
