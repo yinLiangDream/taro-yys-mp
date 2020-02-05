@@ -1,8 +1,8 @@
-import Taro, { Component } from '@tarojs/taro';
-import { View, Text } from '@tarojs/components';
-import PropTypes from 'prop-types';
+import Taro, { Component } from "@tarojs/taro";
+import { View, Text } from "@tarojs/components";
+import PropTypes from "prop-types";
 
-import styles from './index.module.less';
+import styles from "./index.module.less";
 
 class RewardForSealDetailBlock extends Component {
   constructor(props) {

@@ -1,8 +1,7 @@
 import "@tarojs/async-await";
 import { Provider, inject } from "@tarojs/mobx";
 import Taro, { Component } from "@tarojs/taro";
-import "mp-colorui/dist/style/index.scss";
-import "./app.less";
+import "./app.scss";
 import Index from "./pages/index";
 import gameModel from "./store/game";
 import indexModel from "./store/index";
@@ -29,10 +28,6 @@ class App extends Component {
     pages: [
       // 首页
       "pages/index/index",
-      // 悬赏封印
-      "pages/reward-for-seal/index",
-      // 悬赏封印详情
-      "pages/reward-for-seal/reward-for-seal-detail/index",
       // 逢魔
       "pages/fengmo/index",
       // 小程序更新
@@ -44,9 +39,27 @@ class App extends Component {
       // 御魂
       "pages/yuhun/index",
       // 神秘图案
-      "pages/mystery/index",
-      // 斗技排行
-      "pages/charts/index"
+      "pages/mystery/index"
+    ],
+    subPackages: [
+      {
+        root: "package-reward",
+        pages: [
+          // 悬赏封印
+          "reward-for-seal/index",
+          // 悬赏封印详情
+          "reward-for-seal/reward-for-seal-detail/index"
+        ]
+      },
+      {
+        root: "package-charts",
+        pages: [
+          // 悬赏封印
+          "charts/index",
+          // 悬赏封印详情
+          "charts-detail/index"
+        ]
+      }
     ],
     window: {
       backgroundTextStyle: "light",

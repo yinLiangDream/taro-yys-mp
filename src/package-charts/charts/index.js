@@ -11,6 +11,8 @@ import {
 import { inject, observer } from "@tarojs/mobx";
 import { LOADINGIMG } from "../../utils/model";
 import chartsServer from "../../service/charts";
+import { chartsDetailRouter } from "../../router";
+import { getStar } from "../../utils";
 
 import styles from "./index.module.scss";
 
@@ -46,17 +48,29 @@ class Charts extends Component {
 
   async componentDidMount() {
     const { server, page } = this.state;
+    const { indexModel } = this.props;
     const allServer = await chartsServer.getServerList();
     await this.getCharts(server, page);
-    this.setState({
-      loading: false,
-      allServer: [
-        {
-          name: "全服",
-          num: "all"
-        }
-      ].concat(Object.values(allServer))
-    });
+    const allServerKeys = Object.keys(allServer);
+    this.setState(
+      {
+        loading: false,
+        allServer: [
+          {
+            name: "全服",
+            num: "all"
+          }
+        ].concat(
+          allServerKeys.map(key => ({
+            ...allServer[key],
+            originNum: key
+          }))
+        )
+      },
+      () => {
+        indexModel.saveAllServer(this.state.allServer);
+      }
+    );
   }
 
   async getCharts(server, page) {
@@ -93,6 +107,16 @@ class Charts extends Component {
         }
       );
   }
+  toDetail(id) {
+    const { allServer } = this.state;
+    const server =
+      this.state.server === "all"
+        ? allServer[0]
+        : allServer.find(item => item.originNum == this.state.server);
+    Taro.navigateTo({
+      url: chartsDetailRouter(id, server.num, server.originNum)
+    });
+  }
 
   renderList(item, indexModel) {
     const color = rank => {
@@ -114,69 +138,71 @@ class Charts extends Component {
       return currentColor;
     };
     return (
-      <ClCard type="full" active className="solid-bottom">
-        <ClFlex align="center">
-          <ClLayout padding="small" paddingDirection="right">
-            <ClText
-              text={item.rank}
-              size={item.rank > 3 ? "xxlarge" : "xslarge"}
-              textColor={color(item.rank)}
-            />
-          </ClLayout>
-          <ClLayout padding="small" paddingDirection="right">
-            <Image
-              mode="aspectFit"
-              className={`round ${styles.avatar}`}
-              src={`${indexModel.baseUrl}compare/head_img/${item.small_extra.yys_id}.jpg`}
-            />
-          </ClLayout>
-          <View style={{ flex: 1 }}>
-            <ClText
-              text={`${item.small_extra.role_name}`}
-              size="large"
-              textColor="blue"
-            />
-            <ClFlex>
-              <ClLayout padding="small" paddingDirection="right">
-                <ClText
-                  text={`总场数：${item.small_extra.count_all}`}
-                  size="small"
-                  lineSpacing="small"
-                />
-              </ClLayout>
-              <ClLayout padding="small" paddingDirection="right">
-                <ClText
-                  text={`胜场数：${item.small_extra.count_win}`}
-                  size="small"
-                  lineSpacing="small"
-                />
-              </ClLayout>
-            </ClFlex>
-            <ClFlex>
-              <ClLayout padding="small" paddingDirection="right">
-                <ClText
-                  text={`胜率：${(
-                    (item.small_extra.count_win / item.small_extra.count_all) *
-                    100
-                  ).toFixed(2)}%`}
-                  size="small"
-                  lineSpacing="small"
-                />
-              </ClLayout>
+      <View onClick={this.toDetail.bind(this, item.role_id)}>
+        <ClCard type="full" active className="solid-bottom">
+          <ClFlex align="center">
+            <ClLayout padding="small" paddingDirection="right">
               <ClText
-                size="small"
-                lineSpacing="small"
-                text={`总积分:${item.score}${
-                  item.score > 3000
-                    ? " / 星级：" + Math.floor((item.score - 3000) / 30)
-                    : ""
-                }`}
-                textColor="red"
+                text={item.rank}
+                size={item.rank > 3 ? "xxlarge" : "xslarge"}
+                textColor={color(item.rank)}
               />
-            </ClFlex>
-          </View>
-        </ClFlex>
-      </ClCard>
+            </ClLayout>
+            <ClLayout padding="small" paddingDirection="right">
+              <Image
+                mode="aspectFit"
+                className={`round ${styles.avatar}`}
+                src={`${indexModel.baseUrl}compare/head_img/${item.small_extra.yys_id}.jpg`}
+              />
+            </ClLayout>
+            <View style={{ flex: 1 }}>
+              <ClText
+                text={`${item.small_extra.role_name}`}
+                size="large"
+                textColor="blue"
+                fontWeight="bold"
+              />
+              <ClFlex>
+                <ClLayout padding="small" paddingDirection="right">
+                  <ClText
+                    text={`总场数：${item.small_extra.count_all}`}
+                    size="small"
+                    lineSpacing="small"
+                  />
+                </ClLayout>
+                <ClLayout padding="small" paddingDirection="right">
+                  <ClText
+                    text={`胜场数：${item.small_extra.count_win}`}
+                    size="small"
+                    lineSpacing="small"
+                  />
+                </ClLayout>
+              </ClFlex>
+              <ClFlex>
+                <ClLayout padding="small" paddingDirection="right">
+                  <ClText
+                    text={`胜率：${(
+                      (item.small_extra.count_win /
+                        item.small_extra.count_all) *
+                      100
+                    ).toFixed(2)}%`}
+                    size="small"
+                    lineSpacing="small"
+                  />
+                </ClLayout>
+                <ClText
+                  size="small"
+                  lineSpacing="small"
+                  text={`总积分:${item.score}${
+                    item.score > 3000 ? " / 星级：" + getStar(item.score) : ""
+                  }`}
+                  textColor="red"
+                />
+              </ClFlex>
+            </View>
+          </ClFlex>
+        </ClCard>
+      </View>
     );
   }
 
@@ -210,7 +236,9 @@ class Charts extends Component {
               {
                 allCharts: [],
                 loading: true,
-                currentServer: index
+                currentServer: index,
+                server: allServer[index].num,
+                page: 1
               },
               async () => {
                 await this.getCharts(allServer[index].num, 1);

@@ -20,7 +20,7 @@ class StatusBar extends Component {
   }
   toHome() {
     Taro.redirectTo({
-      url: homeRouter
+      url: homeRouter()
     });
   }
   render() {

@@ -1,4 +1,4 @@
-import { observable, configure, action, computed, get } from "mobx";
+import { observable, configure, action, computed } from "mobx";
 import Taro from "@tarojs/taro";
 
 configure({ enforceActions: "observed" });
@@ -44,6 +44,7 @@ class Global {
   };
   @observable baseUrl = baseUrl;
   @observable allRoleDetail = [];
+  @observable allServer = [];
   @observable StatusBar = systemInfo.statusBarHeight;
   @observable Custom = Taro.getMenuButtonBoundingClientRect();
   @observable CustomBar = this.Custom.bottom + this.Custom.top - this.StatusBar;
@@ -60,6 +61,10 @@ class Global {
 
   @action("获取所有式神详情") saveAllRoleDetail = params => {
     this.allRoleDetail.replace(params);
+  };
+
+  @action("获取所以服务器信息") saveAllServer = params => {
+    this.allServer.replace(params);
   };
 
   @computed get all() {
@@ -104,6 +109,9 @@ class Global {
   }
   @computed get getAttrRoleMap() {
     return this.attrRoleMap;
+  }
+  @computed get getAllServer() {
+    return this.allServer;
   }
 }
 

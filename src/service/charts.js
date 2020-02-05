@@ -18,5 +18,12 @@ export default {
    */
   async getChartsList({ server = "all", page = 1 }) {
     return await $http({ url: setUrl("list"), data: { server, page } });
+  },
+  /**
+   * 获取斗技角色详情
+   * @param {*} id
+   */
+  async getChartsDetail({ server = "all", id }) {
+    return await $http({ url: setUrl("detail"), data: { server, id } });
   }
 };

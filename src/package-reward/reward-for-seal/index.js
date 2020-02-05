@@ -3,8 +3,9 @@ import { View, Text, Image, Input, ScrollView } from "@tarojs/components";
 import { observer, inject } from "@tarojs/mobx";
 
 import styles from "./index.module.less";
-import { firstName, debounce } from "../../utils/index";
+import { firstName, debounce } from "../../utils";
 import rewardService from "../../service/reward";
+import { rewardDetailRouter } from "../../router";
 
 @inject("rewardForSealModel", "indexModel", "userModel")
 @observer
@@ -67,11 +68,9 @@ class RewardForSeal extends Component {
       );
     });
   }
-  async deatil(item) {
+  async detail(item) {
     Taro.navigateTo({
-      url: `/pages/reward-for-seal/reward-for-seal-detail/index?id=${
-        item.id
-      }&advice=${JSON.stringify(item.advice)}&name=${item.name}`
+      url: rewardDetailRouter(item)
     });
   }
   clickAvatar(id) {
@@ -98,7 +97,7 @@ class RewardForSeal extends Component {
       <View
         className={styles.list}
         key={index}
-        onClick={this.deatil.bind(this, item)}
+        onClick={this.detail.bind(this, item)}
       >
         <Text>
           {item.name}

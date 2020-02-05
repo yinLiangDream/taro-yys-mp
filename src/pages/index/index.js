@@ -9,13 +9,15 @@ import {
   ClLayout,
   ClFlex,
   ClText,
-  ClTitleBar
+  ClTitleBar,
+  ClNoticeBar
 } from "mp-colorui";
 import { LOADINGIMG } from "../../utils/model";
 import updateData from "../../utils/mpUpdateModel";
 import styles from "./index.module.less";
 import partnerService from "../../service/partner";
 import ShowDOM from "../../components/ShowDOM";
+import { rewardRouter, charts } from "../../router";
 
 @inject("indexModel")
 @observer
@@ -58,7 +60,7 @@ class Index extends Component {
           ]
         },
         {
-          title: "斗技阵容",
+          title: "对弈斗技",
           children: [
             // {
             //   text: "对弈竞猜",
@@ -243,9 +245,25 @@ class Index extends Component {
 
   // 点击各种工具，进行页面跳转
   clickHeader(clickName) {
-    Taro.navigateTo({
-      url: `/pages/${clickName}/index`
-    });
+    switch (clickName) {
+      case "reward-for-seal": {
+        Taro.navigateTo({
+          url: rewardRouter()
+        });
+        break;
+      }
+      case "charts": {
+        Taro.navigateTo({
+          url: charts()
+        });
+        break;
+      }
+      default: {
+        Taro.navigateTo({
+          url: `/pages/${clickName}/index`
+        });
+      }
+    }
   }
 
   // 搜索式神
@@ -285,7 +303,7 @@ class Index extends Component {
           className={styles.scroll}
           scroll-y
           style={{
-            height: `calc(100vh - ${pxTransform(280)})`
+            height: `calc(100vh - ${pxTransform(320)})`
           }}
         >
           <View className={styles.singleSS}>
@@ -395,6 +413,7 @@ class Index extends Component {
     ));
     return (
       <View>
+        <ClNoticeBar text="QQ交流群：693779120~" />
         <ScrollView
           scrollY
           style={{

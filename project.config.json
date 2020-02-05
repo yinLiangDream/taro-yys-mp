@@ -32,7 +32,15 @@
     },
     "miniprogram": {
       "current": 0,
-      "list": []
+      "list": [
+        {
+          "id": -1,
+          "name": "package-charts/charts/index",
+          "pathName": "package-charts/charts/index",
+          "query": "id=GAsGy5IBk88AAAACP0XCA5POBHc5RQtBxBgFOqD-a1-BoZsW7_RK_qkZekidCss-jMc%3D",
+          "scene": null
+        }
+      ]
     }
   }
 }
