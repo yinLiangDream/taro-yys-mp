@@ -54,10 +54,12 @@ class App extends Component {
       {
         root: "package-charts",
         pages: [
-          // 悬赏封印
+          // 斗技排行列表
           "charts/index",
-          // 悬赏封印详情
-          "charts-detail/index"
+          // 斗技排行详情
+          "charts-detail/index",
+          // 斗技阵容列表
+          "charts-popular-list/index"
         ]
       }
     ],

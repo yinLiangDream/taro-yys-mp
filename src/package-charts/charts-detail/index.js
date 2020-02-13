@@ -241,6 +241,7 @@ class ChartsDetail extends Component {
                   text={`${item.battle_result ? "胜利" : "失败"}`}
                   align="center"
                 />
+                {this.renderContent(item)}
                 <ClCard type="full" bgColor="light-orange">
                   <ClFlex wrap>
                     <ClLayout
@@ -330,7 +331,6 @@ class ChartsDetail extends Component {
                     </ClLayout>
                   </ClFlex>
                 </ClCard>
-                {this.renderContent(item)}
               </View>
             </ClLayout>
           </View>

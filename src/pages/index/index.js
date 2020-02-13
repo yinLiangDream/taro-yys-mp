@@ -17,7 +17,7 @@ import updateData from "../../utils/mpUpdateModel";
 import styles from "./index.module.less";
 import partnerService from "../../service/partner";
 import ShowDOM from "../../components/ShowDOM";
-import { rewardRouter, charts } from "../../router";
+import { rewardRouter, charts, chartsPopularListRouter } from "../../router";
 
 @inject("indexModel")
 @observer
@@ -75,7 +75,7 @@ class Index extends Component {
               // {
               //   text: "斗技阵容",
               //   key: `${indexModel.baseUrl}openServicePlan.png`,
-              //   click: "battle-array"
+              //   click: "charts-popular-list"
             }
           ]
         },
@@ -255,6 +255,12 @@ class Index extends Component {
       case "charts": {
         Taro.navigateTo({
           url: charts()
+        });
+        break;
+      }
+      case "charts-popular-list": {
+        Taro.navigateTo({
+          url: chartsPopularListRouter()
         });
         break;
       }

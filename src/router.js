@@ -33,3 +33,9 @@ export const rewardDetailRouter = detail =>
   `/package-reward/reward-for-seal/reward-for-seal-detail/index?id=${
     detail.id
   }&advice=${JSON.stringify(detail.advice)}&name=${detail.name}`;
+
+/**
+ * 斗技阵容路由
+ */
+export const chartsPopularListRouter = () =>
+  "/package-charts/charts-popular-list/index";
